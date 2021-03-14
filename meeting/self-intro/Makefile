@@ -22,7 +22,7 @@ all: *.fmt mv
 .PHONY: mv
 mv: mvf mvl
 
-.PHONY: mv
+.PHONY: mvf
 mvf: *.fmt
 	mv $< $(OUT_DIR)
 
