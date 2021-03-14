@@ -1,3 +1,6 @@
+%&self-introduction_kataoka-nagi_20210315
+% ↑ use precompiled file
+
 % @file           beamer-template.tex
 % @brief          Template slides of beamer (LaTeX)
 % @author         Kataoka Nagi
@@ -29,6 +32,13 @@
 % \usepackage{../styles/base_kataoka-nagi/base_kataoka-nagi} % debug
 % \usepackage{../styles/slides_kataoka-nagi/slides_kataoka-nagi} % debug
 
+% precompile preamble from here. don't precompile with glossaries-env!
+% type [eptex -ini -jobname="FILE_NAME" "&platex" mylatexformat.ltx FILE_NAME.tex] in cd
+% @see 「beamerのコンパイル速度を上げる」 http://margaret-sdpara.blogspot.com/2019/11/beamer.html
+\endofdump
+
+% \includeonlyframes{current} % current build \begin{frame}[label=current]
+
 \title[データ工学研究室 自己紹介]{データ工学研究室}
 \subtitle{自己紹介}
 \author[片岡 凪]{AL18036 片岡 凪}
@@ -39,6 +49,7 @@
 \begin{document}
 \maketitle
 
+% \begin{frame}[label=current]{\quad 略歴}
 \begin{frame}{\quad 略歴}
   \begin{columns}[totalwidth=\mytotalwidth]
     \begin{column}[t]{0.8\mycolumnwidth}
