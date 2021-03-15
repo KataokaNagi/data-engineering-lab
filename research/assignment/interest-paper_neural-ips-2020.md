@@ -4,11 +4,15 @@
 - 分散最近傍分類の統計的保証 JiexinDuan、Xingye Qiao、Guang Cheng
 - 画像分類のための1ビット監視 HengtongHu、Lingxi Xie、Zewei Du、Richang Hong、Qi Tian
 - 転移学習で何が転移されていますか？ Behnam Neyshabur、Hanie Sedghi、Chiyuan Zhang
+    - 石田先輩おすすめ
+    - トレンド
 - ニューラル画像圧縮の推論の改善 YiboYang、Robert Bamler、Stephan Mandt
 - ディープビデオによるブラインドビデオの時間的一貫性以前の ChenyangLei、Yazhou Xing、Qifeng Chen
 - 説明可能な投票 ドミニク・ピーターズ、アリエル・D・プロカッチャ、アレクサンドロス・プソマス、ジシン・チョウ
     - 概論済
-- GANに何を 学ばないかを教えるSiddarthAsokan、Chandra Seelamantula
+- GANに何を学ばないかを教えるSiddarthAsokan、Chandra Seelamantula
+    - 石田先輩おすすめ
+    - 既存のアルゴリズムの解説
 - ビデオ表現学習のための自己教師あり共同トレーニング TengdaHan、Weidi Xie、Andrew Zisserman
 - 協力ゲームの抽象化を使用したチームワークの評価と報酬 TomYan、Christian Kroer、Alexander Peysakhovich
 - A Flexible Framework for Designing Trainable Priors with Adaptive Smoothing and Game Encoding Bruno Lecouat, Jean Ponce, Julien Mairal
