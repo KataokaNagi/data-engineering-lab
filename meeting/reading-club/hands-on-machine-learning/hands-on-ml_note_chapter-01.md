@@ -1,4 +1,4 @@
-# Reading Note
+# scikit-learn、Keras、TensorFlowによる実践機械学習 第2版 第1章 読書メモ
 
 - 片岡輪読担当分
     - 1.1-1.4 2021/03/17
