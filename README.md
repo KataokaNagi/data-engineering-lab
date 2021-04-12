@@ -1,5 +1,5 @@
 # data-engineering-lab
-Laboratory data (meeting, research, etc) in Shibaura Institute of Technology
+Study notes in Shibaura Institute of Technology
 
 ## Directory Construction
 
