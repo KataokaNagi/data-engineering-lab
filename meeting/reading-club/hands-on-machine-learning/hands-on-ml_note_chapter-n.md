@@ -1,3 +1,15 @@
+<!-- tex script for md -->
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script type="text/x-mathjax-config">
+ MathJax.Hub.Config({
+ tex2jax: {
+ inlineMath: [['$', '$'] ],
+ displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+ }
+ });
+</script>
+
 # scikit-learn、Keras、TensorFlowによる実践機械学習 第2版 第n章 読書メモ
 - p. - タイトル
 
