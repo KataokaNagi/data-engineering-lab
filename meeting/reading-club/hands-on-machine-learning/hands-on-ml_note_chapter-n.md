@@ -10,10 +10,14 @@
  });
 </script>
 
+<!-- @see MarkdownとPandocを用いた簡易Latex環境の構築 https://qiita.com/mountcedar/items/e7603c2eb65661369c3b -->
+<!-- pandoc .\hands-on-ml_note_chapter-nn.md -o .\hands-on-ml_note_chapter-nn.tex -->
+
 # scikit-learn、Keras、TensorFlowによる実践機械学習 第2版 第n章 読書メモ
 - p. - タイトル
 
 <!-- 目次: 右クリックから Markdown:TOC Insert/Update [Ctrl+M T]  -->
+
 
 ## 10.1 
 ### 10.1.1 
