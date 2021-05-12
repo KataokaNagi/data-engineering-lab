@@ -61,15 +61,15 @@
 
 % tableofcontents
 % LATEX Beamerの使い方 http://joker.hatenablog.com/entry/2014/10/18/222303
-% \AtBeginSection[]{
-%     \begin{frame}{目次}
-%         \tableofcontents[currentsection]
-%     \end{frame}
-% }
+\AtBeginSection[]{
+    \begin{frame}{目次}
+        \tableofcontents[currentsection]
+    \end{frame}
+}
 
 \AtBeginSubsection[]{
     \begin{frame}{目次}
-        \tableofcontents[currentsection]
+        \tableofcontents[currentsubsection]
     \end{frame}
 }
 
