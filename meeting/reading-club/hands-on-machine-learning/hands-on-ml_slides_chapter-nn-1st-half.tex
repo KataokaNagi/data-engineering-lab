@@ -1,0 +1,124 @@
+%&./out/hands-on-ml_slides_chapter-nn-1st-half
+% use precompiled file
+%%%%%%%%%% ↑ EDIT FILE NAME ↑ %%%%%%%%%%
+
+% @file           hands-on-ml_slides_chapter-nn-1st-half.tex
+% @brief          Template slides of beamer (LaTeX)
+% @author         Kataoka Nagi
+% @date           2021-05-11 17:48:03
+% $Version:       1.0
+% @par            History
+%                 new file
+% Copyright (c) 2021 Kataoka Nagi
+% - This src is released under the MIT License, see LICENSE.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \documentclass[dvipdfmx, 11pt]{beamer}^
+% aspectratio = 43, 149, 169
+% font size = 8pt, 9pt, 10pt, 11pt, 12pt, 14pt, 17pt, 20pt
+% @see　「Beamer columns 環境で画像を配置するベストな方法」https://qiita.com/t_uda/items/8ef173eebf9827305135#3-columns-%E7%92%B0%E5%A2%83%E3%81%AE%E6%AD%A3%E3%81%97%E3%81%84%E4%BD%BF%E3%81%84%E6%96%B9
+\PassOptionsToClass{hiresbb}{graphicx}
+\documentclass[aspectratio=169, dvipdfmx, 14pt, xcolor={svgnames,dvipsnames}, t]{beamer}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{graphicx}
+\newcommand{\thickhrulefill}{\leavevmode\leaders\hrule depth-1.2pt height 3.2pt\hfill\kern0pt}
+\newcommand{\indicatewidth}[1]{\thickhrulefill{#1}\thickhrulefill}
+\newlength{\mytotalwidth}
+\mytotalwidth=\dimexpr\linewidth-5mm
+\newlength{\mycolumnwidth}
+\mycolumnwidth=\dimexpr\mytotalwidth-5mm
+
+\usepackage{base_kataoka-nagi}
+\usepackage{slides_kataoka-nagi}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% precompile preamble from here.
+% don't precompile with glossaries-env!
+% type [eptex -ini -jobname="FILE_NAME" "&platex" mylatexformat.ltx FILE_NAME.tex] in cd
+% @see 「beamerのコンパイル速度を上げる」 http://margaret-sdpara.blogspot.com/2019/11/beamer.html
+\endofdump
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% current build \begin{frame}[label=current]
+% \includeonlyframes{current}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title[実践機械学習 輪読会 第nn章 前半]{scikit-learn、Keras、TensorFlowによる\\実践機械学習 第2版\\第nn章 前半}
+\subtitle{データ工学研究室 輪読会}
+\author[片岡 凪]{AL18036 片岡 凪}
+% \institute[SIT]{芝浦工業大学 工学部 情報工学科 4年}
+\institute[データ工学研究室 B4]{芝浦工業大学 工学部 情報工学科 4年}
+\date{MMM DD, 2021}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% tableofcontents
+% LATEX Beamerの使い方 http://joker.hatenablog.com/entry/2014/10/18/222303
+% \AtBeginSection[]{
+%     \begin{frame}{目次}
+%         \tableofcontents[currentsection]
+%     \end{frame}
+% }
+
+\AtBeginSubsection[]{
+    \begin{frame}{目次}
+        \tableofcontents[currentsection]
+    \end{frame}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{発表者}
+  \begin{columns}[totalwidth=\mytotalwidth]
+    \begin{column}[t]{0.8\mycolumnwidth}
+      \begin{itemize}
+        \item 片岡 凪
+        \item 芝浦工業大学 工学部 情報工学科 4年
+        \item データ工学研究室（木村昌臣研究室）
+        \item Github  KataokaNagi
+        \item Twitter @calm\_IRL
+      \end{itemize}
+    \end{column}
+    \begin{column}[T]{0.2\mycolumnwidth}
+      \centering
+      \includegraphics[width=80pt]{img/icon.jpg}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% index
+\begin{frame}{目次}
+  \tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{nn.1 セクション名}
+\subsection{nn.1.1 サブセクション名}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{第nn章 概要}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}

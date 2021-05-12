@@ -4,18 +4,19 @@
 # @date           2021-03-14 16:31:05
 # $Version:       1.0
 # @par            History
-#                 New file
+#                 add TEX_TARGET
 # Copyright (c) 2021 Kataoka Nagi
 # - This src is released under the MIT License, see LICENSE.
 
 OUT_DIR := ./out
+TEX_TARGET := hands-on-ml_slides_chapter-nn-1st-half
 
 # do all
 .PHONY: all
-all: *.fmt mv
+all: $(TEX_TARGET).fmt mv
 
 # precompile beamer preamble
-%.fmt: %.tex
+$(TEX_TARGET).fmt: $(TEX_TARGET).tex
 	eptex -ini -jobname="$(basename $<)" "&platex" mylatexformat.ltx $<
 
 # move precompiled file to out folder
@@ -23,11 +24,11 @@ all: *.fmt mv
 mv: mvf mvl
 
 .PHONY: mv
-mvf: *.fmt
+mvf: $(TEX_TARGET).fmt
 	mv $< $(OUT_DIR)
 
 .PHONY: mvl
-mvl: *.log
+mvl: $(TEX_TARGET).log
 	mv $< $(OUT_DIR)
 
 # clean precompiled file
