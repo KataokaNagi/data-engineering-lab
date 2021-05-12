@@ -1,0 +1,777 @@
+%&./out/hands-on-ml_slides_chapter-13-1st-half
+% use precompiled file
+%%%%%%%%%% ↑ EDIT FILE NAME ↑ %%%%%%%%%%
+
+% @file           hands-on-ml_slides_chapter-13-1st-half.tex
+% @brief          Template slides of beamer (LaTeX)
+% @author         Kataoka Nagi
+% @date           2021-05-13 00:17:45
+% $Version:       1.0
+% @par            History
+%                 new file
+% Copyright (c) 2021 Kataoka Nagi
+% - This src is released under the MIT License, see LICENSE.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \documentclass[dvipdfmx, 11pt]{beamer}^
+% aspectratio = 43, 149, 169
+% font size = 8pt, 9pt, 10pt, 11pt, 12pt, 14pt, 17pt, 20pt
+% @see　「Beamer columns 環境で画像を配置するベストな方法」https://qiita.com/t_uda/items/8ef173eebf9827305135#3-columns-%E7%92%B0%E5%A2%83%E3%81%AE%E6%AD%A3%E3%81%97%E3%81%84%E4%BD%BF%E3%81%84%E6%96%B9
+\PassOptionsToClass{hiresbb}{graphicx}
+\documentclass[aspectratio=169, dvipdfmx, 14pt, xcolor={svgnames,dvipsnames}, t]{beamer}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{graphicx}
+\newcommand{\thickhrulefill}{\leavevmode\leaders\hrule depth-1.2pt height 3.2pt\hfill\kern0pt}
+\newcommand{\indicatewidth}[1]{\thickhrulefill{#1}\thickhrulefill}
+\newlength{\mytotalwidth}
+\mytotalwidth=\dimexpr\linewidth-5mm
+\newlength{\mycolumnwidth}
+\mycolumnwidth=\dimexpr\mytotalwidth-5mm
+
+\usepackage{base_kataoka-nagi}
+\usepackage{slides_kataoka-nagi}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% precompile preamble from here.
+% don't precompile with glossaries-env!
+% type [eptex -ini -jobname="FILE_NAME" "&platex" mylatexformat.ltx FILE_NAME.tex] in cd
+% @see 「beamerのコンパイル速度を上げる」 http://margaret-sdpara.blogspot.com/2019/11/beamer.html
+\endofdump
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% current build \begin{frame}[label=current]
+% \includeonlyframes{current}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title[実践機械学習 輪読会 第13章 前半]{scikit-learn、Keras、TensorFlowによる\\実践機械学習 第2版\\第13章 前半}
+\subtitle{データ工学研究室 輪読会}
+\author[片岡 凪]{AL18036 片岡 凪}
+% \institute[SIT]{芝浦工業大学 工学部 情報工学科 4年}
+\institute[データ工学研究室 B4]{芝浦工業大学 工学部 情報工学科 4年}
+\date{May 13, 2021}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% tableofcontents
+% LATEX Beamerの使い方 http://joker.hatenablog.com/entry/2014/10/18/222303
+\AtBeginSection[]{
+    \begin{frame}{目次}
+        \tableofcontents[currentsection]
+    \end{frame}
+}
+
+\AtBeginSubsection[]{
+    \begin{frame}{目次}
+        \tableofcontents[currentsubsection]
+    \end{frame}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{発表者}
+  \begin{columns}[totalwidth=\mytotalwidth]
+    \begin{column}[t]{0.8\mycolumnwidth}
+      \begin{itemize}
+        \item 片岡 凪
+        \item 芝浦工業大学 工学部 情報工学科 4年
+        \item データ工学研究室（木村昌臣研究室）
+        \item Github  KataokaNagi
+        \item Twitter @calm\_IRL
+      \end{itemize}
+    \end{column}
+    \begin{column}[T]{0.2\mycolumnwidth}
+      \centering
+      \includegraphics[width=80pt]{img/icon.jpg}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% index
+% \begin{frame}{目次}
+%   \tableofcontents
+% \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\hypertarget{ux7b2c13ux7ae0-ux5c0eux5165}{%
+  \section{第13章 導入}\label{ux7b2c13ux7ae0-ux5c0eux5165}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{TensorFlowのデータAPI}
+
+  \begin{itemize}
+    \tightlist
+    \item
+          DNNの大規模なデータセットに対応
+    \item
+          データの入手元と変換方法をのみを指示
+    \item
+          以下はTF（Tensorflow）が代行
+
+          \begin{itemize}
+            \tightlist
+            \item
+                  マルチスレッド管理
+            \item
+                  キューイング
+            \item
+                  バッチへの分割
+            \item
+                  プリフェッチ
+          \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{データAPIでの入力形式}
+
+  \begin{itemize}
+    \tightlist
+    \item
+          拡張前
+
+          \begin{itemize}
+            \tightlist
+            \item
+                  CSVなどのテキストファイル
+            \item
+                  レコードが固定長のバイナリファイル
+            \item
+                  レコードが可変長のTFRecord形式
+
+                  \begin{itemize}
+                    \tightlist
+                    \item
+                          柔軟で効率が良い
+                    \item
+                          通常はプロトコルバッファを格納（オープンソースのバイナリフォーマット）
+                  \end{itemize}
+          \end{itemize}
+    \item
+          その他、BigQueryなどに拡張可能
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{前処理}
+
+  \begin{itemize}
+    \tightlist
+    \item
+          主な対象
+
+          \begin{itemize}
+            \tightlist
+            \item
+                  スケールの異なる数値フィールド群
+            \item
+                  テキスト特徴量
+            \item
+                  カテゴリ特徴量
+          \end{itemize}
+    \item
+          主な対処
+
+          \begin{itemize}
+            \tightlist
+            \item
+                  正規化
+            \item
+                  ワンホットエンコーディング
+            \item
+                  バッグオブワーズエンコーディング
+            \item
+                  埋め込み（embedding）（後述）
+          \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{便利なTFライブラリ}
+
+  \begin{itemize}
+    \tightlist
+    \item
+          TF Transform (tf.Transform)
+
+          \begin{itemize}
+            \tightlist
+            \item
+                  訓練前：訓練セット全体を高速なバッチモードで前処理
+            \item
+                  訓練後：TF関数として訓練済みモデルに組み込んで前処理
+
+                  \begin{itemize}
+                    \tightlist
+                    \item
+                          本番環境で新たなインスタンスをその場で処理可能
+                  \end{itemize}
+          \end{itemize}
+    \item
+          TF Datasets（TFDS）
+
+          \begin{itemize}
+            \tightlist
+            \item
+                  大規模なデータセットがダウンロード可能な関数を提供
+            \item
+                  データAPIで上記関数を操作可能なデータセットオブジェクトを提供
+          \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\hypertarget{ux30c7ux30fcux30bfapi}{%
+  \section{13.1 データAPI}\label{ux30c7ux30fcux30bfapi}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{データセット}
+
+  \begin{itemize}
+    \tightlist
+    \item
+          ディスクなどから少しずつ読み出していくデータ要素のシーケンス
+    \item
+          例：from\_tensor\_slices(X)
+
+          \begin{itemize}
+            \tightlist
+            \item
+                  テンソルXの第1次元のスライスであるデータセットを返す
+            \item
+                  つまり、tfのスライスをDatasetのスライスに変換？
+          \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\hypertarget{ux5909ux63dbux306eux9023ux9396}{%
+  \subsection{13.1.1 変換の連鎖}\label{ux5909ux63dbux306eux9023ux9396}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{別のデータセットに変換するメソッド 1/4}\label{ux5225ux306eux30c7ux30fcux30bfux30bbux30c3ux30c8ux306bux5909ux63dbux3059ux308bux30e1ux30bdux30c3ux30c9-14}
+
+  \begin{itemize}
+    \tightlist
+    \item
+          repeat(n)
+
+          \begin{itemize}
+            \tightlist
+            \item
+                  同じスライスをn回連結
+            \item
+                  コピーではない（高速かつ小容量？）
+          \end{itemize}
+    \item
+          batch(n)
+
+          \begin{itemize}
+            \tightlist
+            \item
+                  スライスをn個ずつのスライスに分割
+            \item
+                  最後のバッチがn個未満の場合、引数にdrop\_remainder=Trueで削除可能
+          \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{別のデータセットに変換するメソッド 2/4}\label{ux5225ux306eux30c7ux30fcux30bfux30bbux30c3ux30c8ux306bux5909ux63dbux3059ux308bux30e1ux30bdux30c3ux30c9-24}
+
+  \begin{itemize}
+    \tightlist
+    \item
+          \href{https://qiita.com/conf8o/items/0cb02bc504b51af09099}{map}(lambda
+          x: xの式)
+
+          \begin{itemize}
+            \tightlist
+            \item
+                  要素をラムダ式で柔軟に変換するなど
+            \item
+                  TF関数に変換可能なラムダ式のみ対応（12章）
+            \item
+                  \href{https://tensorflow.classcat.com/2019/03/23/tf20-alpha-guide-data-performance/}{引数num\_parallel\_calls=tf.data.experimental.AUTOTUNEで並列・高速化}
+          \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{別のデータセットに変換するメソッド 3/4}\label{ux5225ux306eux30c7ux30fcux30bfux30bbux30c3ux30c8ux306bux5909ux63dbux3059ux308bux30e1ux30bdux30c3ux30c9-34}
+
+  \begin{itemize}
+    \tightlist
+    \item
+          unbach()
+
+          \begin{itemize}
+            \tightlist
+            \item
+                  bach()で作ったデータセットを解体
+            \item
+                  試験段階のメソッドで、collabではエラー
+          \end{itemize}
+    \item
+          apply()
+
+          \begin{itemize}
+            \tightlist
+            \item
+                  {[}{]}で囲まれたデータセット全体に適用
+            \item
+                  引数にdataset.unbach()などを用いる
+          \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{別のデータセットに変換するメソッド 4/4}\label{ux5225ux306eux30c7ux30fcux30bfux30bbux30c3ux30c8ux306bux5909ux63dbux3059ux308bux30e1ux30bdux30c3ux30c9-44}
+
+  \begin{itemize}
+    \tightlist
+    \item
+          filter(lambda x: xを用いたbool演算)
+
+          \begin{itemize}
+            \tightlist
+            \item
+                  ラムダ式がtrueの要素xのみを用いる
+          \end{itemize}
+    \item
+          take(n)
+
+          \begin{itemize}
+            \tightlist
+            \item
+                  戦闘からn個の要素を用いる
+          \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\hypertarget{ux30c7ux30fcux30bfux306eux30b7ux30e3ux30c3ux30d5ux30eb}{%
+  \subsection{13.1.2 データのシャッフル}\label{ux30c7ux30fcux30bfux306eux30b7ux30e3ux30c3ux30d5ux30eb}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Datasetのシャッフル}
+
+  \begin{itemize}
+    \tightlist
+    \item
+          shuffle(buffer\_size=n, seed=m)
+
+          \begin{itemize}
+            \tightlist
+            \item
+                  要素のシャッフル
+            \item
+                  独立同分布（同一の分布から独立に抽出された状態）でよく機能する勾配降下法などで使用（4章）
+            \item
+                  大規模なデータからサイズnのバッファを経由してシャッフル
+            \item
+                  大規模データセットに見合った大きいバッファサイズが必要
+            \item
+                  RAMの容量に注意
+            \item
+                  shuffle()後にrepeat(3)しても、3回とも異なるリピートとなる
+
+                  \begin{itemize}
+                    \tightlist
+                    \item
+                          引数reshuffle\_each\_iteration=Falseで同じリピートにできる
+                  \end{itemize}
+          \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{便利なシャッフル}
+
+  \begin{itemize}
+    \tightlist
+    \item
+          list\_files(DATA\_FILE\_PATH, seed=n)
+
+          \begin{itemize}
+            \tightlist
+            \item
+                  データをシャッフルしてロード
+            \item
+                  引数suffle=Falseも指定可能
+          \end{itemize}
+    \item
+          interleave(lambda file\_name: ラムダ式, cycle\_length=n)
+
+          \begin{itemize}
+            \tightlist
+            \item
+                  n個のファイルを同時に無作為に読み出す
+            \item
+                  n個のデータセットをもつ1個のデータセットを作成
+            \item
+                  n個のデータセット間の同じ長さの部分が互い違いになる
+
+                  \begin{itemize}
+                    \tightlist
+                    \item
+                          \href{https://tensorflow.classcat.com/2019/03/23/tf20-alpha-guide-data-performance/}{引数num\_parallel\_calls=tf.data.experimental.AUTOTUNEで初めて並列化する}
+                  \end{itemize}
+          \end{itemize}
+    \item
+          コードでは、ファイルパスが尽きるまで5個ずつ取り出しインターリーブしている
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\hypertarget{ux30c7ux30fcux30bfux306eux524dux51e6ux7406}{%
+  \subsection{13.1.3 データの前処理}\label{ux30c7ux30fcux30bfux306eux524dux51e6ux7406}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{csvデータのスケーリング}
+
+  \begin{itemize}
+    \tightlist
+    \item
+          TFで上手く平均0、分散1に統一したい
+    \item
+          tf.io.decode\_csv(LINE, record\_defaults={[}\ldots{]})
+
+          \begin{itemize}
+            \tightlist
+            \item
+                  第1引数：CSVの1行
+            \item
+                  第2引数：1行の列数とデータ型がわかる初期値を格納した配列
+
+                  \begin{itemize}
+                    \tightlist
+                    \item
+                          敢えて0.を入れると欠損時に例外を吐く
+                  \end{itemize}
+            \item
+                  1次元テンソル{[}{[}\ldots{]}, \ldots, {[}\ldots{]}{]}を返す
+
+                  \begin{itemize}
+                    \tightlist
+                    \item
+                          tf.stack(fields{[}スライス表現{]})で{[}\ldots, \ldots,
+                          \ldots{]}に直す
+                  \end{itemize}
+          \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\hypertarget{ux3064ux306bux307eux3068ux3081ux308b}{%
+  \subsection{13.1.4 １つにまとめる}\label{ux3064ux306bux307eux3068ux3081ux308b}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{これまでの処理を関数化}
+
+  \begin{itemize}
+    \tightlist
+    \item
+          新要素は最後の行のprefetch(1)のみ（後述）
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\hypertarget{ux30d7ux30eaux30d5ux30a7ux30c3ux30c1}{%
+  \subsection{13.1.5 プリフェッチ}\label{ux30d7ux30eaux30d5ux30a7ux30c3ux30c1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{プリフェッチによる並列化}
+
+  \begin{itemize}
+    \tightlist
+    \item
+          prefetch(n)
+
+          \begin{itemize}
+            \tightlist
+            \item
+                  n個のバッチをCPUとGPUで並列・高速化
+            \item
+                  一般にn=1でよい
+            \item
+                  GPUのRAMの容量や帯域幅（速度）が重要
+            \item
+                  引数num\_parallel\_calls=tf.data.experimental.AUTOTUNE
+
+                  \begin{itemize}
+                    \tightlist
+                    \item
+                          CPU内で並列化
+                    \item
+                          nを自動調節
+                  \end{itemize}
+          \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{その他の便利な関数}
+
+  \begin{itemize}
+    \tightlist
+    \item
+          cache()
+
+          \begin{itemize}
+            \tightlist
+            \item
+                  データセットがメモリに入る程度に小さいときに高速化
+            \item
+                  ロード前処理とシャッフルの間で実行
+          \end{itemize}
+    \item
+          concatenate()
+    \item
+          zip()
+    \item
+          window()
+    \item
+          reduce()
+    \item
+          shard()（破片）
+    \item
+          flat\_map()
+    \item
+          padded\_batch()
+    \item
+          from\_generator()
+    \item
+          from\_tensors()
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\hypertarget{tf.kerasux306eux3082ux3068ux3067ux306eux30c7ux30fcux30bfux30bbux30c3ux30c8ux306eux4f7fux3044ux65b9}{%
+  \subsection{13.1.6 tf.kerasのもとでのデータセットの使い方}\label{tf.kerasux306eux3082ux3068ux3067ux306eux30c7ux30fcux30bfux30bbux30c3ux30c8ux306eux4f7fux3044ux65b9}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{データセットの応用}
+
+  \begin{itemize}
+    \tightlist
+    \item
+          種々のデータセットの作成
+    \item
+          モデルの構築と訓練
+    \item
+          テストの評価と新インスタンスの予測
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{独自のTF訓練関数（12章と同様）}
+
+  \begin{itemize}
+    \tightlist
+    \item
+          p,401の自動微分のコードと比較するとよい
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\hypertarget{tfrecordux5f62ux5f0f}{%
+  \section{13.2 TFRecord形式}\label{tfrecordux5f62ux5f0f}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{TFRecord 概要}
+
+  \begin{itemize}
+    \tightlist
+    \item
+          データのロードやパースがボトルネックなら用いる
+    \item
+          大規模なデータの効率的な格納・読み出しが可能
+    \item
+          可変長バイナリレコードのシーケンス
+
+          \begin{itemize}
+            \tightlist
+            \item
+                  長さ情報
+            \item
+                  長さ情報のCRCチェックサム
+            \item
+                  実データ
+            \item
+                  実データのチェックサム
+          \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{TFRecordの利用}
+
+  \begin{itemize}
+    \tightlist
+    \item
+          書き込み
+    \item
+          読み出し
+    \item
+          出力
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\hypertarget{tfrecordux30d5ux30a1ux30a4ux30ebux306eux5727ux7e2e}{%
+  \subsection{13.2.1 TFRecordファイルの圧縮}\label{tfrecordux30d5ux30a1ux30a4ux30ebux306eux5727ux7e2e}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{TFRecordファイルの圧縮}
+
+  \begin{itemize}
+    \tightlist
+    \item
+          送受信に便利
+    \item
+          option引数で指定
+    \item
+          解凍
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\hypertarget{ux30d7ux30edux30c8ux30b3ux30ebux30d0ux30c3ux30d5ux30a1ux5165ux9580}{%
+  \subsection{13.2.2 プロトコルバッファ入門}\label{ux30d7ux30edux30c8ux30b3ux30ebux30d0ux30c3ux30d5ux30a1ux5165ux9580}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{protobuf（プロトコルバッファ）}
+
+  \begin{itemize}
+    \tightlist
+    \item
+          通常のTFRecordで使われるシリアライズ化されたバイナリ形式
+    \item
+          可搬性と拡張性に優れる
+    \item
+          protoc：protobufコンパイラ
+    \item
+          .protocファイル内の定義例
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Pythonのprotobufアクセスクラスの使用例}
+
+  \begin{itemize}
+    \tightlist
+    \item
+          personインスタンスの可視化や読み書き
+    \item
+          SerializeToString()でシリアライズ
+    \item
+          ParseFromString()でデシリアライズ
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{protobufとTFとの関係}
+
+  \begin{itemize}
+    \tightlist
+    \item
+          protocファイルで定義したPersonクラスはTFオペレーションでない
+
+          \begin{itemize}
+            \tightlist
+            \item
+                  TF関数に単純に組み込めない
+            \item
+                  tf.py\_function()で組み込むと速度と可搬性が落ちる
+            \item
+                  TFで定義された特別なprotobuf定義で解決する
+          \end{itemize}
+    \item
+          その他詳細
+
+          \begin{itemize}
+            \tightlist
+            \item
+                  https://developers.google.com/protocol-buffers/
+          \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
