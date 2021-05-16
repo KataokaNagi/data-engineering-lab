@@ -50,7 +50,8 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\title[実践機械学習 輪読会 第13章 前半]{scikit-learn、Keras、TensorFlowによる\\実践機械学習 第2版\\第13章 前半}
+\title[13章 前半 TFによるデータのロードと前処理]{scikit-learn、Keras、TensorFlowによる\\実践機械学習 第2版 第13章 前半\\
+TensorFlowによるデータのロードと前処理}
 \subtitle{データ工学研究室 輪読会}
 \author[片岡 凪]{AL18036 片岡 凪}
 % \institute[SIT]{芝浦工業大学 工学部 情報工学科 4年}
@@ -121,9 +122,9 @@
   \begin{itemize}
     \tightlist
     \item
-          DNNの大規模なデータセットに対応
+          \alert{大規模なデータセット}に対応
     \item
-          データの入手元と変換方法をのみを指示
+          データの\alert{入手元}と\alert{変換方法}のみを指示
     \item
           以下はTF（Tensorflow）が代行
 
@@ -154,11 +155,11 @@
           \begin{itemize}
             \tightlist
             \item
-                  CSVなどのテキストファイル
+                  CSVなどの\alert{テキストファイル}
             \item
-                  レコードが固定長のバイナリファイル
+                  レコードが固定長の\alert{バイナリファイル}
             \item
-                  レコードが可変長のTFRecord形式
+                  レコードが可変長の\alert{TFRecord形式}
 
                   \begin{itemize}
                     \tightlist
@@ -200,11 +201,11 @@
             \item
                   正規化
             \item
-                  ワンホットエンコーディング
+                  ワンホットエンコーディング\textcolor{gray}{（13章後半）}
             \item
                   バッグオブワーズエンコーディング
             \item
-                  埋め込み（embedding）（後述）
+                  埋め込み（embedding）\textcolor{gray}{（13章後半）}
           \end{itemize}
   \end{itemize}
 
@@ -217,14 +218,14 @@
   \begin{itemize}
     \tightlist
     \item
-          TF Transform (tf.Transform)
+          \alert{TF Transform} (tf.Transform)
 
           \begin{itemize}
             \tightlist
             \item
-                  訓練前：訓練セット全体を高速なバッチモードで前処理
+                  訓練\structure{前}：訓練セット全体を高速なバッチモードで\alert{前処理}
             \item
-                  訓練後：TF関数として訓練済みモデルに組み込んで前処理
+                  訓練\structure{後}：TF関数として訓練済みモデルに組み込んで\alert{前処理}
 
                   \begin{itemize}
                     \tightlist
@@ -233,14 +234,14 @@
                   \end{itemize}
           \end{itemize}
     \item
-          TF Datasets（TFDS）
+          \alert{TF Datasets}（TFDS）
 
           \begin{itemize}
             \tightlist
             \item
-                  大規模なデータセットがダウンロード可能な関数を提供
+                  大規模なデータセットをダウンロード可能な\alert{関数}を提供
             \item
-                  データAPIで上記関数を操作可能なデータセットオブジェクトを提供
+                  データAPIで上記関数を操作可能な\alert{データセットオブジェクト}を提供
           \end{itemize}
   \end{itemize}
 
@@ -266,10 +267,24 @@
             \tightlist
             \item
                   テンソルXの第1次元のスライスであるデータセットを返す
-            \item
-                  つまり、tfのスライスをDatasetのスライスに変換？
+                  \begin{itemize}
+                    \tightlist
+                    \item
+                          つまり、\alert{tfのスライスをDatasetのスライスに変換}？
+                  \end{itemize}
           \end{itemize}
   \end{itemize}
+
+  \begin{columns}[totalwidth=\mytotalwidth]
+    \begin{column}[T]{0.6\mycolumnwidth}
+      \centering
+      \includegraphics[width=200pt]{img/hands-on-ml_13-1_1.png}
+    \end{column}
+    \begin{column}[T]{0.4\mycolumnwidth}
+      \centering
+      \includegraphics[width=110pt]{img/hands-on-ml_13-1_2.png}
+    \end{column}
+  \end{columns}
 
 \end{frame}
 
@@ -282,29 +297,40 @@
 
 \begin{frame}{別のデータセットに変換するメソッド 1/4}\label{ux5225ux306eux30c7ux30fcux30bfux30bbux30c3ux30c8ux306bux5909ux63dbux3059ux308bux30e1ux30bdux30c3ux30c9-14}
 
-  \begin{itemize}
-    \tightlist
-    \item
-          repeat(n)
+  \begin{columns}[totalwidth=\mytotalwidth]
+    \begin{column}[t]{0.75\mycolumnwidth}
+      \begin{itemize}
+        \tightlist
+        \item
+              repeat(n)
 
-          \begin{itemize}
-            \tightlist
-            \item
-                  同じスライスをn回連結
-            \item
-                  コピーではない（高速かつ小容量？）
-          \end{itemize}
-    \item
-          batch(n)
+              \begin{itemize}
+                \tightlist
+                \item
+                      \alert{1つのスライスをn回連結}
+                \item
+                      コピーではない（高速かつ小容量？）
+              \end{itemize}
+        \item
+              batch(n)
 
-          \begin{itemize}
-            \tightlist
-            \item
-                  スライスをn個ずつのスライスに分割
-            \item
-                  最後のバッチがn個未満の場合、引数にdrop\_remainder=Trueで削除可能
-          \end{itemize}
-  \end{itemize}
+              \begin{itemize}
+                \tightlist
+                \item
+                      スライスを\alert{n個ずつのスライスに分割}
+                \item
+                      最後のバッチがn個未満の場合、\\
+                      引数にdrop\_remainder=Trueで削除可能
+              \end{itemize}
+      \end{itemize}
+    \end{column}
+
+    \begin{column}[T]{0.25\mycolumnwidth}
+      \includegraphics[width=110pt]{img/hands-on-ml_13-1-1_1.png}
+      \\
+      \includegraphics[width=110pt]{img/hands-on-ml_13-1-1_2.png}
+    \end{column}
+  \end{columns}
 
 \end{frame}
 
@@ -321,14 +347,15 @@
           \begin{itemize}
             \tightlist
             \item
-                  要素をラムダ式で柔軟に変換するなど
+                  \alert{要素をラムダ式で柔軟に変換する}など
             \item
                   TF関数に変換可能なラムダ式のみ対応（12章）
             \item
-                  \href{https://tensorflow.classcat.com/2019/03/23/tf20-alpha-guide-data-performance/}{引数num\_parallel\_calls=tf.data.experimental.AUTOTUNEで並列・高速化}
+                  \href{https://tensorflow.classcat.com/2019/03/23/tf20-alpha-guide-data-performance/}{引数num\_parallel\_calls=tf.data.experimental.AUTOTUNEで\\並列化＆高速化}
           \end{itemize}
   \end{itemize}
-
+  \centering
+  \includegraphics[width=230pt]{img/hands-on-ml_13-1-1_2.png}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -343,7 +370,7 @@
           \begin{itemize}
             \tightlist
             \item
-                  bach()で作ったデータセットを解体
+                  \alert{bach()で作ったデータセットを解体}
             \item
                   試験段階のメソッドで、collabではエラー
           \end{itemize}
@@ -353,11 +380,14 @@
           \begin{itemize}
             \tightlist
             \item
-                  {[}{]}で囲まれたデータセット全体に適用
+                  \alert{{[}{]}で囲まれたデータセット全体に適用}
             \item
                   引数にdataset.unbach()などを用いる
           \end{itemize}
   \end{itemize}
+
+  \centering
+  \includegraphics[width=300pt]{img/hands-on-ml_13-1-1_4.png}
 
 \end{frame}
 
@@ -373,7 +403,7 @@
           \begin{itemize}
             \tightlist
             \item
-                  ラムダ式がtrueの要素xのみを用いる
+                  \alert{ラムダ式がtrueの要素xのみのスライスを返す}
           \end{itemize}
     \item
           take(n)
@@ -381,9 +411,12 @@
           \begin{itemize}
             \tightlist
             \item
-                  戦闘からn個の要素を用いる
+                  \alert{先頭からn個の要素を用いる}
           \end{itemize}
   \end{itemize}
+
+  \centering
+  \includegraphics[width=230pt]{img/hands-on-ml_13-1-1_5.png}
 
 \end{frame}
 
@@ -394,7 +427,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}{Datasetのシャッフル}
+\begin{frame}{Datasetのシャッフル 1/2}
 
   \begin{itemize}
     \tightlist
@@ -404,9 +437,9 @@
           \begin{itemize}
             \tightlist
             \item
-                  要素のシャッフル
+                  \alert{要素のシャッフル}
             \item
-                  独立同分布（同一の分布から独立に抽出された状態）でよく機能する勾配降下法などで使用（4章）
+                  \alert{独立同分布（同一の分布から独立に抽出された状態）でよく機能する\\勾配降下法などで使用}\textcolor{gray}{（4章）}
             \item
                   大規模なデータからサイズnのバッファを経由してシャッフル
             \item
@@ -414,7 +447,7 @@
             \item
                   RAMの容量に注意
             \item
-                  shuffle()後にrepeat(3)しても、3回とも異なるリピートとなる
+                  shuffle()後にrepeat(3)しても、3回とも異なるリピートとなる\textcolor{gray}{（次頁）}
 
                   \begin{itemize}
                     \tightlist
@@ -423,6 +456,25 @@
                   \end{itemize}
           \end{itemize}
   \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Datasetのシャッフル 2/2}
+
+  \begin{columns}[totalwidth=\mytotalwidth]
+    \begin{column}[T]{0.4\mycolumnwidth}
+      \centering
+      \includegraphics[width=160pt]{img/hands-on-ml_13-1-2_1.png}
+    \end{column}
+
+    \begin{column}[T]{0.6\mycolumnwidth}
+      \centering
+      \includegraphics[width=240pt]{img/hands-on-ml_13-1-2_2.png}
+    \end{column}
+  \end{columns}
+
 
 \end{frame}
 
@@ -438,7 +490,7 @@
           \begin{itemize}
             \tightlist
             \item
-                  データをシャッフルしてロード
+                  \alert{データをシャッフルしてから}ロード
             \item
                   引数suffle=Falseも指定可能
           \end{itemize}
@@ -448,20 +500,21 @@
           \begin{itemize}
             \tightlist
             \item
-                  n個のファイルを同時に無作為に読み出す
+                  \alert{n個のファイルを同時に無作為に読み出す}
             \item
                   n個のデータセットをもつ1個のデータセットを作成
             \item
-                  n個のデータセット間の同じ長さの部分が互い違いになる
+                  n個のデータセット間の同じ長さの部分が\alert{互い違い}になる
 
                   \begin{itemize}
                     \tightlist
                     \item
                           \href{https://tensorflow.classcat.com/2019/03/23/tf20-alpha-guide-data-performance/}{引数num\_parallel\_calls=tf.data.experimental.AUTOTUNEで初めて並列化する}
                   \end{itemize}
+            \item
+                  コードでは、ファイルパスが尽きるまで5個ずつ取り出して\\
+                  インターリーブする操作を繰り返している
           \end{itemize}
-    \item
-          コードでは、ファイルパスが尽きるまで5個ずつ取り出しインターリーブしている
   \end{itemize}
 
 \end{frame}
@@ -473,12 +526,12 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}{csvデータのスケーリング}
+\begin{frame}{CSVデータのスケーリング}
 
   \begin{itemize}
     \tightlist
     \item
-          TFで上手く平均0、分散1に統一したい
+          TFで上手く平均0 分散1に統一したい
     \item
           tf.io.decode\_csv(LINE, record\_defaults={[}\ldots{]})
 
@@ -495,7 +548,7 @@
                           敢えて0.を入れると欠損時に例外を吐く
                   \end{itemize}
             \item
-                  1次元テンソル{[}{[}\ldots{]}, \ldots, {[}\ldots{]}{]}を返す
+                  \alert{1レコードの1次元テンソル{[}{[}\ldots{]}, \ldots, {[}\ldots{]}{]}を返す}
 
                   \begin{itemize}
                     \tightlist
@@ -520,8 +573,11 @@
   \begin{itemize}
     \tightlist
     \item
-          新要素は最後の行のprefetch(1)のみ（後述）
+          新要素は最後の行のprefetch(1)のみ\textcolor{gray}{（後述）}
   \end{itemize}
+
+  \centering
+  \includegraphics[width=400pt]{img/hands-on-ml_13-1-4_1.png}
 
 \end{frame}
 
@@ -534,69 +590,85 @@
 
 \begin{frame}{プリフェッチによる並列化}
 
-  \begin{itemize}
-    \tightlist
-    \item
-          prefetch(n)
+  \begin{columns}[totalwidth=\mytotalwidth]
+    \begin{column}[t]{0.8\mycolumnwidth}
 
-          \begin{itemize}
-            \tightlist
-            \item
-                  n個のバッチをCPUとGPUで並列・高速化
-            \item
-                  一般にn=1でよい
-            \item
-                  GPUのRAMの容量や帯域幅（速度）が重要
-            \item
-                  引数num\_parallel\_calls=tf.data.experimental.AUTOTUNE
+      \begin{itemize}
+        \tightlist
+        \item
+              prefetch(n)
 
-                  \begin{itemize}
-                    \tightlist
-                    \item
-                          CPU内で並列化
-                    \item
-                          nを自動調節
-                  \end{itemize}
-          \end{itemize}
-  \end{itemize}
+              \begin{itemize}
+                \tightlist
+                \item
+                      \alert{n個のバッチをCPUとGPUで並列・高速化}
+                \item
+                      一般にn=1でよい
+                \item
+                      GPUのRAMの容量や帯域幅（速度）が重要
+                \item
+                      引数num\_parallel\_calls\\　　=tf.data.experimental.AUTOTUNE
+
+                      \begin{itemize}
+                        \tightlist
+                        \item
+                              CPU内で並列化
+                        \item
+                              nを自動調節
+                      \end{itemize}
+              \end{itemize}
+      \end{itemize}
+
+    \end{column}
+    \begin{column}[T]{0.20\mycolumnwidth}
+      \includegraphics[width=125pt]{img/hands-on-ml_13-1-5_1.jpg}
+    \end{column}
+  \end{columns}
 
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}{その他の便利な関数}
+  \begin{columns}[totalwidth=\mytotalwidth]
+    \begin{column}[t]{0.5\mycolumnwidth}
+      \begin{itemize}
+        \tightlist
+        \item
+              cache()
 
-  \begin{itemize}
-    \tightlist
-    \item
-          cache()
-
-          \begin{itemize}
-            \tightlist
-            \item
-                  データセットがメモリに入る程度に小さいときに高速化
-            \item
-                  ロード前処理とシャッフルの間で実行
-          \end{itemize}
-    \item
-          concatenate()
-    \item
-          zip()
-    \item
-          window()
-    \item
-          reduce()
-    \item
-          shard()（破片）
-    \item
-          flat\_map()
-    \item
-          padded\_batch()
-    \item
-          from\_generator()
-    \item
-          from\_tensors()
-  \end{itemize}
+              \begin{itemize}
+                \tightlist
+                \item
+                      データセットがメモリに入る程度に小さいときに高速化
+                \item
+                      ロード前処理とシャッフルの間で実行
+              \end{itemize}
+        \item
+              concatenate()
+        \item
+              zip()
+        \item
+              window()
+      \end{itemize}
+    \end{column}
+    \begin{column}[t]{0.5\mycolumnwidth}
+      \begin{itemize}
+        \item
+              reduce()
+        \item
+              shard()\ \textcolor{gray}{ = 破片}
+        \item
+              flat\_map()
+        \item
+              padded\_batch()
+        \item
+              from\_generator()
+        \item
+              from\_tensors()
+      \end{itemize}
+    \end{column}
+  \end{columns}
 
 \end{frame}
 
@@ -607,17 +679,46 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}{データセットの応用}
+\begin{frame}{データセットの応用 1/3}
 
   \begin{itemize}
     \tightlist
     \item
           種々のデータセットの作成
+  \end{itemize}
+
+  \centering
+  \includegraphics[width=240pt]{img/hands-on-ml_13-1-6_1.png}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{データセットの応用 2/3}
+
+  \begin{itemize}
+    \tightlist
     \item
           モデルの構築と訓練
+  \end{itemize}
+
+  \centering
+  \includegraphics[width=240pt]{img/hands-on-ml_13-1-6_2.png}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{データセットの応用 3/3}
+
+  \begin{itemize}
+    \tightlist
     \item
           テストの評価と新インスタンスの予測
   \end{itemize}
+
+  \centering
+  \includegraphics[width=240pt]{img/hands-on-ml_13-1-6_2.png}
 
 \end{frame}
 
@@ -645,7 +746,7 @@
   \begin{itemize}
     \tightlist
     \item
-          データのロードやパースがボトルネックなら用いる
+          TFデータのロードやパースがボトルネックなら用いる
     \item
           大規模なデータの効率的な格納・読み出しが可能
     \item
@@ -694,7 +795,7 @@
   \begin{itemize}
     \tightlist
     \item
-          送受信に便利
+          \alert{TFデータの送受信}に用いる
     \item
           option引数で指定
     \item
@@ -715,9 +816,9 @@
   \begin{itemize}
     \tightlist
     \item
-          通常のTFRecordで使われるシリアライズ化されたバイナリ形式
+          通常のTFRecordで使われる\alert{シリアライズ化されたバイナリデータ}
     \item
-          可搬性と拡張性に優れる
+          \alert{可搬性}と\alert{拡張性}に優れる
     \item
           protoc：protobufコンパイラ
     \item
@@ -749,7 +850,7 @@
   \begin{itemize}
     \tightlist
     \item
-          protocファイルで定義したPersonクラスはTFオペレーションでない
+          \alert{protocファイルで定義したクラスはTFオペレーションでない}
 
           \begin{itemize}
             \tightlist
