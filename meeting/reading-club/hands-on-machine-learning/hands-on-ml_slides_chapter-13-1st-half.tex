@@ -43,6 +43,9 @@
 % @see 「beamerのコンパイル速度を上げる」 http://margaret-sdpara.blogspot.com/2019/11/beamer.html
 \endofdump
 
+% \usepackage{background}
+\usepackage{wrapfig}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % current build \begin{frame}[label=current]
@@ -355,7 +358,7 @@ TensorFlowによるデータのロードと前処理}
           \end{itemize}
   \end{itemize}
   \centering
-  \includegraphics[width=230pt]{img/hands-on-ml_13-1-1_2.png}
+  \includegraphics[width=200pt]{img/hands-on-ml_13-1-1_3.png}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -428,18 +431,25 @@ TensorFlowによるデータのロードと前処理}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}{Datasetのシャッフル 1/2}
-
+  % \begin{wrapfigure}[4]{r}[0mm]{width=190pt}
+  %   \centering
+  %   \includegraphics[keepaspectratio,width=180pt]
+  %   {img/hands-on-ml_13-1-2_1.png}
+  % \end{wrapfigure}
   \begin{itemize}
     \tightlist
-    \item
-          shuffle(buffer\_size=n, seed=m)
-
+    \item shuffle(buffer\_size=n, seed=m)
+          % shuffle(buffer\_size=n, seed=m)
+          % \quad \backgroundsetup{scale=1, contents=\includegraphics{img/hands-on-ml_13-1-2_1.png}}
           \begin{itemize}
             \tightlist
             \item
                   \alert{要素のシャッフル}
             \item
-                  \alert{独立同分布（同一の分布から独立に抽出された状態）でよく機能する\\勾配降下法などで使用}\textcolor{gray}{（4章）}
+                  \alert{
+                    独立同分布（同一の分布から独立に抽出された状態）でよく機能する勾配降下法などで使用
+                  }
+                  \textcolor{gray}{（4章）}
             \item
                   大規模なデータからサイズnのバッファを経由してシャッフル
             \item
@@ -527,37 +537,46 @@ TensorFlowによるデータのロードと前処理}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}{CSVデータのスケーリング}
+  \begin{columns}[totalwidth=\mytotalwidth]
+    \begin{column}[t]{0.75\mycolumnwidth}
 
-  \begin{itemize}
-    \tightlist
-    \item
-          TFで上手く平均0 分散1に統一したい
-    \item
-          tf.io.decode\_csv(LINE, record\_defaults={[}\ldots{]})
+      \begin{itemize}
+        \tightlist
+        \item
+              TFで上手く平均0 分散1に統一したい
+        \item
+              tf.io.decode\_csv(LINE, record={[}\ldots{]})
 
-          \begin{itemize}
-            \tightlist
-            \item
-                  第1引数：CSVの1行
-            \item
-                  第2引数：1行の列数とデータ型がわかる初期値を格納した配列
+              \begin{itemize}
+                \tightlist
+                \item
+                      第1引数：CSVの1行
+                \item
+                      第2引数：1行の列数とデータ型がわかる\\
+                      初期値を格納した配列
 
-                  \begin{itemize}
-                    \tightlist
-                    \item
-                          敢えて0.を入れると欠損時に例外を吐く
-                  \end{itemize}
-            \item
-                  \alert{1レコードの1次元テンソル{[}{[}\ldots{]}, \ldots, {[}\ldots{]}{]}を返す}
+                      \begin{itemize}
+                        \tightlist
+                        \item
+                              敢えて0.を入れると欠損時に例外を吐く
+                      \end{itemize}
+                \item
+                      \alert{1レコードの1次元テンソル\\
+                      {[}{[}\ldots{]}, \ldots, {[}\ldots{]}{]}を返す}
 
-                  \begin{itemize}
-                    \tightlist
-                    \item
-                          tf.stack(fields{[}スライス表現{]})で{[}\ldots, \ldots,
-                          \ldots{]}に直す
-                  \end{itemize}
-          \end{itemize}
-  \end{itemize}
+                      \begin{itemize}
+                        \tightlist
+                        \item
+                              tf.stack(fields{[}スライス表現{]})で{[}\ldots,{]}に直す
+                      \end{itemize}
+              \end{itemize}
+      \end{itemize}
+    \end{column}
+
+    \begin{column}[T]{0.25\mycolumnwidth}
+      \includegraphics[width=140pt]{img/hands-on-ml_13-1-3_1.png}
+    \end{column}
+  \end{columns}
 
 \end{frame}
 
@@ -718,7 +737,7 @@ TensorFlowによるデータのロードと前処理}
   \end{itemize}
 
   \centering
-  \includegraphics[width=240pt]{img/hands-on-ml_13-1-6_2.png}
+  \includegraphics[width=240pt]{img/hands-on-ml_13-1-6_3.png}
 
 \end{frame}
 
@@ -731,6 +750,9 @@ TensorFlowによるデータのロードと前処理}
     \item
           p,401の自動微分のコードと比較するとよい
   \end{itemize}
+
+  \centering
+  \includegraphics[height=170pt]{img/hands-on-ml_13-1-6_4.png}
 
 \end{frame}
 
@@ -774,11 +796,15 @@ TensorFlowによるデータのロードと前処理}
   \begin{itemize}
     \tightlist
     \item
-          書き込み
+          書き込み\\
+          \begin{center}
+            \includegraphics[width=240pt]{img/hands-on-ml_13-2_1.png}
+          \end{center}
     \item
-          読み出し
-    \item
-          出力
+          読み出し・出力\\
+          \begin{center}
+            \includegraphics[width=240pt]{img/hands-on-ml_13-2_2.png}
+          \end{center}
   \end{itemize}
 
 \end{frame}
@@ -792,15 +818,25 @@ TensorFlowによるデータのロードと前処理}
 
 \begin{frame}{TFRecordファイルの圧縮}
 
-  \begin{itemize}
-    \tightlist
-    \item
-          \alert{TFデータの送受信}に用いる
-    \item
-          option引数で指定
-    \item
-          解凍
-  \end{itemize}
+  \begin{columns}[totalwidth=\mytotalwidth]
+    \begin{column}[t]{0.5\mycolumnwidth}
+      \begin{itemize}
+        \tightlist
+        \item
+              \alert{TFデータの送受信}に利用
+        \item
+              option引数で指定
+        \item
+              解凍
+      \end{itemize}
+    \end{column}
+
+    \begin{column}[T]{0.5\mycolumnwidth}
+      \centering
+      \includegraphics[width=200pt]{img/hands-on-ml_13-2-1_1.png}
+    \end{column}
+
+  \end{columns}
 
 \end{frame}
 
@@ -825,21 +861,34 @@ TensorFlowによるデータのロードと前処理}
           .protocファイル内の定義例
   \end{itemize}
 
+  \centering
+  \includegraphics[height=100pt]{img/hands-on-ml_13-2-2_1.png}
+
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}{Pythonのprotobufアクセスクラスの使用例}
 
-  \begin{itemize}
-    \tightlist
-    \item
-          personインスタンスの可視化や読み書き
-    \item
-          SerializeToString()でシリアライズ
-    \item
-          ParseFromString()でデシリアライズ
-  \end{itemize}
+  \begin{columns}[totalwidth=\mytotalwidth]
+    \begin{column}[t]{0.5\mycolumnwidth}
+      \begin{itemize}
+        \tightlist
+        \item
+              personインスタンスの\\可視化や読み書き
+        \item
+              SerializeToString()で\\シリアライズ
+        \item
+              ParseFromString()で\\デシリアライズ
+      \end{itemize}
+    \end{column}
+
+    \begin{column}[T]{0.5\mycolumnwidth}
+      \centering
+      \includegraphics[width=200pt]{img/hands-on-ml_13-2-2_2.png}
+    \end{column}
+
+  \end{columns}
 
 \end{frame}
 
