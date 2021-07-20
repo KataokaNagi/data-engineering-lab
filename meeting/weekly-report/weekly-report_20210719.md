@@ -10,7 +10,7 @@
  });
 </script>
 
-# 週次報告書 2021年07月19日
+# 週次報告書（概要チェック） 2021年07月19日
 AL18036 片岡 凪
 
 ## 1. 今回の報告会までに実施する予定だったこと
@@ -179,5 +179,68 @@ AL18036 片岡 凪
             - BERTより沢山学習
             - Newsを学習
             - 長い文章に対応
-            - 毎回ランダムにマスキング
+          - 毎回ランダムにマスキング
         - [FASTTEXT]()
+
+## 相談会後
+- Transformerの分類器の仕組み
+    - エンコーダ部分のみにDense層を付与
+- データ解析法の復習（7，8回）
+    - クラスタリング
+        - Ward法
+            - 実用的
+        - 混合正規分布
+        - 凝縮型クラスタリング
+            - 類似度行列のmin
+        - x-means
+            - k-meansにBIC（ベイズ）で尤もらしく
+        - DBSCAN
+            - 設定半径内のminPoints
+            - クラスタリング前後の分散の差が少ないように
+        - Affinity Prpagation
+            - メッセージの送受信で代表を決定
+        - 選び方
+            - 階層が必要なら階層的
+            - データが大きいなら非階層
+    - 距離
+        - コサイン類似度
+            - Sentence-BERTの元論文で使用が想定されている
+            - [ユークリッド距離 vs コサイン類似度](https://enjoyworks.jp/tech-blog/2242)
+                - 長さでなく角度
+                - 数値的な大きさを考慮しない
+                - テキストデータの標準
+                - 単語数に非依存？
+- [IBM Debater dataset](https://www.research.ibm.com/haifa/dept/vst/debating_data.shtml)
+    - Argument mining
+    - 作品がCC-BY-SAでリリースされていることを示すライセンス表示
+        - 権利者の名前を入れる
+        - 加工しても同じライセンスで他人にもシェア
+        - 商用利用OK
+    - a)ライセンスのテキストへのハイパーリンクまたはURL
+    - またはb)ライセンスのコピーのいずれかを含める
+- [Yahooニュース](https://support.yahoo-net.jp/SccNews/s/article/H000009756)
+    - 情報源の了承が必要
+- [ivedoorニュース データセット]()
+    - NHK Japan株式会社
+    - クリエイティブ・コモンズライセンス
+- [GRU (Gated Recurrent Unit)]
+    - RNNの層
+    - どの程度昔を忘れるかを制御し、長期記憶を持たせたもの
+    - Simple RNNの限界
+        - hidden層hの情報が更新の度に薄れる
+    - 数値
+        - z: h, h~の配合比率
+            - update gate vector
+            - よく変わる意味は変えとく
+            - 変わらない意味は記憶しつつ、意味が大きく変わる段落などで忘却？
+        - r: h~を決める前にhをr倍
+            - 前の情報をどれだけ弱めるか
+            - reset gate vector
+        - h~: hのアップデート率
+            - xを加味しつつ
+    - 図
+        - x, h -> GRU Cell -> y, h
+- [Japanese FakeNews Dataset]()
+    - [オープンデータコモンズパブリックドメイン専用およびライセンス（PDDL）v1.0](http://translate.google.com/translate?hl=ja&sl=auto&tl=ja&u=https%3A%2F%2Fopendatacommons.org%2Flicenses%2Fpddl%2F1-0%2F)
+        - 受信者は、本作品を商業的に利用したり、技術的な保護手段を用いたり、本データやデータベースを他のデータベースやデータと組み合わせたり、変更や追加を共有したり、秘密にしたりすることができます。
+    - 本物はCC BYのウィキニュース
