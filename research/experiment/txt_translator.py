@@ -69,7 +69,7 @@ PRE_TRANS_TXT_DIR = "G:\\マイドライブ\\lab\\experiment\\japanese_fakenews_
 POST_TRANS_TXT_DIR = "G:\\マイドライブ\\lab\\experiment\\txt_translator\\" + SAVING_TXT_NAME
 PRE_TRANS_LANG = "JA"  # Japanese
 POST_TRANS_LANG = "EN-US"  # English(American)
-SLEEP_SEC_PER_TRANS = 14
+SLEEP_SEC_PER_TRANS = 20
 
 ############################################################
 # Don't publish on the web
@@ -98,7 +98,8 @@ pre_trans_txts
 """
 
 
-TIME_DIFF = 9  # between jp & colab server
+# TIME_DIFF = 9  # between jp & colab server
+TIME_DIFF = 0
 
 sum_sleep_sec = SLEEP_SEC_PER_TRANS * len(pre_trans_txts)
 trans_hour = sum_sleep_sec / 60 / 60
@@ -120,13 +121,14 @@ print()
 
 
 NUM_TRANS = len(pre_trans_txts)
+NUM_TRANS_PER_PRINT = 100
 
 # debug
 # NUM_TRANS = 3
-NUM_TRANS_PER_PRINT = 100
-NUM_PRINT_POST_TRANS_TXT = 1
+# NUM_TRANS_PER_PRINT = 2
 
 post_trans_txts = []
+cnt_backup = 0
 
 for i in range(NUM_TRANS):
     params = {
@@ -145,20 +147,32 @@ for i in range(NUM_TRANS):
     # debug
     # print(result)
     print('.', end='', flush=True)
-    if (i % NUM_TRANS_PER_PRINT) == NUM_TRANS_PER_PRINT - 1:
+    if ((i % NUM_TRANS_PER_PRINT) ==
+            NUM_TRANS_PER_PRINT - 1) or (i == NUM_TRANS - 1):
         print()
         print("{}/{} translated".format(i + 1, NUM_TRANS))
         if len(post_trans_txts[i]) > 20:
             print("{}th doc: {} ... {}".format(
                 i + 1, post_trans_txts[i][:10], post_trans_txts[i][-10:]))
 
-print("done")
+        # backup docs
+        backup_txt_dir = POST_TRANS_TXT_DIR[:-
+                                            4] + "_{}".format(cnt_backup) + ".txt"
+        range_l = NUM_TRANS_PER_PRINT * cnt_backup
+        range_r = NUM_TRANS_PER_PRINT * (cnt_backup + 1)
+        if range_r > NUM_TRANS:
+            range_r = NUM_TRANS
+        with open(backup_txt_dir, 'w', encoding="utf-8") as f:
+            for txt in post_trans_txts[range_l:range_r]:
+                f.write("%s\n" % txt.rstrip("\n"))
+        cnt_backup += 1
+        print("backuped from {}th to {}th".format(range_l, range_r - 1))
 
-for i in range(NUM_PRINT_POST_TRANS_TXT):
-    print(post_trans_txts[i])
 
 """## Write"""
 
 with open(POST_TRANS_TXT_DIR, 'w', encoding="utf-8") as f:
     for txt in post_trans_txts:
         f.write("%s\n" % txt.rstrip("\n"))
+
+print("done")
