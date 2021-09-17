@@ -73,7 +73,7 @@ SLEEP_SEC_PER_TRANS = 20
 
 ############################################################
 # Don't publish on the web
-DEEPL_API_KEY = "c3a5e031-5b7b-e534-193e-ac8b826677ac:fx"
+# DEEPL_API_KEY = ""
 ############################################################
 
 """### Mount google drive"""
