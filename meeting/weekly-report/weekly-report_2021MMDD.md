@@ -25,6 +25,12 @@ AL18036 片岡 凪
 
 ### 2.1 
 
+![](img/)
+<div style="text-align: center;">
+図. 
+</div>
+<br>
+<br>
 
 ### 2.2 
 
