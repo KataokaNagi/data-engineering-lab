@@ -274,3 +274,9 @@ TSWLatexianTemp*
 
 # Makeindex log files
 *.lpz
+
+# datasets
+covid-19-news-articles/
+
+# venv
+venv/
