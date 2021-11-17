@@ -280,3 +280,6 @@ covid-19-news-articles/
 
 # venv
 venv/
+
+# vscode
+.vscode/
