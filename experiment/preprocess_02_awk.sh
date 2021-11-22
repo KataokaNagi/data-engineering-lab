@@ -25,13 +25,13 @@ done
 AWK_DIR="./preprocess_02.awk"
 DATA_SUBDIR_1="./covid-19-news-articles/"
 NATIONS=(
-    "India"
-    "Japan"
-    "Korea"
-    "UK"
+    "india"
+    "japan"
+    "korea"
+    "uk"
 )
-DATA_SUBDIR_2="-Articles_preprocess-01_extract-column-c.csv"
-DIST_SUBDIR="-Articles_preprocess_02_awk.txt"
+DATA_SUBDIR_2="-articles_preprocess-01_extract-column-c.csv"
+DIST_SUBDIR="-articles_preprocess_02_awk.txt"
 
 # make command
 # for i in {1..4}
@@ -46,7 +46,7 @@ do
     mawk -f "${AWK_DIR}" "${data_dir}" > "${dist_dir}"
 done
 
-# mawk -f preprocess_02.awk India-Articles_preprocess-01_extract-column-c.csv > India-Articles_preprocess_02_awk.txt
-# mawk -f preprocess_02.awk Japan-Articles_preprocess-01_extract-column-c.csv > Japan-Articles_preprocess_02_awk.txt
-# mawk -f preprocess_02.awk Korea-Articles_preprocess-01_extract-column-c.csv > Korea-Articles_preprocess_02_awk.txt
-# mawk -f preprocess_02.awk UK-Articles_preprocess-01_extract-column-c.csv > UK-Articles_preprocess_02_awk.txt
+# mawk -f preprocess_02.awk india-articles_preprocess-01_extract-column-c.csv > india-articles_preprocess_02_awk.txt
+# mawk -f preprocess_02.awk japan-articles_preprocess-01_extract-column-c.csv > japan-articles_preprocess_02_awk.txt
+# mawk -f preprocess_02.awk korea-articles_preprocess-01_extract-column-c.csv > korea-articles_preprocess_02_awk.txt
+# mawk -f preprocess_02.awk uk-articles_preprocess-01_extract-column-c.csv > uk-articles_preprocess_02_awk.txt

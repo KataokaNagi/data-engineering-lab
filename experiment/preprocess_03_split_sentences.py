@@ -35,16 +35,16 @@ def main():
 
     # consts of dir
     DATASET_DIRS = [
-        "./covid-19-news-articles/India-Articles_preprocess_02_awk.txt",
-        "./covid-19-news-articles/Japan-Articles_preprocess_02_awk.txt",
-        "./covid-19-news-articles/Korea-Articles_preprocess_02_awk.txt"
-        # "./covid-19-news-articles/UK-Articles_preprocess_02_awk.txt"
+        "./covid-19-news-articles/india-articles_preprocess_02_awk.txt",
+        "./covid-19-news-articles/japan-articles_preprocess_02_awk.txt",
+        "./covid-19-news-articles/korea-articles_preprocess_02_awk.txt"
+        # "./covid-19-news-articles/uk-articles_preprocess_02_awk.txt"
     ]
     DIST_DIRS = [
-        "./covid-19-news-articles/India-Articles_preprocess_03_spilt-sentences.tsv",
-        "./covid-19-news-articles/Japan-Articles_preprocess_03_spilt-sentences.tsv",
-        "./covid-19-news-articles/Korea-Articles_preprocess_03_spilt-sentences.tsv"
-        # "./covid-19-news-articles/UK-Articles_preprocess_03_spilt-sentences.tsv"
+        "./covid-19-news-articles/india-articles_preprocess_03_spilt-sentences.txt",
+        "./covid-19-news-articles/japan-articles_preprocess_03_spilt-sentences.txt",
+        "./covid-19-news-articles/korea-articles_preprocess_03_spilt-sentences.txt"
+        # "./covid-19-news-articles/uk-articles_preprocess_03_spilt-sentences.txt"
     ]
     
     # debug option
