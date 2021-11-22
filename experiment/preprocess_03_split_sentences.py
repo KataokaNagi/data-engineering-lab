@@ -85,7 +85,7 @@ def main():
     start_time = time.time()
 
     # open dataset
-    for dir_idx in range(len(DATASET_DIRS)):
+    for dir_idx, _ in enumerate(DATASET_DIRS):
         with open(DATASET_DIRS[dir_idx], 'r') as fi, open(dist_dirs[dir_idx], 'w+') as fw:
             cnt_line = 1
             for line in fi:
