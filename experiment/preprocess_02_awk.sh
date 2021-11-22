@@ -34,11 +34,11 @@ DATA_SUBDIR_2="-articles_preprocess-01_extract-column-c.csv"
 DIST_SUBDIR="-articles_preprocess_02_awk.txt"
 
 # make command
-# for i in {1..4}
-for i in {1..3} # except UK
+# for i in {0..3}
+for i in {0..2} # except UK
 do
-    data_dir="${DATA_SUBDIR_1}${NATIONS["$1"]}${DATA_SUBDIR_2}"
-    dist_dir="${DATA_SUBDIR_1}${NATIONS["$1"]}${DIST_SUBDIR}"
+    data_dir="${DATA_SUBDIR_1}${NATIONS["$i"]}${DATA_SUBDIR_2}"
+    dist_dir="${DATA_SUBDIR_1}${NATIONS["$i"]}${DIST_SUBDIR}"
     if "${do_debug}"; then
         dist_dir="${dist_dir/.txt/_debug.txt}"
     fi
