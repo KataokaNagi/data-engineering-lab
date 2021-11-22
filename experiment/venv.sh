@@ -36,8 +36,10 @@ source $ACTIVATE_DIR;
 install_if_not_exist "pip3" "cython";
 install_if_not_exist "pip3" "spacy";
 install_if_not_exist "pip3" "stanza";
+python3 -m pip uninstall torch
+python3 -m pip3 install torch==1.8.2+cu111 torchvision==0.9.2+cu111 torchaudio==0.8.2 -f https://download.pytorch.org/whl/lts/1.8/torch_lts.html
 
-# set path
+# set path (add venv/bin/activate)
 # export PYTHONPATH="$PYTHONPATH:/home/nagi/.local/lib/python3.6/site-packages" # tmp (only in current shell)
 # echo 'export PYTHONPATH="$PYTHONPATH:/home/nagi/.local/lib/python3.6/site-packages"' >> ~/.bashrc # semipermanent
 
