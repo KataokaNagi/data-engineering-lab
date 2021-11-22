@@ -59,7 +59,7 @@ def main():
         use_stanza = True
     if arg.spacy:
         use_spacy = True
-        use_stanza = False
+        use_stanza = False    
 
     # prepare for stanza or spacy
     processors = \
@@ -75,22 +75,24 @@ def main():
 
     # open dataset
     for dir_idx in range(len(DATASET_DIRS)):
-        with open(DATASET_DIRS[dir_idx], 'r') as fi, open(DIST_DIRS[dir_idx], 'a+') as fw:
-            num_line = 0
+        with open(DATASET_DIRS[dir_idx], 'r') as fi, open(DIST_DIRS[dir_idx], 'w+') as fw:
+            cnt_line = 1
             for line in fi:
                 # split sentences
                 doc = nlp(line)
                 spilit_sentences = [sentence.text for sentence in doc.sentences]
-                spilit_sentences = "#".join(spilit_sentences)
-                
+                spilit_sentences = "#".join(spilit_sentences).strip().strip('#')
+                spilit_sentences += '\n'
+
                 # write
                 fw.write(spilit_sentences)
                 
                 # debug
                 if do_debug:
-                    print("num_line:", num_line, spilit_sentences)
-                    if ++num_line == num_debug:
+                    if cnt_line > num_debug:
                         break
+                    print("cnt_line:", cnt_line, spilit_sentences)
+                    cnt_line += 1
     
     # print time
     print(time.time() - start_time)
