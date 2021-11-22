@@ -61,6 +61,15 @@ def main():
         use_spacy = True
         use_stanza = False
 
+    # prepare for stanza or spacy
+    processors = \
+        'tokenize' if use_stanza \
+        else \
+        {'tokenize': 'spacy'} if use_spacy \
+        else \
+        print("unsuspected processors", file=sys.stderr)
+    nlp = stanza.Pipeline(lang="en", processors=processors)
+
     # time mesurement: start
     start_time = time.time()
 
@@ -70,13 +79,6 @@ def main():
             num_line = 0
             for line in fi:
                 # split sentences
-                processors = \
-                    'tokenize' if use_stanza \
-                    else \
-                    {'tokenize': 'spacy'} if use_spacy \
-                    else \
-                    print("unsuspected processors", file=sys.stderr)
-                nlp = stanza.Pipeline(lang="en", processors=processors)
                 doc = nlp(line)
                 spilit_sentences = [sentence.text for sentence in doc.sentences]
                 spilit_sentences = "#".join(spilit_sentences)
