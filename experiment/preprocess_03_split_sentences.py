@@ -23,6 +23,7 @@
 def main():
     import sys
     import argparse
+    import re
     import time
     import stanza
     stanza.download('en')
@@ -40,7 +41,7 @@ def main():
         "./covid-19-news-articles/korea-articles_preprocess_02_awk.txt"
         # "./covid-19-news-articles/uk-articles_preprocess_02_awk.txt"
     ]
-    DIST_DIRS = [
+    dist_dirs = [
         "./covid-19-news-articles/india-articles_preprocess_03_spilt-sentences.txt",
         "./covid-19-news-articles/japan-articles_preprocess_03_spilt-sentences.txt",
         "./covid-19-news-articles/korea-articles_preprocess_03_spilt-sentences.txt"
@@ -61,6 +62,16 @@ def main():
         use_spacy = True
         use_stanza = False    
 
+    # edit DIST_DIRS according to options
+    for i, _ in enumerate(dist_dirs):
+        if use_spacy:
+            dist_dirs[i] = re.sub("\.txt","_with-spacy.txt", dist_dirs[i])
+        if use_stanza:
+            dist_dirs[i] = re.sub("\.txt","_with-stanza.txt", dist_dirs[i])
+
+        if do_debug:
+            dist_dirs[i] = re.sub("\.txt","_debug.txt", dist_dirs[i])
+
     # prepare for stanza or spacy
     processors = \
         'tokenize' if use_stanza \
@@ -75,7 +86,7 @@ def main():
 
     # open dataset
     for dir_idx in range(len(DATASET_DIRS)):
-        with open(DATASET_DIRS[dir_idx], 'r') as fi, open(DIST_DIRS[dir_idx], 'w+') as fw:
+        with open(DATASET_DIRS[dir_idx], 'r') as fi, open(dist_dirs[dir_idx], 'w+') as fw:
             cnt_line = 1
             for line in fi:
                 # split sentences
