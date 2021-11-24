@@ -1,0 +1,33 @@
+Traceback (most recent call last):
+  File "/home/nagi/.local/lib/python3.6/site-packages/stanza/models/constituency/lstm_model.py", line 285, in initial_word_queues
+    tag_idx = torch.stack([self.tag_tensors[self.tag_map[word.label]] for word in tagged_words])
+  File "/home/nagi/.local/lib/python3.6/site-packages/stanza/models/constituency/lstm_model.py", line 285, in <listcomp>
+    tag_idx = torch.stack([self.tag_tensors[self.tag_map[word.label]] for word in tagged_words])
+KeyError: 'GW'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "preprocess_03_split_sentences.py", line 115, in <module>
+    main()
+  File "preprocess_03_split_sentences.py", line 95, in main
+    doc = nlp(line)
+  File "/home/nagi/.local/lib/python3.6/site-packages/stanza/pipeline/core.py", line 231, in __call__
+    doc = self.process(doc)
+  File "/home/nagi/.local/lib/python3.6/site-packages/stanza/pipeline/core.py", line 225, in process
+    doc = process(doc)
+  File "/home/nagi/.local/lib/python3.6/site-packages/stanza/pipeline/constituency_processor.py", line 50, in process
+    trees = trainer.parse_tagged_words(self._model.model, words, self._batch_size)
+  File "/home/nagi/.local/lib/python3.6/site-packages/stanza/models/constituency/trainer.py", line 545, in parse_tagged_words
+    treebank = parse_sentences(sentence_iterator, build_batch_from_tagged_words, batch_size, model)
+  File "/home/nagi/.local/lib/python3.6/site-packages/stanza/models/constituency/trainer.py", line 501, in parse_sentences
+    tree_batch = build_batch_fn(batch_size, data_iterator, model)
+  File "/home/nagi/.local/lib/python3.6/site-packages/stanza/models/constituency/trainer.py", line 485, in build_batch_from_tagged_words
+    tree_batch = parse_transitions.initial_state_from_words(tree_batch, model)
+  File "/home/nagi/.local/lib/python3.6/site-packages/stanza/models/constituency/parse_transitions.py", line 139, in initial_state_from_words
+    return initial_state_from_preterminals(preterminal_lists, model, gold_trees=None)
+  File "/home/nagi/.local/lib/python3.6/site-packages/stanza/models/constituency/parse_transitions.py", line 112, in initial_state_from_preterminals
+    word_queues = model.initial_word_queues(preterminal_lists)
+  File "/home/nagi/.local/lib/python3.6/site-packages/stanza/models/constituency/lstm_model.py", line 289, in initial_word_queues
+    raise KeyError("Constituency parser not trained with tag {}".format(str(e))) from e
+KeyError: "Constituency parser not trained with tag 'GW'"
