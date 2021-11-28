@@ -1,23 +1,13 @@
 """
 @file      preprocess_03_split_sentences.py
 @author    Kataoka Nagi (calm1836[at]gmail.com)
-@brief     Split sentences by punctuations (.!?) with stanza
-@detail    Not split by abbreviation periods
-@date      2021-11-13 01:42:13
+@brief     split sentences with '#' by periods other than appreviate periods
+@date      2021-11-17 09:56:09
 @version   1.0
-@see       
-@copyright (c) 2021 Kataoka Nagi This src is released under the MIT License, see LICENSE.
+@see       https://stackoverflow.com/questions/66238613/sentence-segmentation-with-trailing-whitespaces-in-stanza-stanford-corenlp
+@copyright This file includes the work that is distributed in the [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+@copyright (c) 2021 Kataoka Nagi This src is released under the Apache License 2.0, see LICENSE.
 """
-#
-# @file      preprocess_03_split_sentences.py
-# @author    Kataoka Nagi (calm1836[at]gmail.com)
-# @brief     splt sentences with '#' by periods other than appreviate periods
-# @date      2021-11-17 09:56:09
-# @version   1.0
-# @see       https://stackoverflow.com/questions/66238613/sentence-segmentation-with-trailing-whitespaces-in-stanza-stanford-corenlp
-# @copyright This file includes the work that is distributed in the [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
-# @copyright (c) 2021 Kataoka Nagi This src is released under the Apache License 2.0, see LICENSE.
-# 
 
 
 def main():
@@ -47,12 +37,22 @@ def main():
         "./covid-19-news-articles/korea-articles_preprocess_03_spilt-sentences.txt"
         # "./covid-19-news-articles/uk-articles_preprocess_03_spilt-sentences.txt"
     ]
-    
+
     # debug option
     arg_parser = argparse.ArgumentParser(description='-d: debug')
-    arg_parser.add_argument("-d", "--debug", help="optional debug", action="store_true")
-    arg_parser.add_argument("--spacy", help="optional debug", action="store_true")
-    arg_parser.add_argument("--stanza", help="optional debug", action="store_true")
+    arg_parser.add_argument(
+        "-d",
+        "--debug",
+        help="optional debug",
+        action="store_true")
+    arg_parser.add_argument(
+        "--spacy",
+        help="optional debug",
+        action="store_true")
+    arg_parser.add_argument(
+        "--stanza",
+        help="optional debug",
+        action="store_true")
     arg = arg_parser.parse_args()
     do_debug = arg.debug
     if arg.stanza:
@@ -60,17 +60,17 @@ def main():
         use_stanza = True
     if arg.spacy:
         use_spacy = True
-        use_stanza = False    
+        use_stanza = False
 
     # edit DIST_DIRS according to options
     for i, _ in enumerate(dist_dirs):
         if use_spacy:
-            dist_dirs[i] = re.sub("\.txt","_with-spacy.txt", dist_dirs[i])
+            dist_dirs[i] = re.sub("\\.txt", "_with-spacy.txt", dist_dirs[i])
         if use_stanza:
-            dist_dirs[i] = re.sub("\.txt","_with-stanza.txt", dist_dirs[i])
+            dist_dirs[i] = re.sub("\\.txt", "_with-stanza.txt", dist_dirs[i])
 
         if do_debug:
-            dist_dirs[i] = re.sub("\.txt","_debug.txt", dist_dirs[i])
+            dist_dirs[i] = re.sub("\\.txt", "_debug.txt", dist_dirs[i])
 
     # prepare for stanza or spacy
     processors = \
@@ -91,20 +91,22 @@ def main():
             for line in fi:
                 # split sentences
                 doc = nlp(line)
-                spilit_sentences = [sentence.text for sentence in doc.sentences]
-                spilit_sentences = "#".join(spilit_sentences).strip().strip('#')
+                spilit_sentences = [
+                    sentence.text for sentence in doc.sentences]
+                spilit_sentences = "#".join(
+                    spilit_sentences).strip().strip('#')
                 spilit_sentences += '\n'
 
                 # write
                 fw.write(spilit_sentences)
-                
+
                 # debug
                 if do_debug:
                     if cnt_line > num_debug:
                         break
                     print("cnt_line:", cnt_line, spilit_sentences)
                     cnt_line += 1
-    
+
     # print time
     print(time.time() - start_time)
 
