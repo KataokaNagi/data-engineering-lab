@@ -29,29 +29,45 @@
 
 ##################################################
 
-from argparse import ArgumentParser
+# from argparse import ArgumentParser
 
-ap1 = ArgumentParser(description='one')
-ap2 = ArgumentParser(description='two')
+# ap1 = ArgumentParser(description='one')
+# ap2 = ArgumentParser(description='two')
 
-ap1.add_argument(
-    "-o",
-    "--one",
-    help="one description",
-    action="store_true")
-# ap2.add_argument(
-#     "-t",
-#     "--two",
-#     help="two description",
+# ap1.add_argument(
+#     "-o",
+#     "--one",
+#     help="one description",
 #     action="store_true")
+# # ap2.add_argument(
+# #     "-t",
+# #     "--two",
+# #     help="two description",
+# #     action="store_true")
 
-arg1 = ap1.parse_args()
-# arg2 = ap2.parse_args()
+# arg1 = ap1.parse_args()
+# # arg2 = ap2.parse_args()
 
-print("foo")
+# print("foo")
 
-if arg1.one:
-    print("one")
+# if arg1.one:
+#     print("one")
 
 # if arg2.two:
 #     print("two")
+
+##################################################
+
+# import utils
+
+# utils.log.Log.v("vorbose")
+# utils.log.Log.d("debug")
+# utils.log.Log.e("error")
+# utils.log.Log.w("worning")
+
+from utils.log import Log as log
+
+log.v("vorbose")
+log.d("debug")
+log.e("error")
+log.w("worning")
