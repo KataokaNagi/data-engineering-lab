@@ -4,7 +4,7 @@
 @brief     Android-like logging helper
 @date      2021-11-13 01:42:13
 @version   1.0
-@copyright (c) 2021 Kataoka Nagi This src is released under the MIT License, see LICENSE.
+@copyright (c) 2021 Kataoka Nagi This src is released under the MIT License.
 """
 
 from sys import stderr
@@ -12,31 +12,32 @@ from sys import stderr
 
 class Log:
 
-    def __init__(self):
-        self.__ENABLE_DEBUG = True
-        self.__ENABLE_VERBOSE = True
+    # @see [Pythonでのstatic変数／static関数について考える]
+    # (https://qiita.com/daiyada/items/5865cef7aa068363ac14)
+    __ENABLE_DEBUG = True
+    __ENABLE_VERBOSE = True
 
-        self.__RESET = "\033[0m"
-        self.__RED = "\033[41m"
-        self.__YELLOW = "\033[33m"
+    __RESET = "\033[0m"
+    __RED = "\033[41m"
+    __YELLOW = "\033[33m"
 
     @staticmethod
-    def d(self, *args):
-        if self.__ENABLE_DEBUG:
+    def d(*args):
+        if Log.__ENABLE_DEBUG:
             print(args)
 
     # VERBOSE
     @staticmethod
-    def v(self, *args):
-        if self.__ENABLE_VERBOSE:
+    def v(*args):
+        if Log.__ENABLE_VERBOSE:
             print(args)
 
     # ERROR
     @staticmethod
-    def e(self, *args):
-        print(self.__RED, args, self.__RESET, file=stderr)
+    def e(*args):
+        print(Log.__RED, args, Log.__RESET, file=stderr)
 
     # WARNING
     @staticmethod
-    def w(self, *args):
-        print(self.__YELLOW, args, self.__RESET)
+    def w(*args):
+        print(Log.__YELLOW, args, Log.__RESET)
