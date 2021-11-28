@@ -275,6 +275,10 @@ TSWLatexianTemp*
 # Makeindex log files
 *.lpz
 
+##################################################
+# @auther Kataoka Nagi
+##################################################
+
 # datasets
 covid-19-news-articles/
 IBM_Debater_(R)_CE-EMNLP-2015.v3/
@@ -285,3 +289,6 @@ venv-tf/
 
 # vscode
 .vscode/
+
+# python
+__pycache__/
