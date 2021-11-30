@@ -27,6 +27,9 @@ import pandas as pd
 import logging
 import sklearn
 import time
+from sys import argv
+from argparse import ArgumentParser
+from re import sub
 
 CLAIMS_DIR = "./IBM_Debater_(R)_CE-EMNLP-2015.v3/claims.txt"
 EVIDENCE_DIR = "./IBM_Debater_(R)_CE-EMNLP-2015.v3/evidence.txt"
@@ -41,6 +44,8 @@ NUM_EPOCHS = 10
 MODEL_SEED = 2021
 CLASSIFICATION_MODEL_TYPE = 'roberta'
 CLASSIFICATION_MODEL_NAME = 'roberta-base'
+
+NUM_DEBUG = 20
 
 
 def main():
@@ -213,117 +218,91 @@ def main():
     result, model_outputs, wrong_predictions = model.eval_model(
         eval_df, acc=sklearn.metrics.accuracy_score)
 
-    """## 英記事でのテスト
+    """## 英記事で分類
 
         # データのインポート
         - preprocessed covid-19-news-articles
     """
 
-    """### データの前処理"""
+    articles_dir, dist_dir = argv
+
+    # debug option
+    arg_parser = ArgumentParser(description='-d: debug')
+    arg_parser.add_argument(
+        "-d",
+        "--debug",
+        help="optional debug",
+        action="store_true")
+    arg = arg_parser.parse_args()
+    do_debug = arg.debug
+
+    # edit DIST_DIRS according to options
+    if do_debug:
+        dist_dir = sub("\\.txt", "_debug.txt", dist_dir)
+
     log.d("*** import articles ***")
 
-    nations_articles_sentences = [
-        len(ARTICLES_DIRS)]  # [nation][articles][sentences]
+    articles_sentences = []  # [articles][sentences]
 
-    # read
-    for nation_idx, articles_dir in enumerate(ARTICLES_DIRS):
-        with open(articles_dir, "r", encoding="utf_8") as f:
-            articles_sentences = [
-                article.split('#') for article in f.readlines()]
-            nations_articles_sentences[nation_idx] = articles_sentences
-            log.v("articles_sentences:")
-            log.v(articles_sentences[0])
-            log.v(articles_sentences[1])
-            log.v(articles_sentences[2])
-            log.v()
+    with open(articles_dir, "r", encoding="utf_8") as f:
+        articles_sentences = [
+            article.split('#') for article in f.readlines()]
+        log.v("articles_sentences:")
+        log.v(articles_sentences[0])
+        log.v(articles_sentences[1])
+        log.v(articles_sentences[2])
+        log.v()
 
     """## 分類器へ代入"""
-    log.d("*** substitute nations' articles' sentences for model ***")
+    log.d("*** substitute articles' sentences for model ***")
 
-    predicts = []
+    predicts = [[model.predict([sentence]) for sentence in article]
+                for article in articles_sentences]
 
-    for nation_idx, articles_sentences in enumerate(
-            nations_articles_sentences):
-        for article_idx, sentences in enumerate(
-                articles_sentences):
-            each_articles_preds = []
-            for sentence in articles_sentences[article_idx]:
-                # log.v(sentence)
-                # log.v(model.predict([sentence]))
-                pred = model.predict([sentence])
-                each_articles_preds.append(pred)
-            predicts.append(each_articles_preds)
-
-    log.v(predicts)
-
-    log.v(predicts[0])
-    for pred in predicts[0]:
-        log.v(pred)
-
-    log.v(predicts[0][0][0])
-    log.v(predicts[0][0][0][0])
+    log.v("predicts", predicts)
+    log.v("predicts[0]", predicts[0])
+    log.v("predicts[0][0]", predicts[0][0])
+    log.v("predicts[0][0][0]", predicts[0][0][0])
+    log.v("predicts[0][0][0][0]", predicts[0][0][0][0])
 
     """### 文章と分類結果の対応"""
 
-    for article_idx in range(len(wikinews_sentences_en)):
-        each_articles_preds = []
-        log.v("\n******************************")
-        log.v("article_idx: ", article_idx)
-        log.v("******************************\n")
-        for sentence_idx in range(len(wikinews_sentences_en[article_idx])):
-            sentence = wikinews_sentences_en[article_idx][sentence_idx]
-            if predicts[article_idx][sentence_idx][0][0] == CLAIMS_LABEL:
-                log.v("claim   : ", sentence)
-            else:
-                log.v("evidence: ", sentence)
+    LABEL_IDX = 0
+    FEATURE_IDX = 1
+    FEATURE_X_IDX = 0
+    FEATURE_Y_IDX = 0
 
-    for article_idx in range(len(wikinews_sentences_en)):
-        each_articles_preds = []
-        log.v("\n******************************")
-        log.v("article_idx: ", article_idx)
-        log.v("******************************\n")
-        for sentence in nations_articles_sentences[article_idx]:
-            log.v(sentence)
-        log.v()
-        for sentence_idx in range(len(wikinews_sentences_en[article_idx])):
-            sentence = wikinews_sentences_en[article_idx][sentence_idx]
-            if predicts[article_idx][sentence_idx][0][0] == CLAIMS_LABEL:
-                log.v("claim   : ", sentence)
+    # cat label and sentences
+    classified_articles_sentences = []
+
+    for article_idx, article in enumerate(articles_sentences):
+
+        classified_sentences = []
+
+        for sentence_idx, sentence in enumerate(article):
+            pred_label = predicts[article_idx][sentence_idx][LABEL_IDX][0]
+            feature_x = predicts[article_idx][sentence_idx][FEATURE_IDX][0][0][FEATURE_X_IDX]
+            feature_y = predicts[article_idx][sentence_idx][FEATURE_IDX][0][0][FEATURE_Y_IDX]
+            if pred_label == CLAIMS_LABEL:
+                classified_sentences.append(
+                    "c;" + feature_x + ";" + feature_y + ";" + sentence)
             else:
-                log.v("evidence: ", sentence)
+                classified_sentences.append(
+                    "e;" + feature_x + ";" + feature_y + ";" + sentence)
+
+        joined = "#".join(
+            classified_sentences).strip().strip('#')
+        classified_articles_sentences.append(joined + "\n")
+
+        if do_debug and NUM_DEBUG == article_idx - 1:
+            break
+
+    # write
+    with open(dist_dir, "w+", encoding="utf_8") as f:
+        f.write(classified_articles_sentences)
 
     log.w("remove outputs/ if you needed")
 
-    """### ラベルの可視化"""
-
-
-"""## データのインポート・前処理
-
-# データセット概要
-- [IBM Debater® - Claims and Evidence (EMNLP 2015)](https://www.research.ibm.com/haifa/dept/vst/debating_data.shtml#Download)
-    - 作品がCC-BY-SAでリリースされていることを示すライセンス表示
-        - 権利者の名前を入れる
-        - 加工しても同じライセンスで他人にもシェア
-        - 商用利用OK
-    - a)ライセンスのテキストへのハイパーリンクまたはURL
-    - またはb)ライセンスのコピーのいずれかを含める
-    - 文末のカンマやクエスチョンマークは除去済み
-
-# インポートとテキスト処理
-- 変数
-    - claims_data
-        - claims.txtの分割した行のリスト
-    - evidence_data
-        - evidence.txtの分割した行のリスト
-    - claims
-        - 主張の文のリスト
-    - evidence
-        - 根拠の文のリスト
-- 前処理
-    - 改行文字の除去
-    - タブ文字で分割
-    - 大文字を小文字に変換
-"""
 
 if __name__ == "__main__":
     main()
