@@ -17,6 +17,7 @@
 
 from utils.log import Log as log
 import time
+import datetime
 from argparse import ArgumentParser
 from re import sub
 from simpletransformers.classification import ClassificationModel
@@ -32,6 +33,7 @@ def main():
         # データのインポート
         - preprocessed covid-19-news-articles
     """
+    exe_time_dir = "./covid-19-news-articles/exe-time_process-02_classified-claim-or-evidence.txt"
 
     # debug option
     arg_parser = ArgumentParser(description='execute simple transformer')
@@ -55,6 +57,7 @@ def main():
     dest_dir = arg.dest_dir
     if do_debug:
         dest_dir = sub("\\.txt", "_debug.txt", dest_dir)
+        exe_time_dir = sub("\\.txt", "_debug.txt", exe_time_dir)
 
     log.d("*** import articles ***")
 
@@ -89,7 +92,8 @@ def main():
                 for article in articles_sentences]
 
     # print time
-    log.d("predict time (sec):", time.time() - start_time)
+    predict_time = time.time() - start_time
+    log.d("predict time (sec):", predict_time)
 
     log.v("predicts:", predicts, '\n')
     log.v("predicts[0]:", predicts[0], '\n')
@@ -142,9 +146,17 @@ def main():
         "classified_articles_sentences[0]:",
         classified_articles_sentences[0])
 
-    # write
+    # write dest
+    log.d("*** write destination data & predict time ***")
     with open(dest_dir, "w+", encoding="utf_8") as f:
         f.writelines(classified_articles_sentences)
+
+    # write time
+    with open(exe_time_dir, "a+", encoding="utf_8") as f:
+        f.write(str(datetime.datetime))
+        f.write(" predict_time(sec): ")
+        f.write(str(predict_time))
+        f.write("\n")
 
 
 if __name__ == "__main__":
