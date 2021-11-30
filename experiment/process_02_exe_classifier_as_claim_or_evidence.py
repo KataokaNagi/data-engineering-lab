@@ -62,7 +62,7 @@ def main():
 
     with open(arg.articles_dir, "r", encoding="utf_8") as f:
         articles_sentences = [
-            article.split('#') for article in f.readlines()]
+            article.strip().split('#') for article in f.readlines()]
         log.v("articles_sentences:")
         log.v(articles_sentences[0])
         log.v(articles_sentences[1])
