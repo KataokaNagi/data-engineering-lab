@@ -31,7 +31,7 @@ apt-get install python3-venv;
 
 # make venv if not exist
 if [ ! -d $VENV_DIR ]; then
-    python3 -m venv venv;
+    python3 -m venv venv --system-site-packages;
 fi
 
 # activate venv
@@ -42,14 +42,24 @@ source $ACTIVATE_DIR;
 ##################################################
 
 # preprocess_03_split_sentences.py
-python3 -m pip3 install cython
+python3 -m pip install cython
 pip install -U pip setuptools wheel
 pip install -U spacy
-python3 -m pip3 install stanza
+python3 -m pip install stanza
 
 # debug for tensorflow
-python3 -m pip3 uninstall torch
-python3 -m pip3 install torch==1.8.2+cu111 torchvision==0.9.2+cu111 torchaudio==0.8.2 -f https://download.pytorch.org/whl/lts/1.8/torch_lts.html
+python3 -m pip uninstall torch
+python3 -m pip install torch==1.8.2+cu111 torchvision==0.9.2+cu111 torchaudio==0.8.2 -f https://download.pytorch.org/whl/lts/1.8/torch_lts.html
+
+# process_01_classifier_as_claim_or_evidence.py
+python3 -m pip uninstall importlib-metadata
+python3 -m pip install importlib-metadata==4.2.0
+python3 -m pip install pandas
+python3 -m pip install transformers
+python3 -m pip install simpletransformers
+python3 -m pip install sklearn
+# python3 -m pip uninstall importlib-metadata
+# python3 -m pip3 install importlib-metadata==4.8.2
 
 ##################################################
 # set path (add venv/bin/activate)
