@@ -292,3 +292,8 @@ venv-tf/
 
 # python
 __pycache__/
+
+# simple transformer
+cache_dir/
+outputs/
+runs/
