@@ -23,7 +23,7 @@ from simpletransformers.classification import ClassificationModel
 
 CLASSIFICATION_MODEL_TYPE = 'roberta'
 MODEL_DIR = "outputs/"
-NUM_DEBUG = 3
+NUM_DEBUG = 1
 
 
 def main():
@@ -85,18 +85,26 @@ def main():
     predicts = [[model.predict([sentence]) for sentence in article]
                 for article in articles_sentences]
 
-    log.v("predicts", predicts)
-    log.v("predicts[0]", predicts[0])
-    log.v("predicts[0][0]", predicts[0][0])
-    log.v("predicts[0][0][0]", predicts[0][0][0])
-    log.v("predicts[0][0][0][0]", predicts[0][0][0][0])
+    log.v("predicts:", predicts, '\n')
+    log.v("predicts[0]:", predicts[0], '\n')
+    log.v("predicts[0][0]:", predicts[0][0], '\n')
+    log.v("predicts[0][0][0]:", predicts[0][0][0], '\n')
+    log.v("predicts[0][0][0][0]:", predicts[0][0][0][0], '\n')
+    log.v("predicts[0][0][1]:", predicts[0][0][1], '\n')
+    log.v("predicts[0][0][1][0]:", predicts[0][0][1][0], '\n')
+    log.v("type(predicts[0][0][1][0]):", type(predicts[0][0][1][0]), '\n')
+    x, y = predicts[0][0][1][0]
+    log.v("x, y = predicts[0][0][1][0]")
+    log.v("x:", x)
+    log.v("y:", y)
+    # log.v("predicts[0][0][1][0][0]:", predicts[0][0][0][0][0], '\n') # error
+    # log.v("predicts[0][0][1][0][0][0]:", predicts[0][0][1][0][0][0], '\n')
+    # log.v("predicts[0][0][1][0][0][0]:", predicts[0][0][1][0][0][1], '\n')
 
     """### 文章と分類結果の対応"""
 
     LABEL_IDX = 0
     FEATURE_IDX = 1
-    FEATURE_X_IDX = 0
-    FEATURE_Y_IDX = 0
 
     CLAIMS_LABEL = 1
     EVIDENCE_LABEL = 0
@@ -110,8 +118,9 @@ def main():
 
         for sentence_idx, sentence in enumerate(article):
             pred_label = predicts[article_idx][sentence_idx][LABEL_IDX][0]
-            feature_x = predicts[article_idx][sentence_idx][FEATURE_IDX][0][0][FEATURE_X_IDX]
-            feature_y = predicts[article_idx][sentence_idx][FEATURE_IDX][0][0][FEATURE_Y_IDX]
+            feature_x, feature_y = predicts[article_idx][sentence_idx][FEATURE_IDX][0]
+            feature_x, feature_y = str(feature_x), str(feature_y)
+
             if pred_label == CLAIMS_LABEL:
                 classified_sentences.append(
                     "c;" + feature_x + ";" + feature_y + ";" + sentence)
@@ -123,9 +132,13 @@ def main():
             classified_sentences).strip().strip('#')
         classified_articles_sentences.append(joined + "\n")
 
+    log.v(
+        "classified_articles_sentences[0]:",
+        classified_articles_sentences[0])
+
     # write
     with open(dest_dir, "w+", encoding="utf_8") as f:
-        f.write(classified_articles_sentences)
+        f.writelines(classified_articles_sentences)
 
 
 if __name__ == "__main__":
