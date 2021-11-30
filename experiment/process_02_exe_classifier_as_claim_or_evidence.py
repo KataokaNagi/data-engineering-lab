@@ -23,7 +23,7 @@ from simpletransformers.classification import ClassificationModel
 
 CLASSIFICATION_MODEL_TYPE = 'roberta'
 MODEL_DIR = "outputs/"
-NUM_DEBUG = 20
+NUM_DEBUG = 3
 
 
 def main():
@@ -68,6 +68,9 @@ def main():
         log.v(articles_sentences[1])
         log.v(articles_sentences[2])
         log.v()
+
+    if do_debug:
+        articles_sentences = articles_sentences[:NUM_DEBUG]
 
     """## 分類器へ代入"""
     log.d("*** substitute articles' sentences for model ***")
@@ -119,9 +122,6 @@ def main():
         joined = "#".join(
             classified_sentences).strip().strip('#')
         classified_articles_sentences.append(joined + "\n")
-
-        if do_debug and NUM_DEBUG == article_idx - 1:
-            break
 
     # write
     with open(dest_dir, "w+", encoding="utf_8") as f:
