@@ -4,7 +4,7 @@
 @author    Kataoka Nagi (calm1836[at]gmail.com)
 @brief     execute transformer txt classifier as claim or evidence
 @note      [sent-1#sent-2#...\n, ...] -> [e;[ec-score-array];sent-1#c;[ec-score-array];sent-2...\n, ...]
-@note      python3 process_02_exe_classifier_as_claim_or_evidence.py ARTICLE_DIR DIST_DIR [-d]
+@note      python3 process_02_exe_classifier_as_claim_or_evidence.py ARTICLE_DIR DEST_DIR [-d]
 @date      2021-12-01 00:38:55
 @version   1.0
 @see       transformer_classifier_as_claim_or_evidence.ipynb
@@ -17,13 +17,12 @@
 
 from utils.log import Log as log
 import time
-from sys import argv
 from argparse import ArgumentParser
 from re import sub
 from simpletransformers.classification import ClassificationModel
 
 CLASSIFICATION_MODEL_TYPE = 'roberta'
-MODEL_DIR = "outputs/best_model"
+MODEL_DIR = "outputs/"
 NUM_DEBUG = 20
 
 
@@ -34,10 +33,16 @@ def main():
         - preprocessed covid-19-news-articles
     """
 
-    articles_dir, dist_dir = argv
-
     # debug option
-    arg_parser = ArgumentParser(description='-d: debug')
+    arg_parser = ArgumentParser(description='execute simple transformer')
+    arg_parser.add_argument(
+        "articles_dir",
+        help="article directory's path",
+        type=str)
+    arg_parser.add_argument(
+        "dest_dir",
+        help="destination directory's path",
+        type=str)
     arg_parser.add_argument(
         "-d",
         "--debug",
@@ -46,15 +51,16 @@ def main():
     arg = arg_parser.parse_args()
     do_debug = arg.debug
 
-    # edit DIST_DIRS according to options
+    # edit DEST_DIRS according to options
+    dest_dir = arg.dest_dir
     if do_debug:
-        dist_dir = sub("\\.txt", "_debug.txt", dist_dir)
+        dest_dir = sub("\\.txt", "_debug.txt", dest_dir)
 
     log.d("*** import articles ***")
 
     articles_sentences = []  # [articles][sentences]
 
-    with open(articles_dir, "r", encoding="utf_8") as f:
+    with open(arg.articles_dir, "r", encoding="utf_8") as f:
         articles_sentences = [
             article.split('#') for article in f.readlines()]
         log.v("articles_sentences:")
@@ -118,10 +124,8 @@ def main():
             break
 
     # write
-    with open(dist_dir, "w+", encoding="utf_8") as f:
+    with open(dest_dir, "w+", encoding="utf_8") as f:
         f.write(classified_articles_sentences)
-
-    log.w("remove outputs/ if you needed")
 
 
 if __name__ == "__main__":
