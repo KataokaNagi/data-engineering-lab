@@ -24,20 +24,20 @@ class Log:
     @staticmethod
     def d(*args):
         if Log.__ENABLE_DEBUG:
-            print(args)
+            print(*args)
 
     # VERBOSE
     @staticmethod
     def v(*args):
         if Log.__ENABLE_VERBOSE:
-            print(args)
+            print(*args)
 
     # ERROR
     @staticmethod
     def e(*args):
-        print(Log.__RED, args, Log.__RESET, file=stderr)
+        print(Log.__RED, *args, Log.__RESET, file=stderr)
 
     # WARNING
     @staticmethod
     def w(*args):
-        print(Log.__YELLOW, args, Log.__RESET)
+        print(Log.__YELLOW, *args, Log.__RESET)
