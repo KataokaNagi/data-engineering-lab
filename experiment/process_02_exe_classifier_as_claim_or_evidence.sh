@@ -22,9 +22,25 @@ DEST_DIRS=(
     # "./covid-19-news-articles/uk-articles_process-02_classified-claim-or-evidence.txt"
 )
 
+# debug [-d] or not
+do_debug=false
+while getopts d OPT
+do
+    case $OPT in
+        d) do_debug=true
+        ;;
+        \?) echo "u can use -d option for debug"
+        ;;
+    esac
+done
+
 for i in {0..2}
 do
-    python3 process_02_exe_classifier_as_claim_or_evidence.py "${ARTICLES_DIRS[$i]}" "${DEST_DIRS[$i]}"
+    if "${do_debug}"; then
+        python3 process_02_exe_classifier_as_claim_or_evidence.py "${ARTICLES_DIRS[$i]}" "${DEST_DIRS[$i]}" -d
+    else
+        python3 process_02_exe_classifier_as_claim_or_evidence.py "${ARTICLES_DIRS[$i]}" "${DEST_DIRS[$i]}"
+    fi
 done
 
 # debug
