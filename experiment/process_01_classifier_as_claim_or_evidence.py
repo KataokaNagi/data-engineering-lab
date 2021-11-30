@@ -2,7 +2,10 @@
 """process_01_classifier_as_claim_or_evidence.py
 
 @author    Kataoka Nagi (calm1836[at]gmail.com)
-@date      2021-11-17 09:56:09
+@brief     transformer txt classifier as claim or evidence
+@note      [sent-1#sent-2#...\n, ...] -> [e;[ec-score-array];sent-1#c;[ec-score-array];sent-2...\n, ...]
+@note      python3 process_01_classifier_as_claim_or_evidence.py ARTICLE_DIR DIST_DIR
+@date      2021-12-01 00:38:55
 @version   1.0
 @see       transformer_classifier_as_claim_or_evidence.ipynb
 @see       [hands-on-ml 16章 Sentiment Analysys](https://github.com/ageron/handson-ml2/blob/master/16_nlp_with_rnns_and_attention.ipynb)
@@ -38,20 +41,6 @@ NUM_EPOCHS = 10
 MODEL_SEED = 2021
 CLASSIFICATION_MODEL_TYPE = 'roberta'
 CLASSIFICATION_MODEL_NAME = 'roberta-base'
-
-ARTICLES_DIRS = [
-    "./covid-19-news-articles/india-articles_preprocess_03_spilt-sentences_with-stanza.txt",
-    "./covid-19-news-articles/japan-articles_preprocess_03_spilt-sentences_with-stanza.txt",
-    "./covid-19-news-articles/korea-articles_preprocess_03_spilt-sentences_with-stanza.txt"
-    # "./covid-19-news-articles/uk-articles_preprocess_03_spilt-sentences_with-stanza.txt"
-]
-
-DIST_DIRS = [
-    "./covid-19-news-articles/india-articles_preprocess_03_spilt-sentences.txt",
-    "./covid-19-news-articles/japan-articles_preprocess_03_spilt-sentences.txt",
-    "./covid-19-news-articles/korea-articles_preprocess_03_spilt-sentences.txt"
-    # "./covid-19-news-articles/uk-articles_preprocess_03_spilt-sentences.txt"
-]
 
 
 def main():
