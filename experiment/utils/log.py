@@ -15,7 +15,9 @@ class Log:
     # @see [Pythonでのstatic変数／static関数について考える]
     # (https://qiita.com/daiyada/items/5865cef7aa068363ac14)
     __ENABLE_DEBUG = True
-    __ENABLE_VERBOSE = True
+    # __ENABLE_DEBUG = False
+    # __ENABLE_VERBOSE = True
+    __ENABLE_VERBOSE = False
 
     __RESET = "\033[0m"
     __RED = "\033[41m"
