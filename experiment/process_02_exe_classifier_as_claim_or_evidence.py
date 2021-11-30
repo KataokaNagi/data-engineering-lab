@@ -81,9 +81,15 @@ def main():
         MODEL_DIR
     )
 
+    # time mesurement: start
+    start_time = time.time()
+
     # predict
     predicts = [[model.predict([sentence]) for sentence in article]
                 for article in articles_sentences]
+
+    # print time
+    log.d("predict time (sec):", time.time() - start_time)
 
     log.v("predicts:", predicts, '\n')
     log.v("predicts[0]:", predicts[0], '\n')

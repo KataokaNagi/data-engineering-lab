@@ -22,6 +22,7 @@ from simpletransformers.classification import ClassificationModel, Classificatio
 import pandas as pd
 import logging
 import sklearn
+import time
 
 CLAIMS_DIR = "./IBM_Debater_(R)_CE-EMNLP-2015.v3/claims.txt"
 EVIDENCE_DIR = "./IBM_Debater_(R)_CE-EMNLP-2015.v3/evidence.txt"
@@ -200,7 +201,9 @@ def main():
     # !rm - rf outputs/
 
     # 学習
+    start_time = time.time()
     model.train_model(train_df, overwrite_output_dir=True)
+    log.d("train time (sec):", time.time() - start_time)
 
     # 評価
     result, model_outputs, wrong_predictions = model.eval_model(eval_df)
