@@ -8,10 +8,8 @@
 # @copyright (c) 2021 Kataoka Nagi This src is released under the MIT License, see LICENSE.
 # 
 BEGIN{
-    do_print_debug = 1
-    # do_print_debug = 0
-    do_limit_row = 1
-    # do_limit_row = 0
+    do_print_debug = do_debug
+    do_limit_row = do_debug
     num_each_debug = 1000
 }
 function print_debug(regex_title) {

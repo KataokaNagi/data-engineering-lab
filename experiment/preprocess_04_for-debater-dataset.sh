@@ -40,7 +40,11 @@ do
     fi
 
     # exe command
-    mawk -f "${AWK_DIR}" "${DATA_DIRS[$i]}" > "${dest_dir}"
+    if "${do_debug}"; then
+        mawk -v do_debug=1 -f "${AWK_DIR}" "${DATA_DIRS[$i]}" > "${dest_dir}"
+    else
+        mawk -v do_debug=0 -f "${AWK_DIR}" "${DATA_DIRS[$i]}" > "${dest_dir}"
+    fi
 done
 
 # mawk -f preprocess_04_for-debater-dataset.awk ./IBM_Debater_(R)_CE-EMNLP-2015.v3/claims_preprocess-01_extract-column-c.txt > ./IBM_Debater_(R)_CE-EMNLP-2015.v3/claims_preprocess-02_awk.txt
