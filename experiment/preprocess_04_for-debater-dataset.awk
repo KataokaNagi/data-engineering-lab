@@ -8,10 +8,10 @@
 # @copyright (c) 2021 Kataoka Nagi This src is released under the MIT License, see LICENSE.
 # 
 BEGIN{
-    # do_print_debug = 1
-    do_print_debug = 0
-    # do_limit_row = 1
-    do_limit_row = 0
+    do_print_debug = 1
+    # do_print_debug = 0
+    do_limit_row = 1
+    # do_limit_row = 0
     num_each_debug = 1000
 }
 function print_debug(regex_title) {
@@ -35,7 +35,17 @@ function print_debug(regex_title) {
         print ""
     }
 
-    # A-Z -> a-z
+    # for debater dataset
+    print_debug("rm like [REF or [REF]")
+    gsub(/\[[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]\]?/," ")
+    # gsub(/\[[a-zA-Z0-9]{1,3}\]?/," ") # error
+    # gsub(/\[REF\]?/," ")
+
+    print_debug("add '.' at the end of sentence")
+    $0 = $0 "."
+
+    # A-Z -> a-z.
+    # debater dataset version
     print_debug("make lower")
     $0=tolower($0)
 
@@ -63,7 +73,7 @@ function print_debug(regex_title) {
     gsub(/[^a-z0-9 \.!?]/,"")
 
 
-    # rm punctuations & spaces
+    # rm spaces befor punctuations
     print_debug("rm spaces before periods")
     gsub(/ +\./,".")
     print_debug("rm spaces before exclamation marks")
@@ -73,37 +83,19 @@ function print_debug(regex_title) {
     # print_debug("rm spaces beside period")
     # gsub(/ \. | \.|\. /,".")
 
+    # rm multi punctuations
     print_debug("multi periods -> single period")
-    gsub(/\.{2,}/,".")
+    gsub(/\.+/,".")
+    # gsub(/\.{2,}/,".")
     print_debug("multi exclamation marks -> single exclamation mark")
-    gsub(/!{2,}/,"!")
+    gsub(/!+/,"!")
+    # gsub(/!{2,}/,"!")
     print_debug("multi question marks -> single question mark")
-    gsub(/\?{2,}/,"?")    
+    gsub(/\?+/,"?")
+    # gsub(/\?{2,}/,"?")    
     print_debug("multi spaces -> single space")
-    gsub(/ {2,}/," ")
-    
-    # rm abbreviation periods
-    # print_debug("rm 3 consecutive abbreviation periods at beginning of line")
-    # gsub(/^(.)\.(.)\.(.)\./,"$1$2$3")
-    # print_debug("rm 2 consecutive abbreviation periods at beginning of line")
-    # gsub(/^(.)\.(.)\./,"$1$2")
-    # print_debug("rm an abbreviation period at beginning of line")
-    # gsub(/^(.)\./,"$1")
-
-    # print_debug("rm 7 consecutive abbreviation periods")
-    # gsub(/ (.)\.(.)\.(.)\.(.)\.(.)\.(.)\.(.)\./,"$1$2$3$4$5$6$7")
-    # print_debug("rm 6 consecutive abbreviation periods")
-    # gsub(/ (.)\.(.)\.(.)\.(.)\.(.)\.(.)\./,"$1$2$3$4$5$6")
-    # print_debug("rm 5 consecutive abbreviation periods")
-    # gsub(/ (.)\.(.)\.(.)\.(.)\.(.)\./,"$1$2$3$4$5")
-    # print_debug("rm 4 consecutive abbreviation periods")
-    # gsub(/ (.)\.(.)\.(.)\.(.)\./,"$1$2$3$4")
-    # print_debug("rm 3 consecutive abbreviation periods")
-    # gsub(/ (.)\.(.)\.(.)\./,"$1$2$3")
-    # print_debug("rm 2 consecutive abbreviation periods")
-    # gsub(/ (.)\.(.)\./,"$1$2")
-    # print_debug("rm an consecutive abbreviation period")
-    # gsub(/ (.)\./,"$1")
+    gsub(/ +/," ")
+    # gsub(/ {2,}/," ")
         
     print_debug("rm spaces at beginning of line")
     gsub(/^ +/,"")
