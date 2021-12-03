@@ -295,5 +295,5 @@ __pycache__/
 
 # simple transformer
 cache_dir/
-outputs/
+outputs*/
 runs/
