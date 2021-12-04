@@ -3,12 +3,13 @@
 # @file      process_02_exe_classifier_as_claim_or_evidence.sh
 # @author    Kataoka Nagi (calm1836[at]gmail.com)
 # @brief     execute process_02_exe_classifier_as_claim_or_evidence with multi files
-# @date      2021-12-01 06:05:33
-# @version   1.0
-# @history   added
+# @date      2021-12-05 04:38:15
+# @version   1.1
+# @history   add log option
 # @copyright (c) 2021 Kataoka Nagi This src is released under the MIT License, see LICENSE.
 # 
 
+SRC_DIR="process_02_exe_classifier_as_claim_or_evidence.py"
 ARTICLES_DIRS=(
     "./covid-19-news-articles/india-articles_preprocess_03_spilt-sentences_with-stanza.txt"
     "./covid-19-news-articles/japan-articles_preprocess_03_spilt-sentences_with-stanza.txt"
@@ -22,12 +23,19 @@ DEST_DIRS=(
     # "./covid-19-news-articles/uk-articles_process-02_classified-claim-or-evidence.txt"
 )
 
+date=`date "+%Y%m%d-%H%M%S"`
+log_dir="./logs/${SRC_DIR/.py/_${date}.log}"
+log_cmd="2>&1 | tee -a ${log_dir}"
+
 # debug [-d] or not
 do_debug=false
-while getopts d OPT
+do_log=false
+while getopts ":dl" OPT
 do
     case $OPT in
         d) do_debug=true
+        ;;
+        l) do_log=true
         ;;
         \?) echo "u can use -d option for debug"
         ;;
@@ -36,15 +44,15 @@ done
 
 for i in {0..2}
 do
-    if "${do_debug}"; then
-        python3 process_02_exe_classifier_as_claim_or_evidence.py "${ARTICLES_DIRS[$i]}" "${DEST_DIRS[$i]}" -d
-    else
-        python3 process_02_exe_classifier_as_claim_or_evidence.py "${ARTICLES_DIRS[$i]}" "${DEST_DIRS[$i]}"
-    fi
-done
+    cmd="python3 ${SRC_DIR} ${ARTICLES_DIRS[$i]} ${DEST_DIRS[$i]}"
 
-# debug
-# for i in {0..2}
-# do
-#     python3 process_02_exe_classifier_as_claim_or_evidence.py "${ARTICLES_DIRS[$i]}" "${DEST_DIRS[$i]}" -d
-# done
+    if "${do_debug}"; then
+        cmd="${cmd} --debug"
+    fi
+
+    if "${do_log}"; then
+        cmd="${cmd} ${log_cmd}"
+    fi
+
+    eval "${cmd}"
+done
