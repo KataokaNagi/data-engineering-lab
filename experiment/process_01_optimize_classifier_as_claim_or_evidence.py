@@ -41,6 +41,11 @@ MODEL_SEED = 2021
 CLASSIFICATION_MODEL_TYPE = 'roberta'
 CLASSIFICATION_MODEL_NAME = 'roberta-base'
 
+train_df = None
+eval_df = None
+model_args = None
+model = None
+
 
 def main():
     claims = []
@@ -211,7 +216,7 @@ def main():
     # 学習
     start_time = time.time()
     # wandbで学習
-    wandb.agent(sweep_id, train(train_df, eval_df, model_args))
+    wandb.agent(sweep_id, train)
     log.d("train time (sec):", time.time() - start_time)
 
     # 評価
@@ -222,7 +227,7 @@ def main():
         eval_df, acc=sklearn.metrics.accuracy_score)
 
 
-def train(train_df, eval_df, model_args):
+def train():
     # wandbの初期化
     wandb.init()
 
