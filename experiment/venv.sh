@@ -51,7 +51,7 @@ python3 -m pip install stanza
 python3 -m pip uninstall torch
 python3 -m pip install torch==1.8.2+cu111 torchvision==0.9.2+cu111 torchaudio==0.8.2 -f https://download.pytorch.org/whl/lts/1.8/torch_lts.html
 
-# process_01_classifier_as_claim_or_evidence.py
+# process_01_train_classifier_as_claim_or_evidence.py
 python3 -m pip uninstall importlib-metadata
 python3 -m pip install importlib-metadata==4.2.0
 python3 -m pip install pandas
@@ -60,6 +60,8 @@ python3 -m pip install simpletransformers
 python3 -m pip install sklearn
 # python3 -m pip uninstall importlib-metadata
 # python3 -m pip3 install importlib-metadata==4.8.2
+python3 -m pip install wandb
+wandb login <API keysを記述> # https://wandb.ai/settings
 
 ##################################################
 # set path (add venv/bin/activate)

@@ -297,3 +297,9 @@ __pycache__/
 cache_dir/
 outputs*/
 runs/
+
+# wandb
+wandb/
+.env
+
+tmp/
