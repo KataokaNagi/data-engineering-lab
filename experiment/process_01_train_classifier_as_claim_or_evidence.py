@@ -25,8 +25,8 @@ import logging
 import sklearn
 import time
 
-CLAIMS_DIR = "./IBM_Debater_(R)_CE-EMNLP-2015.v3/claims_preprocess-02_awk.txt"
-EVIDENCE_DIR = "./IBM_Debater_(R)_CE-EMNLP-2015.v3/evidence_preprocess-02_awk.txt"
+CLAIMS_DIR = "./IBM_Debater_(R)_CE-EMNLP-2015.v3/claims_preprocess-05_rm-duplicate-sentences.txt"
+EVIDENCE_DIR = "./IBM_Debater_(R)_CE-EMNLP-2015.v3/evidence_preprocess-05_rm-duplicate-sentences.txt"
 
 CLAIMS_LABEL = 1
 EVIDENCE_LABEL = 0
@@ -34,7 +34,7 @@ EVIDENCE_LABEL = 0
 SHUFFLE_SEED = 2021
 EVAL_RATE = 0.2
 
-NUM_EPOCHS = 1
+NUM_EPOCHS = 3
 MODEL_SEED = 2021
 CLASSIFICATION_MODEL_TYPE = 'roberta'
 CLASSIFICATION_MODEL_NAME = 'roberta-base'
