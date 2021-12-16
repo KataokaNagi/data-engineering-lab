@@ -9,14 +9,15 @@
 # @copyright (c) 2021 Kataoka Nagi This src is released under the MIT License, see LICENSE.
 # 
 
+NUM_EPOCHS=10
+
 FILE_DIRS=(
-    "./covid-19-news-articles/archive/process-02_classified-claim-or-evidence_preprocessed-by-06_debug/india-articles_process-02_classified-claim-or-evidence_debug_3-epochs.txt"
-    "./covid-19-news-articles/archive/process-02_classified-claim-or-evidence_preprocessed-by-06_debug/japan-articles_process-02_classified-claim-or-evidence_debug_3-epochs.txt"
-    "./covid-19-news-articles/archive/process-02_classified-claim-or-evidence_preprocessed-by-06_debug/korea-articles_process-02_classified-claim-or-evidence_debug_3-epochs.txt"
+    "./covid-19-news-articles/archive/process-02_classified-claim-or-evidence_preprocessed-by-06_debug/india-articles_process-02_classified-claim-or-evidence_debug_${NUM_EPOCHS}-epochs.txt"
+    "./covid-19-news-articles/archive/process-02_classified-claim-or-evidence_preprocessed-by-06_debug/japan-articles_process-02_classified-claim-or-evidence_debug_${NUM_EPOCHS}-epochs.txt"
+    "./covid-19-news-articles/archive/process-02_classified-claim-or-evidence_preprocessed-by-06_debug/korea-articles_process-02_classified-claim-or-evidence_debug_${NUM_EPOCHS}-epochs.txt"
 )
 
 for i in {0..2}
 do
-    echo "" >> "${FILE_DIRS[$i]}"
-    cat "${FILE_DIRS[$i]}" | sed -e 's/#/\n/g' >> "${FILE_DIRS[$i]}"
+    cat "${FILE_DIRS[$i]}" | sed -e 's/#/\n/g' > "${FILE_DIRS[$i]}"
 done
