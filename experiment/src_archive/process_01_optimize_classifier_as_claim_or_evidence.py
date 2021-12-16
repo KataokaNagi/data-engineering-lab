@@ -41,34 +41,6 @@ MODEL_SEED = 2021
 CLASSIFICATION_MODEL_TYPE = 'roberta'
 CLASSIFICATION_MODEL_NAME = 'roberta-base'
 
-
-def train():
-    # wandbの初期化
-    wandb.init()
-
-    # モデルの作成
-    model = ClassificationModel(
-        model_type=CLASSIFICATION_MODEL_TYPE,
-        model_name=CLASSIFICATION_MODEL_NAME,
-        use_cuda=True,
-        args=model_args,
-        sweep_config=wandb.config)
-
-    # 学習
-    model.train_model(train_df,
-                      eval_df=eval_df,
-                      accuracy=lambda truth,
-                      predictions: accuracy_score(truth,
-                                                  [round(p) for p in predictions]),
-                      overwrite_output_dir=True)
-
-    # wandbのログ保存
-    wandb.log(model.results)
-
-    # wandbの同期
-    wandb.join()
-
-
 # def main():
 claims = []
 evidences = []
@@ -225,8 +197,8 @@ model_args.manual_seed = MODEL_SEED
 
 #! @see [Simple Transformers 入門 (10) - ハイパーパラメータの最適化](https://note.com/npaka/n/n298f269c2275)
 model_args.learning_rate = float(1e-5)  # 学習率
-model_args.train_batch_size = 8  # 学習のバッチサイズ
-model_args.eval_batch_size = 16  # 評価のバッチサイズ
+model_args.train_batch_size = 16  # 学習のバッチサイズ
+model_args.eval_batch_size = 8  # 評価のバッチサイズ
 model_args.evaluate_during_training = True
 model_args.labels_list = ["not_entailment", "entailment"]
 
@@ -234,6 +206,39 @@ log.d("CLASSIFICATION_MODEL_TYPE:", CLASSIFICATION_MODEL_TYPE)
 log.d("CLASSIFICATION_MODEL_NAME:", CLASSIFICATION_MODEL_NAME)
 
 # !rm - rf outputs/
+
+# 保存なし
+model_args.save_eval_checkpoints = False
+model_args.save_model_every_epoch = False
+model_args.no_cache = True
+model_args.overwrite_output_dir = True
+
+
+def train():
+    # wandbの初期化
+    wandb.init()
+
+    # モデルの作成
+    model = ClassificationModel(
+        model_type=CLASSIFICATION_MODEL_TYPE,
+        model_name=CLASSIFICATION_MODEL_NAME,
+        use_cuda=True,
+        args=model_args,
+        sweep_config=wandb.config)
+
+    # 学習
+    model.train_model(
+        train_df, eval_df=eval_df, accuracy=lambda truth, predictions: accuracy_score(
+            truth, [
+                round(p) for p in predictions]))
+    #   overwrite_output_dir=True)
+
+    # wandbのログ保存
+    wandb.log(model.results)
+
+    # wandbの同期
+    wandb.join()
+
 
 # 学習
 start_time = time.time()
