@@ -24,6 +24,19 @@ ACTIVATE_DIR="$VENV_DIR/$ACTIVATE_DIR_FROM_VENV_DIR"
 # }
 
 ##################################################
+# change python version
+# @see [Ubuntuでpythonのバージョンを切り換える](https://qiita.com/piyo_parfait/items/5abbe4bee2495a62acdc)
+##################################################
+whitch python
+ls /usr/bin/ | grep python
+which update-alternatives
+sudo update-alternatives --config python
+sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.6 1
+sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 2
+sudo update-alternatives --config python
+
+
+##################################################
 # setup venv
 ##################################################
 
