@@ -9,7 +9,7 @@
 # @copyright (c) 2021 Kataoka Nagi This src is released under the MIT License, see LICENSE.
 # 
 
-NUM_EPOCHS=3
+NUM_EPOCHS="$1"
 
 # mv covid-19-news-articles/*process-02* covid-19-news-articles/archive/process-02_classified-claim-or-evidence_preprocessed-by-04_debug/
 # eval rename '"s/g.txt/g_${NUM_EPOCHS}-epochs.txt/"' covid-19-news-articles/archive/process-02_classified-claim-or-evidence_debug/*.txt
