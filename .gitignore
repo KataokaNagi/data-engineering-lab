@@ -303,3 +303,4 @@ wandb/
 .env
 
 tmp/
+logs/
