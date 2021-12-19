@@ -28,13 +28,13 @@ import time
 CLAIMS_DIR = "./IBM_Debater_(R)_CE-EMNLP-2015.v3/claims_preprocess-05_rm-duplicate-sentences.txt"
 EVIDENCE_DIR = "./IBM_Debater_(R)_CE-EMNLP-2015.v3/evidence_preprocess-05_rm-duplicate-sentences.txt"
 
-CLAIMS_LABEL = 1
 EVIDENCE_LABEL = 0
+CLAIMS_LABEL = 1
 
 SHUFFLE_SEED = 2021
 EVAL_RATE = 0.2
 
-NUM_EPOCHS = 3
+NUM_EPOCHS = 100
 MODEL_SEED = 2021
 CLASSIFICATION_MODEL_TYPE = 'roberta'
 CLASSIFICATION_MODEL_NAME = 'roberta-base'
@@ -169,8 +169,28 @@ def main():
     # 評価データの作成
     eval_df = pd.DataFrame(eval_dataset)
 
-    # モデルの作成
+    # 不均衡なデータの調整用
+    cnt_train_label_0 = 0
+    cnt_train_label_1 = 0
+    LABEL_IDX = 1
 
+    for data in train_dataset:
+        label = data[LABEL_IDX]
+        if label == 0:
+            cnt_train_label_0 += 1
+        elif label == 1:
+            cnt_train_label_1 += 1
+        else:
+            log.e("unsuspected label")
+            exit()
+
+    claims_per_evidence = float(cnt_train_label_1) / float(cnt_train_label_0)
+
+    log.v("cnt_train_label_0:", cnt_train_label_0)
+    log.v("cnt_train_label_1:", cnt_train_label_1)
+    log.v("claims_per_evidence:", claims_per_evidence)
+
+    # モデルの作成
     log.d("NUM_EPOCHS:", NUM_EPOCHS)
     log.d("MODEL_SEED:", MODEL_SEED)
     model_args = ClassificationArgs()
@@ -184,7 +204,10 @@ def main():
         model_type=CLASSIFICATION_MODEL_TYPE,
         model_name=CLASSIFICATION_MODEL_NAME,
         use_cuda=True,
-        args=model_args)
+        args=model_args,
+        weight=[1, claims_per_evidence]
+        # weight=[claims_per_evidence, 1]
+    )
 
     # !rm - rf outputs/
 
