@@ -111,17 +111,22 @@
 \chapter{序論}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+（用紙や文字のなどのサイズには井尻先生のTeXテンプレートをそのまま利用しています）
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{研究背景}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{研究目的}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{本論文の構成}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{本研究で用いる知識と技術}
@@ -131,83 +136,108 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{ニュース推薦システム}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{ニュース推薦システムが生むバイアス}
 ~
+% @see 
 
 \subsection{エコーチェンバー問題}
 ~
+% @see 
 
 \subsection{フィルターバブル問題}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{機械学習}
 ~
+% @see 
 
 \subsection{ニューラルネットワーク}
 ~
+% @see 
 
 \subsection{教師あり学習}
 ~
+% @see 
 
 \subsection{Attention（LSTMに触れる）}
 ~
+% @see 
 
 \subsection{Transformer（教師あり分類にも触れる）}
 ~
+% @see 
 
 \subsection{BERT}
 ~
+% @see 
 
 \subsection{RoBERTa（BERTとの比較など）}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{文章分類}
 ~
+% @see 
 
 \subsection{テキストの前処理}
 ~
+% @see 
 
 \subsection{単語埋め込み}
 ~
+% @see 
 
 \subsection{Transformer分類器}
 ~
+% @see 
 
 \subsection{分類モデルの評価（acc, prcなどの議論）}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{文章の類似度の算出}
 ~
+% @see 
 
 \subsection{Sentence-BERT}
 ~
+% @see 
 
 \subsection{コサイン類似度}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{クラスタリング}
 ~
+% @see 
 
 \subsection{非階層クラスタリング}
 ~
+% @see 
 
 \subsection{階層的クラスタリング}
 ~
+% @see 
 
 \subsection{Ward法}
 ~
+% @see 
 
 \subsection{（その他使用した手法）}
 ~
+% @see 
 
 \subsection{t-SNE (使うかも)}
 ~
+% @see 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -218,46 +248,59 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{ニュース推薦システムのバイアスの解決}
 ~
+% @see 
 
 \subsection{Breaking the filter bubble: democracy and design}
 ~
+% @see 
 
 \subsubsection{（UIでバブルの可視化）（結局表示されるものにバイアスがかかる，行動に繋がらない）}
 ~
+% @see 
 
 \subsubsection{（トピックモデル，LSI, LDAの議論）}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{話題の定量化によるニュース推薦手法}
 ~
+% @see 
 
 \subsection{トピックマップ}
 ~
+% @see 
 
 \subsection{Labeled Bilingual Topic Model for Cross-Lingual Text Classification and Label Recommendation}
 ~
+% @see 
 
 \subsubsection{（LDAの利用）}
 ~
+% @see 
 
 %%%%%%%%%%
 % \section{LSI}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{（要追加調査：比較評価できる推薦手法）（出来事，主張に着目するシステムなど）}
 ~
+% @see 
 
 \subsection{Investigating COVID-19 News Across Four Nations A Topic Modeling and Sentiment Analysis Approach}
 ~
+% @see 
 
 \subsubsection{トピックモデル，top2vec, roberta}
 ~
+% @see 
 
 %%%%%%%%%%
 % \section{tf-idf -->}
-~% <!-- SCDV -->
+~%% @see 
+ <!-- SCDV -->
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -268,55 +311,71 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{使用する語彙と基準の定義}
 ~
+% @see 
 
 \subsection{文と文章}
 ~
+% @see 
 
 \subsection{出来事の文}
 ~
+% @see 
 
 \subsection{主張の文}
 ~
+% @see 
 
 \subsection{文が示す話題の類似度}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{記事の出来事と主張のクラスタを用いた多言語ニュース推薦}
 ~
+% @see 
 
 \subsection{手法概要}
 ~
+% @see 
 
 \subsection{クラスタリングの順序の検討}
 ~
+% @see 
 
 \subsection{（その他報告会などで議論したこと）}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{データセットの選定}
 ~
+% @see 
 
 \subsection{出来事の文と主張の文の分類器の学習データ（IBM Debater Datasetの議論）}
 ~
+% @see 
 
 \subsection{分類とクラスタリングを行うデータ（covid-19-articlesの議論）}
 ~
+% @see 
 
 %%%%%%%%%%<!-- 
 % \section{Japanese fakenews dataset -->}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{データの前処理}
 ~
+% @see 
 
 \subsection{自然言語処理のためのテキストの前処理（前処理の種類，なぜ前処理するのかなどの議論）}
 ~
+% @see 
 
 \subsection{（その他工夫した前処理）}
 ~
+% @see 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -327,50 +386,63 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{システムの設計指針（入出力，使い方など）}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{システム構成（モジュールの説明）}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{実装環境（PCスペック，ライブラリバージョンなど）}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{データの前処理}
 ~
+% @see 
 
 \subsection{正規表現による前処理（awkの正規表現などの議論）}
 ~
+% @see 
 
 \subsection{省略のピリオドに注意した文章の分割（Stanza, spacyの議論）}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{出来事の文と主張の文の分類}
 ~
+% @see 
 
 \subsection{Simple Transformers}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{出来事の文章のクラスタリング}
 ~
+% @see 
 
 \subsection{(要検討)}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{主張の文のクラスタリング}
 ~
+% @see 
 
 \subsection{(要検討)}
 ~
+% @see 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 % \section{仮説}
-~% 評価実験を設計するにあたり以下3件の仮説を立てる．
+~%% @see 
+ 評価実験を設計するにあたり以下3件の仮説を立てる．
 % \begin{itemize}
 %   \item 仮説1) ．
 %   \item 仮説2) 
@@ -388,66 +460,86 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{出来事の文と主張の文の分類}
 ~
+% @see 
 
 \subsection{実験方法}
 ~
+% @see 
 
 \subsection{実験結果}
 ~
+% @see 
 
 \subsection{実験の考察}
 ~
+% @see 
 
 \subsection{（試行錯誤）}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{出来事の文章のクラスタリング}
 ~
+% @see 
 
 \subsection{実験方法}
 ~
+% @see 
 
 \subsection{実験結果}
 ~
+% @see 
 
 \subsection{実験の考察}
 ~
+% @see 
 
 \subsection{（試行錯誤）}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{主張の文のクラスタリング}
 ~
+% @see 
 
 \subsection{実験方法（クラスタの階層の基準ごとの評価）}
 ~
+% @see 
 
 \subsection{実験結果}
 ~
+% @see 
 
 \subsection{実験の考察}
 ~
+% @see 
 
 \subsection{（試行錯誤）}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{（他の研究との比較実験）}
 ~
+% @see 
 
 \subsection{実験方法}
 ~
+% @see 
 
 \subsection{実験結果}
 ~
+% @see 
 
 \subsection{実験の考察}
 ~
+% @see 
 
 \subsection{（試行錯誤）}
 ~
+% @see 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -458,20 +550,25 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{既存手法との比較}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{提案手法の妥当性}
 ~
+% @see 
 
 \subsection{入力と出力の妥当性}
 ~
+% @see 
 
 \subsection{処理速度の妥当性（分散システムの議論も）}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{（結果を基に検討）}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{まとめと展望}
@@ -481,11 +578,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{まとめ}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{今後の展望}
-~% \section{データセットの相性（ディベートとニュース）}
+~%% @see 
+ \section{データセットの相性（ディベートとニュース）}
 ~
+% @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter*{謝辞}
