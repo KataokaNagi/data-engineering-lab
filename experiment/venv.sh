@@ -24,6 +24,13 @@ ACTIVATE_DIR="$VENV_DIR/$ACTIVATE_DIR_FROM_VENV_DIR"
 # }
 
 ##################################################
+# apt preparation
+##################################################
+sudo apt update
+sudo apt upgrade
+
+
+##################################################
 # change python version
 # @see [Ubuntuでpythonのバージョンを切り換える](https://qiita.com/piyo_parfait/items/5abbe4bee2495a62acdc)
 ##################################################
@@ -89,3 +96,14 @@ sudo apt install rename
 # deactivate venv
 ##################################################
 # deactivate
+
+##################################################
+# LaTeX
+# @see [Ubuntu 18.04 LTS に LaTeX をインストール](https://qiita.com/willow-micro/items/6b13e2038d628c33be8e)
+##################################################
+sudo apt install \
+evince texlive-fonts-extra \
+texlive-fonts-recommended texlive-lang-cjk xdvik-ja
+# platex hoge.tex
+# dvipdfmx hoge.dvi
+# evince hoge.pdf &
