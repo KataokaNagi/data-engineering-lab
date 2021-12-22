@@ -24,6 +24,7 @@ import pandas as pd
 import logging
 import sklearn
 import time
+import math
 
 CLAIMS_DIR = "./IBM_Debater_(R)_CE-EMNLP-2015.v3/claims_preprocess-05_rm-duplicate-sentences.txt"
 EVIDENCE_DIR = "./IBM_Debater_(R)_CE-EMNLP-2015.v3/evidence_preprocess-05_rm-duplicate-sentences.txt"
@@ -34,6 +35,7 @@ CLAIMS_LABEL = 1
 SHUFFLE_SEED = 2021
 EVAL_RATE = 0.2
 
+NUM_BATCH = 128  # != batch size
 NUM_EPOCHS = 100
 MODEL_SEED = 2021
 CLASSIFICATION_MODEL_TYPE = 'roberta'
@@ -191,12 +193,21 @@ def main():
     log.v("claims_per_evidence:", claims_per_evidence)
 
     # モデルの作成
+    train_batch_size = math.ceil(float(train_num) / NUM_BATCH)
+    eval_batch_size = math.ceil(float(eval_num) / NUM_BATCH)
+
+    log.d("NUM_BATCH:", NUM_BATCH)
     log.d("NUM_EPOCHS:", NUM_EPOCHS)
     log.d("MODEL_SEED:", MODEL_SEED)
+    log.d("train_batch_size:", train_batch_size)
+    log.d("eval_batch_size:", eval_batch_size)
+
     model_args = ClassificationArgs()
     model_args.num_train_epochs = NUM_EPOCHS
-    # model_args.reprocess_input_data = True
     model_args.manual_seed = MODEL_SEED
+    model_args.train_batch_size = train_batch_size
+    model_args.eval_batch_size = eval_batch_size
+    # model_args.reprocess_input_data = True
 
     log.d("CLASSIFICATION_MODEL_TYPE:", CLASSIFICATION_MODEL_TYPE)
     log.d("CLASSIFICATION_MODEL_NAME:", CLASSIFICATION_MODEL_NAME)
