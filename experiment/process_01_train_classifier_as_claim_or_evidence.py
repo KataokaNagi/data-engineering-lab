@@ -205,6 +205,7 @@ def main():
         model_name=CLASSIFICATION_MODEL_NAME,
         use_cuda=True,
         args=model_args,
+        num_labels=2,
         weight=[1, claims_per_evidence]
         # weight=[claims_per_evidence, 1]
     )
