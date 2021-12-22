@@ -24,7 +24,7 @@ from simpletransformers.classification import ClassificationModel
 
 CLASSIFICATION_MODEL_TYPE = 'roberta'
 MODEL_DIR = "outputs/"
-NUM_DEBUG = 1
+NUM_DEBUG = 3
 
 
 def main():
