@@ -100,10 +100,12 @@ sudo apt install rename
 ##################################################
 # LaTeX
 # @see [Ubuntu 18.04 LTS に LaTeX をインストール](https://qiita.com/willow-micro/items/6b13e2038d628c33be8e)
+# @see [VSCode で最高の LaTeX 環境を作る](https://qiita.com/rainbartown/items/d7718f12d71e688f3573)
 ##################################################
 sudo apt install \
 evince texlive-fonts-extra \
 texlive-fonts-recommended texlive-lang-cjk xdvik-ja
+sudo apt install texlive-full
 # platex hoge.tex
 # dvipdfmx hoge.dvi
 # evince hoge.pdf &
