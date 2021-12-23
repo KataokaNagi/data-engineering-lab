@@ -17,22 +17,14 @@ AL18036 片岡 凪
 - 分類
     - IBMのデータセットの重複データを削除
     - Epoc数の変更と分析
-- クラスタリングの実装
-    - 出来事の文章の特徴量ベクトルを作成
-    - 主張の文の特徴量ベクトルを作成
-    - 3カ国の記事を結合して保存
-    - [e-feature-array]を基に記事（行）をクラスタリング
-    - 出来事の記事クラスタからnation-name;article-n;sentence-nで記事を特定
-    - 指定した記事クラスタファイルの文を、cの[feature-array]でクラスタリング
-    - 主張の文クラスタからnation-name;article-n;sentence-nで文とそのクラスタを特定
-- 訓練と評価でバッチサイズが逆になっていた
+    - 修正
+<!-- - 訓練と評価でバッチサイズが逆になっていた -->
 - 論文執筆
-- 評価方法の検討
 
 ## 2. 実施内容
 
 ### 目次
-- 2.1 
+- 2.1 IBMのデータセットの重複データを削除し分類・評価
 - 2.2 
 - 2.3 
 
@@ -122,7 +114,6 @@ AL18036 片岡 凪
             - self.classifier = RobertaClassificationHead(config)
                 - RobertaClassificationHeadクラス
                     - https://huggingface.co/transformers/v1.1.0/_modules/pytorch_transformers/modeling_roberta.html
-                    - 
     - imbalance data用にweightの調節、実行
         - https://simpletransformers.ai/docs/classification-models/#setting-class-weights
         - https://uribo.github.io/dpp-cookbook/slides/class-imbalance#7
@@ -175,6 +166,9 @@ AL18036 片岡 凪
             - 62epochs
                 - {'mcc': 0.8053047132851614, 'tp': 374, 'tn': 790, 'fp': 61, 'fn': 50, 'auroc': 0.9365978981442477, 'auprc': 0.845492301108545, 'eval_loss': 0.4510218167510175, 'acc': 0.9129411764705883}
                 - ほぼE、C１つ
+            - 4epochs
+            - 13epochs
+        - バッチサイズ 1/10
     - transformer分類器でnnだけ学習する手法が適切かどうか
     - FFNNを分割して実装
 - simpletransformersの引数を確認
@@ -192,108 +186,70 @@ AL18036 片岡 凪
 - 目次を編集
     - 交差エントロピーの追記
 - 論文執筆
-
-1.  目次
-2.  序論
-    1.  研究背景
-    2.  研究目的
-    3.  本論文の構成
-3.  本研究で用いる知識・技術
-    1.  ニュース推薦システム
-    2.  ニュース推薦システムが生むバイアス
-        1.  エコーチェンバー問題
-        2.  フィルターバブル問題
-    3.  機械学習
-        1.  ニューラルネットワーク
-        2.  教師あり学習
-        3.  Attention（LSTMに触れる）
-        4.  Transformer（教師あり分類にも触れる）
-        5.  BERT
-        6.  RoBERTa（BERTとの比較など）
-    4.  文章分類
-        1.  テキストの前処理
-        2.  単語埋め込み
-        3.  Transformer分類器
-        4.  分類モデルの評価（acc, prcなどの議論）
-    5.  文章の類似度の算出
-        1.  Sentence-BERT
-        2.  コサイン類似度
-    6.  クラスタリング
-        1.  非階層クラスタリング
-        2.  階層的クラスタリング
-        3.  Ward法 
-        4.  （その他使用した手法）
-        5.  t-SNE (使うかも)
-4.  関連研究
-    1.  ニュース推薦システムのバイアスの解決
-        1.  Breaking the filter bubble: democracy and design
-            1.  （UIでバブルの可視化）（結局表示されるものにバイアスがかかる、行動に繋がらない）
-            2.  （トピックモデル、LSI, LDAの議論）
-    2.  話題の定量化によるニュース推薦手法
-        1.  トピックマップ
-        2.  Labeled Bilingual Topic Model for Cross-Lingual Text Classification and Label Recommendation
-            1.  （LDAの利用）
-        <!-- 2.  LSI -->
-    1.  （要追加調査：比較評価できる推薦手法）（出来事、主張に着目するシステムなど）
-        1.  Investigating COVID-19 News Across Four Nations A Topic Modeling and Sentiment Analysis Approach
-            1.  トピックモデル、top2vec, roberta
-    <!-- 6.  tf-idf -->
-    <!-- SCDV -->
-5.  提案手法
-    1.  使用する語彙と基準の定義
-        1.  文と文章
-        2.  出来事の文
-        3.  主張の文
-        4.  文が示す話題の類似度
-    2.  記事の出来事と主張のクラスタを用いた多言語ニュース推薦
-        1.  手法概要
-        2.  クラスタリングの順序の検討
-    3.  学習データの前処理
-    4.  記事データの前処理
-6.  実装
-    1.  システムの設計指針（入出力、使い方など）
-    2.  システム構成（モジュールの説明）
-    3.  実装環境（PCスペック、ライブラリバージョンなど）
-    4.  データの前処理
-        1. 自然言語処理のためのテキストの前処理（前処理の種類、なぜ前処理するのか、awkの正規表現などの議論）
-        2. 省略のピリオドに注意した文章の分割（Stanza, spacyの議論）
-    5.  出来事の文と主張の文の分類
-        1. Simple Transformers
-    6.  出来事の文章のクラスタリング
-        1.  (要検討)
-    7.  主張の文のクラスタリング
-        1.  (要検討)
-7.  実験
-    1.  データセットの選定
-        1.  出来事の文と主張の文の分類器の学習データ（IBM Debater Datasetの議論）
-        2.  分類とクラスタリングを行うデータ（covid-19-articlesの議論）
-            <!-- 1.  Japanese fakenews dataset -->
-    2.  出来事の文と主張の文の分類
-        1.  実験方法
-        2.  実験結果
-        3.  （試行錯誤）
-    3.  出来事の文章のクラスタリング
-        1.  実験方法
-        2.  実験結果
-        3.  （試行錯誤）
-    4.  主張の文のクラスタリング
-        1.  実験方法（クラスタの階層の基準ごとの評価）
-        2.  実験結果
-        3.  （試行錯誤）
-    5.  （他の研究との比較実験）
-        1.  実験方法
-        2.  実験結果
-        3.  （試行錯誤）
-8.  結果と考察
-    1.  既存手法との比較
-    2.  提案手法の妥当性
-        1.  入力と出力の妥当性
-        2.  処理速度の妥当性（分散システムの議論も）
-    3.  （結果を基に検討）
-9.  まとめと展望
-    1.  まとめ
-    2.  今後の展望
-    3.  （結果を基に検討）
-    4.  データセットの相性（ディベートとニュース）
-10. 謝辞
-11. 参考文献
+- weightのソースコード
+    - ClassificationModel
+        - メンバに代入するのみ
+        - https://github.com/ThilinaRajapakse/simpletransformers/blob/master/simpletransformers/classification/classification_model.py
+    - roberta_model
+        - CrossEntropyLossに入れている
+        - https://github.com/ThilinaRajapakse/simpletransformers/blob/master/simpletransformers/classification/transformer_models/roberta_model.py
+    - from torch.nn import CrossEntropyLoss
+        - targetを設定して順番を決める？
+            - https://teratail.com/questions/341726
+            - num_epochsで
+            - ぱっとわからなかったので後回し
+- 3記事x3カ国見られるようにした
+    - 160記事
+- グラフの特徴的なエポックで評価
+    - 4エポック
+        - {'mcc': 0.8035667589080978, 'tp': 383, 'tn': 778, 'fp': 73, 'fn': 41, 'auroc': 0.9658587011950424, 'auprc': 0.9082390969598422, 'eval_loss': 0.35128727730843823, 'acc': 0.9105882352941177}
+        - cは160記事中7個
+            - インドは全くない
+        - あとで評価
+    - 13エポック
+        - {'mcc': 0.7928674925433208, 'tp': 370, 'tn': 787, 'fp': 64, 'fn': 54, 'auroc': 0.9583162428219851, 'auprc': 0.8990278949199824, 'eval_loss': 0.5645049487325651, 'acc': 0.9074509803921569}
+        - cは160記事中5個
+            - インドと韓国は全くない
+        - あとで評価
+- バッチサイズの調整
+    - 今まではデフォルト
+        - train_batch_size 8文
+            - 638バッチ
+        - eval_batch_size 8文
+            - 160バッチ
+    - 10バッチ100エポック
+        - RuntimeError: CUDA out of memory. Tried to allocate 384.00 MiB (GPU 0; 7.79 GiB total capacity; 5.97 GiB already allocated; 36.00 MiB free; 6.00 GiB reserved in total by PyTorch)
+    - 16バッチ100エポック
+        - RuntimeError: CUDA out of memory. Tried to allocate 240.00 MiB (GPU 0; 7.79 GiB total capacity; 5.69 GiB already allocated; 71.06 MiB free; 5.97 GiB reserved in total by PyTorch)
+    - 32バッチ100エポック
+        - RuntimeError: CUDA out of memory. Tried to allocate 240.00 MiB (GPU 0; 7.79 GiB total capacity; 5.76 GiB already allocated; 203.94 MiB free; 5.84 GiB reserved in total by PyTorch)
+    - 64バッチ100エポック
+        - RuntimeError: CUDA out of memory. Tried to allocate 120.00 MiB (GPU 0; 7.79 GiB total capacity; 6.00 GiB already allocated; 17.31 MiB free; 6.02 GiB reserved in total by PyTorch)
+    - 128バッチ100エポック
+        - train_num 5103文
+        - eval_num 1275文
+        - train_batch_size 40文
+        - eval_batch_size 10文
+        - weight=[1, claims_per_evidence]
+            - {'mcc': 0.8155391227971583, 'tp': 386, 'tn': 782, 'fp': 69, 'fn': 38, 'auroc': 0.960870119504246, 'auprc': 0.9106979966867893, 'eval_loss': 0.8653483360831373, 'acc': 0.9160784313725491}
+            - 収束が早くなり、振動も減っている
+            - 収束しそうな点で再学習する予定
+            - ![](img/classify_with-balanced-data_1-and-claims-per-evidence_100-epochs_128-batch_20211223.png)
+        - weight=[claims_per_evidence, 1]
+            - {'mcc': 0.7946893607766448, 'tp': 380, 'tn': 776, 'fp': 75, 'fn': 44, 'auroc': 0.9557277232113163, 'auprc': 0.905232419932518, 'eval_loss': 0.9521337962378738, 'acc': 0.9066666666666666}
+            - 収束が早くなり、振動も減っている
+            - 収束しそうな点で再学習する予定
+            - ![](img/classify_with-balanced-data_claims-per-evidence-and-1_100-epochs_128-batch_20211223.png)
+    - 少ないバッチ数でGPUのメモリ不足となるため、やはりFFNNのみの実装を視野に入れるべき...？
+        - でも振動少なくなってるし良いかも
+        - 再学習と評価をしてから検討
+- Running Lossの見方
+    - 最後のエポックのlossを表示しているにすぎない
+    - 頻度を考慮して平均を取るべきか
+- 自分の分類基準を明確に決定するか、論文の分類基準を使うかを決める
+    - どちらにせよ論文の分類基準での評価は必要
+        - モデルがうまく学習できているかのチェック
+- epoch数が少ないほどeval_lossは小さい
+    - 1エポックで0.3->どんどん1に近く
+    - running lossではなくeval_lossを見るべきか
+    - running lossはtrain_lossと同義か微妙
