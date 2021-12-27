@@ -62,19 +62,32 @@
 import requests
 import time
 import datetime
-SAVING_TXT_NAME = "japanese_fakenews_dataset_2_en.txt"
-# PRE_TRANS_TXT_DIR = "/content/drive/MyDrive/lab/experiment/japanese_fakenews_dataset_2_txt/japanese_fakenews_dataset.txt"
-# POST_TRANS_TXT_DIR = "/content/drive/MyDrive/lab/experiment/txt_translator/" + SAVING_TXT_NAME
-PRE_TRANS_TXT_DIR = "G:\\マイドライブ\\lab\\experiment\\japanese_fakenews_dataset_2_txt\\japanese_fakenews_dataset.txt"
-POST_TRANS_TXT_DIR = "G:\\マイドライブ\\lab\\experiment\\txt_translator\\" + SAVING_TXT_NAME
-PRE_TRANS_LANG = "JA"  # Japanese
-POST_TRANS_LANG = "EN-US"  # English(American)
+
+# SAVING_TXT_NAME = "japanese_fakenews_dataset_2_en.txt"
+# PRE_TRANS_TXT_DIR = "G:\\マイドライブ\\lab\\experiment\\japanese_fakenews_dataset_2_txt\\japanese_fakenews_dataset.txt"
+# POST_TRANS_TXT_DIR = "G:\\マイドライブ\\lab\\experiment\\txt_translator\\" + SAVING_TXT_NAME
+
+IN_TXT_NAME = "en.txt"
+OUT_TXT_NAME = "jp.txt"
+PRE_TRANS_TXT_DIR = "./" + IN_TXT_NAME
+POST_TRANS_TXT_DIR = "./" + OUT_TXT_NAME
+
+# PRE_TRANS_LANG = "JA"  # Japanese
+# POST_TRANS_LANG = "EN-US"  # English(American)
+PRE_TRANS_LANG = "EN"  # English(American)
+POST_TRANS_LANG = "JA"  # Japanese
+
 SLEEP_SEC_PER_TRANS = 20
 
 ############################################################
 # Don't publish on the web
-# DEEPL_API_KEY = ""
+DEEPL_API_DIR = "./.deepl_api_key"
+deepl_api_key = ""
 ############################################################
+
+with open(DEEPL_API_DIR, "r", encoding="utf_8") as f:
+    deepl_api_key = f.readlines()
+
 
 """### Mount google drive"""
 
@@ -89,7 +102,7 @@ pre_trans_txts = []
 with open(PRE_TRANS_TXT_DIR, "r", encoding="utf_8") as f:
     pre_trans_txts = f.readlines()
 
-pre_trans_txts
+print(pre_trans_txts[:(len(pre_trans_txts) % 5)])
 
 """## DeepL translation
 - [DeepL APIをPythonから利用して日本語の文章を翻訳する](https://deepblue-ts.co.jp/nlp/deepl-api-python/)
@@ -132,7 +145,7 @@ cnt_backup = 0
 
 for i in range(NUM_TRANS):
     params = {
-        "auth_key": DEEPL_API_KEY,
+        "auth_key": deepl_api_key,
         "text": pre_trans_txts[i].rstrip("\n"),
         "source_lang": PRE_TRANS_LANG,
         "target_lang": POST_TRANS_LANG

@@ -308,3 +308,6 @@ logs/
 # LaTeX
 thesis.pdf
 エクスポートされたアイテム.bib
+
+# deepl
+.deepl_api_key

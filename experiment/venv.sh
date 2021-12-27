@@ -87,17 +87,6 @@ wandb login <API keysを記述> # https://wandb.ai/settings
 sudo apt install rename
 
 ##################################################
-# set path (add venv/bin/activate)
-##################################################
-# export PYTHONPATH="$PYTHONPATH:/home/nagi/.local/lib/python3.6/site-packages" # tmp (only in current shell)
-# echo 'export PYTHONPATH="$PYTHONPATH:/home/nagi/.local/lib/python3.6/site-packages"' >> ~/.bashrc # semipermanent
-
-##################################################
-# deactivate venv
-##################################################
-# deactivate
-
-##################################################
 # LaTeX
 # @see [Ubuntu 18.04 LTS に LaTeX をインストール](https://qiita.com/willow-micro/items/6b13e2038d628c33be8e)
 # @see [VSCode で最高の LaTeX 環境を作る](https://qiita.com/rainbartown/items/d7718f12d71e688f3573)
@@ -109,3 +98,19 @@ sudo apt install texlive-full
 # platex hoge.tex
 # dvipdfmx hoge.dvi
 # evince hoge.pdf &
+
+##################################################
+# deepl translator
+##################################################
+python3 -m pip install requests
+
+##################################################
+# set path (add venv/bin/activate)
+##################################################
+# export PYTHONPATH="$PYTHONPATH:/home/nagi/.local/lib/python3.6/site-packages" # tmp (only in current shell)
+# echo 'export PYTHONPATH="$PYTHONPATH:/home/nagi/.local/lib/python3.6/site-packages"' >> ~/.bashrc # semipermanent
+
+##################################################
+# deactivate venv
+##################################################
+# deactivate
