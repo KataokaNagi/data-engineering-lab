@@ -408,8 +408,6 @@ $\bm{b}$は一般に1を要素とするバイアスニューロンと呼ばれ�
   w_{i, j}^{(next~ step)} &= w_{i, j} + \eta~ (y_j - \hat{y}_j)~ x_i
   \label{nn_update_weight}
   \\
-  \nonumber
-  \\
   \eta &= Const.
   \label{nn_learning_rate}
 \end{align}
@@ -433,8 +431,37 @@ $\bm{b}$は一般に1を要素とするバイアスニューロンと呼ばれ�
 データの何を特徴とし，何を基に似たデータと判断するかが重要で，目的によって工夫する必要がある．
 
 \subsection{Attention}
-% @see 
-% （LSTMに触れる）
+Dzmitryらが2014年に提案したAttentionは，株価や文章といったデータ間に関係がある機械学習を行う際，出力データと関わりが強い入力データに効率よく比重を与えるモジュールである\cite{aurellen20}\cite{bahdanau_neural_2016}．
+モデルにAttentionを組み込むことで無駄なデータの学習が減り，モデルが過去に学習した内容を忘却しにくくなる．
+これにより，30語以上の長い文章の機械翻訳タスクの精度が大幅に向上する．
+
+図\ref{fig_nn}に機械翻訳モデルに組み込まれたAttention機構を示す．
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[keepaspectratio, width=120mm]{img/attention.png}
+	\caption{入力単語群$(x_1, x_2, ... , x_T)$を基にt番目の出力語$y_t$を生成するAttention機構\cite{bahdanau_neural_2016}}
+	\label{attention}
+\end{figure}
+
+直前に翻訳した単語$y_{t-1}$と過去に翻訳した単語群の情報$s_{t-1}$に，Attentionの式(\ref{attention_c}))を考慮して次の単語$y_t$を予測している．
+$\vec{h_i}$は文脈を加味した単語の意味情報をもつベクトルであり，BiGRUと呼ばれるニューラルネットワークを用いて生成されている．
+
+\begin{align}
+  c_{i} &= \sum_{j=1}^{T_{x}} \alpha_{i j} h_{j} &
+  \label{attention_c}
+  \\
+  \alpha_{i j} &= \operatorname*{softmax}_j(e_{ij}) = \frac{\exp \left(e_{i j}\right)}{\sum_{k=1}^{T_{x}} \exp \left(e_{i k}\right)}
+  \label{attention_alpha}
+  \\
+  e_{i j} &= a\left(s_{i-1}, h_{j}\right) = v_{a}^{\top} \tanh \left(W_{a} s_{i-1}+U_{a} h_{j}\right)
+  \label{attention_e}
+\end{align}
+
+式(\ref{attention_alpha})はソフトマックス関数と呼ばれる関数に式(\ref{attention_e})を代入したものであり$\sum_j \alpha_{ij} = 1$となる意味ベクトル$h_j$の重み係数を表す．
+式(\ref{attention_e})は，過去に翻訳した単語群の情報$s_{t-1}$と入力単語の意味ベクトル$h_j$を基に，どの単語に比重を置くかを決定するニューラルネットワークである．
+式(\ref{attention_e})の$v_{a}^{\top},~ W_{a},~ U_{a}$はニューラルネットワークの重みである．
+
 
 \subsection{Transformer（教師なし分類にも触れる）}
 ~
