@@ -89,6 +89,10 @@ python3 -m pip install requests
 # util
 sudo apt install rename
 
+# process_03_articles_features_calculator
+python3 -m pip install sentence-transformers
+
+
 ##################################################
 # LaTeX
 # @see [Ubuntu 18.04 LTS に LaTeX をインストール](https://qiita.com/willow-micro/items/6b13e2038d628c33be8e)
