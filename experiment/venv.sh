@@ -83,6 +83,9 @@ python3 -m pip install sklearn
 python3 -m pip install wandb
 wandb login <API keysを記述> # https://wandb.ai/settings
 
+# for deepl
+python3 -m pip install requests
+
 # util
 sudo apt install rename
 
@@ -98,11 +101,6 @@ sudo apt install texlive-full
 # platex hoge.tex
 # dvipdfmx hoge.dvi
 # evince hoge.pdf &
-
-##################################################
-# deepl translator
-##################################################
-python3 -m pip install requests
 
 ##################################################
 # set path (add venv/bin/activate)
