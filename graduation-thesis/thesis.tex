@@ -476,13 +476,13 @@ Dzmitryらが2014年に提案したAttentionは，時系列データの機械学
 モデルにAttentionを組み込むことで無駄なデータの学習が減り，モデルが過去に学習した内容を忘却しにくくなる．
 これにより，30語以上の長い文章の機械翻訳タスクの精度が大幅に向上する．
 
-図\ref{fig_nn}に機械翻訳モデルに組み込まれたAttention機構を示す．
+図\ref{fig_attention}に機械翻訳モデルに組み込まれたAttention機構を示す．
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[keepaspectratio, width=120mm]{img/attention.png}
 	\caption{入力単語群$(x_1, x_2, ... , x_T)$を基にt番目の出力語$y_t$を生成するAttention機構\cite{bahdanau_neural_2016}}
-	\label{attention}
+	\label{fig_attention}
 \end{figure}
 
 直前に翻訳した単語$y_{t-1}$と過去に翻訳した単語群の情報$s_{t-1}$に，Attentionの式(\ref{attention_c}))を考慮して次の単語$y_t$を予測している．
@@ -504,8 +504,53 @@ $\vec{h_i}$は文脈を加味した単語の意味情報をもつベクトルで
 式(\ref{attention_e})の$v_{a}^{\top},~ W_{a},~ U_{a}$はニューラルネットワークの重みである．
 
 \subsection{Transformer}
-~
-% @see 
+Ashishらが2017年に提案したTransformerは，Attentionを組み込んだ翻訳タスクに用いられる機械学習モデルで，2017年の最先端のモデルと比べて数分の1のコストで最大級の精度を有する\cite{aurellen20}\cite{vaswani_attention_nodate}．
+時系列データを扱う従来の機械学習にはRNN（Recurrent Neural Network）が多く組み込まれていたが，このモデルは単語を逐次的に処理する仕組みになっており，並列演算が難しい．
+一方でTransformerは，RNNを組み込まずに並列演算が可能なAttentionを多く組み込んで時系列データを処理するため，処理コストが低い．
+
+Transformerは，文章を文意を表すベクトルに変換するエンコーダ部分と，そのベクトルを用いて目的の文章を生成するデコーダ部分に分かれるエンコーダ・デコーダモデルの一種である．
+図\ref{fig_transformer}に示すTransformerのうち，左半分がエンコーダ，右半分がデコーダである．
+エンコーダの入力は翻訳前の文章であり，デコーダの入力はエンコーダの出力と翻訳後の文章である．
+デコーダの出力は翻訳中の文章の次の単語の予測確率である．
+なお，デコーダに入力される翻訳後の文章は，モデルの学習の際には全文が渡され，予測の際には翻訳中の単語群が渡される．
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[keepaspectratio, width=120mm]{img/transformer.png}
+	\caption{Transformer\cite{vaswani_attention_nodate}}
+	\label{fig_transformer}
+\end{figure}
+
+Transformerの学習コストを低減する所以となるAttentionは，図\ref{fig_attentions-of-transformer}のように工夫されて組み込まれている．
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[keepaspectratio, width=120mm]{img/attentions-of-transformer.png}
+	\caption{Transformerを構成するMulti-Head Attention（右）とそれを構成すScaled Dot-Product Attention（左）\cite{vaswani_attention_nodate}}
+	\label{fig_attentions-of-transformer}
+\end{figure}
+
+Scaled Dot-Product Attentionは式(\ref{scaled_dot_product_attention})で表される．
+$Q$（Queue）は入力を意味し，式(\ref{scaled_dot_product_attention})は$Q$と$K$（Key）との類似度を基にした重みづけによって出力$V$（Value）を調節するような効果をもつ．
+
+Multi-Head Attentionは式(\ref{multi_head_attention})で表される．
+式(\ref{multi_head_attention})を構成する式\ref{scaled_dot_product_attention})の$Q,~ K,~ V$は同値であり，Transformerのデコーダへの入力文をOutput EmbeddingとPositional Encodingで加工したもの（Xとする）を表す．
+これらの$Q,~ K,~ V$に$W_i^Q,~ W_i^K,~ W_i^V$を作用させて役割を変えている．
+$QW_i^Q$はXのどの部分を処理するかを表し，$KW_i^K$はXの注目の仕方を表し，$VW_i^V$は出力の様子を調整する役割を担う．
+
+\begin{align}
+  \text { Attention }(Q, K, V) &= \operatorname{softmax}\left(\frac{Q K^{T}}{\sqrt{d_{k}}}\right) V
+  \label{scaled_dot_product_attention}
+  \\
+  \text { MultiHead }(Q, K, V) &=\text { Concat }\left(\text { head }_{1}, \ldots, \text { head }_{\mathrm{h}}\right) W^{O}
+  \label{multi_head_attention}
+  \\
+  \text { head }_{\mathrm{i}} &=\operatorname{Attention}\left(Q W_{i}^{Q}, K W_{i}^{K}, V W_{i}^{V}\right)
+  \label{substituted_scaled_dot_product_attention}
+\end{align}
+
+% （教師なし分類にも触れる）
+% @see p.549-
 
 \subsection{BERT}
 ~
