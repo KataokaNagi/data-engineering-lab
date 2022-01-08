@@ -48,7 +48,7 @@ AL18036 片岡 凪
         - #を元にリストに格納
         - 分類
             - 時間かかるからpyにした方がいいかも
-        - #e;[ec-score-array];sent-1#c;[ec-score-array];sent-2...\n のtxt
+        - #e;feature-x;feature-y;sent-1#c;feature-x;feature-y;sent-2...\n のtxt
             - DeepL翻訳で10記事ほどチェック
             - 文頭、文末はシャープがないことに注意
         - ニュートラルも含めることを考えつつ
@@ -67,7 +67,7 @@ AL18036 片岡 凪
         - india-articles_process-03_calced-sentences-features.txt
         - #e:sent-1#c:sent-2...\n
         - S-BERTにsent-nを入れて特徴量を算出
-        - article-n;[e-feature-array];[c-feature-array];[all-feature-array]#article-n;sentence-n;e;[ec-score-array];[feature-array];sent-1#article-n;sentence-n;c;[ec-score-array];[feature-array];sent-2...\n とする
+        - article-n;[e-feature-array];[c-feature-array];[all-feature-array]#article-n;sentence-n;e;feature-x;feature-y;[feature-array];sent-1#article-n;sentence-n;c;feature-x;feature-y;[feature-array];sent-2...\n とする
             - 各文に特徴量を追加
             - 各文に番号を追加
             - #eのfeatureは不要だが、もしかしたら使うかも
@@ -76,7 +76,7 @@ AL18036 片岡 凪
         - process_04_nations_articles_concatenator.py
         - process-04_concatenated-nations-articles.txt
         - 国情報を付与
-            - nation-name;article-n;[e-feature-array];[c-feature-array];[all-feature-array]#nation-name;article-n;sentence-n;e;[ec-score-array];[feature-array];sent-1#nation-name;article-n;sentence-n;c;[ec-score-array];[feature-array];sent-2...\n
+            - nation-name;article-n;[e-feature-array];[c-feature-array];[all-feature-array]#nation-name;article-n;sentence-n;e;feature-x;feature-y;[feature-array];sent-1#nation-name;article-n;sentence-n;c;feature-x;feature-y;[feature-array];sent-2...\n
     - [e-feature-array]を基に記事（行）をクラスタリング
         - process_05_articles_cluster_generator.py
         - クラスタごとに名前を付けて保存
@@ -109,10 +109,10 @@ AL18036 片岡 凪
         - 論文を読んで決める
     - まとめ
         - sent-1#sent-2#...\n
-        - e;[ec-score-array];sent-1#c;[ec-score-array];sent-2...\n 
-        - article-n;[e-feature-array];[c-feature-array];[all-feature-array]#e;[ec-score-array];sent-1#c;[ec-score-array];sent-2...\n
-        - article-n;[e-feature-array];[c-feature-array];[all-feature-array]#article-n;sentence-n;e;[ec-score-array];[feature-array];sent-1#article-n;sentence-n;c;[ec-score-array];[feature-array];sent-2...\n
-        - nation-name;article-n;[e-feature-array];[c-feature-array];[all-feature-array]#nation-name;article-n;sentence-n;e;[ec-score-array];[feature-array];sent-1#nation-name;article-n;sentence-n;c;[ec-score-array];[feature-array];sent-2...\n
+        - e;feature-x;feature-y;sent-1#c;feature-x;feature-y;sent-2...\n 
+        - article-n;[e-feature-array];[c-feature-array];[all-feature-array]#e;feature-x;feature-y;sent-1#c;feature-x;feature-y;sent-2...\n
+        - article-n;[e-feature-array];[c-feature-array];[all-feature-array]#article-n;sentence-n;e;feature-x;feature-y;[feature-array];sent-1#article-n;sentence-n;c;feature-x;feature-y;[feature-array];sent-2...\n
+        - nation-name;article-n;[e-feature-array];[c-feature-array];[all-feature-array]#nation-name;article-n;sentence-n;e;feature-x;feature-y;[feature-array];sent-1#nation-name;article-n;sentence-n;c;feature-x;feature-y;[feature-array];sent-2...\n
         - process-05_generated-articles-cluster_n.txt
         - process-06_find-articles-cluster-of-selected-sentence-info.sh
         - process-07_sentences_cluster_generator.py
@@ -127,7 +127,7 @@ sentence-1#sentence-2#...\n
 ```
 といったデータになっているが、**最終的には**
 ```
-nation-name;article-n;[e-feature-array];[c-feature-array];[all-feature-array]#nation-name;article-n;sentence-n;e;[ec-score-array];[feature-array];sent-1#nation-name;article-n;sentence-n;c;[ec-score-array];[feature-array];sent-2...\n
+nation-name;article-n;[e-feature-array];[c-feature-array];[all-feature-array]#nation-name;article-n;sentence-n;e;feature-x;feature-y;[feature-array];sent-1#nation-name;article-n;sentence-n;c;feature-x;feature-y;[feature-array];sent-2...\n
 〃
 ...
 ```
@@ -369,14 +369,14 @@ DeepLを用いて日本語訳すると以下のようになる。
         - #を元にリストに格納
         - 分類
             - 時間かかるからpyにした方がいいかも
-        - #e;[ec-score-array];sent-1#c;[ec-score-array];sent-2...\n のtxt
+        - #e;feature-x;feature-y;sent-1#c;feature-x;feature-y;sent-2...\n のtxt
             - DeepL翻訳で10記事ほどチェック
             - 文頭、文末はシャープがないことに注意
         - ニュートラルも含めることを考えつつ
         - シャッフルを消す
             - 前処理前の記事との紐づけのため
             - 本当は必要
-    - 出来事の文章の特徴量ベクトルを作成
+    - **出来事の文章の特徴量ベクトルを作成**
         - process_03_articles_features_calculator.py
         - india-articles_process-03_calced-articles-features.txt
         - 出来事の文のみを結合
@@ -388,7 +388,7 @@ DeepLを用いて日本語訳すると以下のようになる。
         - india-articles_process-04_calced-sentences-features.txt
         - #e:sent-1#c:sent-2...\n
         - S-BERTにsent-nを入れて特徴量を算出
-        - article-n;[e-feature-array];[c-feature-array];[all-feature-array]#article-n;sentence-n;e;[ec-score-array];[feature-array];sent-1#article-n;sentence-n;c;[ec-score-array];[feature-array];sent-2...\n とする
+        - article-n;[e-feature-array];[c-feature-array];[all-feature-array]#article-n;sentence-n;e;feature-x;feature-y;[feature-array];sent-1#article-n;sentence-n;c;feature-x;feature-y;[feature-array];sent-2...\n とする
             - 各文に特徴量を追加
             - 各文に番号を追加
             - #eのfeatureは不要だが、もしかしたら使うかも
@@ -397,7 +397,7 @@ DeepLを用いて日本語訳すると以下のようになる。
         - process_05_nations_articles_concatenator.py
         - process-05_concatenated-nations-articles.txt
         - 国情報を付与
-            - nation-name;article-n;[e-feature-array];[c-feature-array];[all-feature-array]#nation-name;article-n;sentence-n;e;[ec-score-array];[feature-array];sent-1#nation-name;article-n;sentence-n;c;[ec-score-array];[feature-array];sent-2...\n
+            - nation-name;article-n;[e-feature-array];[c-feature-array];[all-feature-array]#nation-name;article-n;sentence-n;e;feature-x;feature-y;[feature-array];sent-1#nation-name;article-n;sentence-n;c;feature-x;feature-y;[feature-array];sent-2...\n
     - [e-feature-array]を基に記事（行）をクラスタリング
         - process_06_articles_cluster_generator.py
         - クラスタごとに名前を付けて保存
@@ -430,10 +430,10 @@ DeepLを用いて日本語訳すると以下のようになる。
         - 論文を読んで決める
     - まとめ
         - sent-1#sent-2#...\n
-        - e;[ec-score-array];sent-1#c;[ec-score-array];sent-2...\n 
-        - article-n;[e-feature-array];[c-feature-array];[all-feature-array]#e;[ec-score-array];sent-1#c;[ec-score-array];sent-2...\n
-        - article-n;[e-feature-array];[c-feature-array];[all-feature-array]#article-n;sentence-n;e;[ec-score-array];[feature-array];sent-1#article-n;sentence-n;c;[ec-score-array];[feature-array];sent-2...\n
-        - nation-name;article-n;[e-feature-array];[c-feature-array];[all-feature-array]#nation-name;article-n;sentence-n;e;[ec-score-array];[feature-array];sent-1#nation-name;article-n;sentence-n;c;[ec-score-array];[feature-array];sent-2...\n
+        - e;feature-x;feature-y;sent-1#c;feature-x;feature-y;sent-2...\n 
+        - article-n;[e-feature-array];[c-feature-array];[all-feature-array]#e;feature-x;feature-y;sent-1#c;feature-x;feature-y;sent-2...\n
+        - article-n;[e-feature-array];[c-feature-array];[all-feature-array]#article-n;sentence-n;e;feature-x;feature-y;[feature-array];sent-1#article-n;sentence-n;c;feature-x;feature-y;[feature-array];sent-2...\n
+        - nation-name;article-n;[e-feature-array];[c-feature-array];[all-feature-array]#nation-name;article-n;sentence-n;e;feature-x;feature-y;[feature-array];sent-1#nation-name;article-n;sentence-n;c;feature-x;feature-y;[feature-array];sent-2...\n
         - process-06_generated-articles-cluster_n.txt
         - process-07_find-articles-cluster-of-selected-sentence-info.sh
         - process-08_sentences_cluster_generator.py
