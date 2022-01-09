@@ -29,7 +29,7 @@ MODEL_NAME = 'paraphrase-MiniLM-L6-v2'
 
 def main():
 
-    exe_time_dir = "./covid-19-news-articles/exe-time/exe-time_process_03_articles_features_calculator.txt"
+    exe_time_dir = "./covid-19-news-articles/archive/exe-time/exe-time_process_03_articles_features_calculator.txt"
 
     # debug option
     arg_parser = ArgumentParser(description='execute S-BERT')
