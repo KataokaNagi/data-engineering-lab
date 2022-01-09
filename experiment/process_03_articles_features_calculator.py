@@ -25,6 +25,7 @@ from sentence_transformers import SentenceTransformer
 
 NUM_DEBUG = 3
 MODEL_NAME = 'paraphrase-MiniLM-L6-v2'
+RECORD_ADDITIONAL_EMBED = False
 
 
 def main():
@@ -146,23 +147,26 @@ def main():
     start_time = time.time()
 
     # embed
-    all_sentences_embeddings = model.encode(cats_sentences)
     evidence_sentences_embeddings = model.encode(cats_evidence_sentences)
-    claims_sentences_embeddings = model.encode(cats_claims_sentences)
-
-    log.v("all_sentences_embeddings[0]", all_sentences_embeddings[0])
-    log.v("all_sentences_embeddings.shape", all_sentences_embeddings.shape)
-    log.v()
-
     log.v("evidence_sentences_embeddings[0]", evidence_sentences_embeddings[0])
     log.v("evidence_sentences_embeddings.shape",
           evidence_sentences_embeddings.shape)
     log.v()
 
-    log.v("claims_sentences_embeddings[0]", claims_sentences_embeddings[0])
-    log.v("claims_sentences_embeddings.shape",
-          claims_sentences_embeddings.shape)
-    log.v()
+    claims_sentences_embeddings = None
+    all_sentences_embeddings = None
+
+    if RECORD_ADDITIONAL_EMBED:
+        claims_sentences_embeddings = model.encode(cats_claims_sentences)
+        log.v("claims_sentences_embeddings[0]", claims_sentences_embeddings[0])
+        log.v("claims_sentences_embeddings.shape",
+              claims_sentences_embeddings.shape)
+        log.v()
+
+        all_sentences_embeddings = model.encode(cats_sentences)
+        log.v("all_sentences_embeddings[0]", all_sentences_embeddings[0])
+        log.v("all_sentences_embeddings.shape", all_sentences_embeddings.shape)
+        log.v()
 
     # print time
     embed_time = time.time() - start_time
@@ -179,13 +183,20 @@ def main():
     for article_idx, _ in enumerate(articles_sentences):
 
         article_id = nation_name + '-' + str(article_idx)
-        a_embed = str(all_sentences_embeddings[article_idx])
         e_embed = str(evidence_sentences_embeddings[article_idx])
-        c_embed = str(claims_sentences_embeddings[article_idx])
+        c_embed = None
+        a_embed = None
+        if RECORD_ADDITIONAL_EMBED:
+            c_embed = str(claims_sentences_embeddings[article_idx])
+            a_embed = str(all_sentences_embeddings[article_idx])
         informed_sentences = articles_informed_sentences[article_idx]
 
         article_info = ';'.join(
-            [article_id, a_embed, e_embed, c_embed]).strip().strip(';')
+            [article_id, e_embed]).strip().strip(';')
+        if RECORD_ADDITIONAL_EMBED:
+            article_info = ';'.join(
+                [article_id, a_embed, e_embed, c_embed]).strip().strip(';')
+
         cat = [article_info] + informed_sentences
         joined = "#".join(cat).strip().strip('#')
 
