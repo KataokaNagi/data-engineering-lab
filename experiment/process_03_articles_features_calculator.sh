@@ -61,7 +61,7 @@ done
 
 for i in {0..2}
 do
-    cmd="python3 ${SRC_DIR} ${NATION_NAMES[$i]} ${ARTICLES_DIRS[$i]} ${DEST_DIRS[$i]}"
+    cmd="python3 ${SRC_DIR} ${ARTICLES_DIRS[$i]} ${DEST_DIRS[$i]} ${NATION_NAMES[$i]}"
 
     if "${do_debug}"; then
         cmd="${cmd} --debug"
