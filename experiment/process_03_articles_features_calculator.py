@@ -91,8 +91,8 @@ def main():
         class_infos = []  # [e;-x;-y, ...]
         sentences = []  # [sent-1, ...]
         cat_sentence = ""  # "sent-1 sent-2 ..."
-        evidence_sentence = ""  # "sent-e1 sent-e2 ..."
-        claims_sentence = ""  # "sent-c1 sent-c2 ..."
+        cat_evidence_sentence = ""  # "sent-e1 sent-e2 ..."
+        cat_claims_sentence = ""  # "sent-c1 sent-c2 ..."
 
         # e;feature-x;feature-y;sent-1
         for informed_sentence in informed_sentences:
@@ -104,15 +104,14 @@ def main():
             sentence = splits_with_semicolon[-1]  # sent-1
 
             cat_sentence += " " + sentence
-            if(class_info[0] == "e") {
-                evidence_cat_sentence += " " + sentence
-            } elif (class_info[0] == "c") {
-                claims_cat_sentence += " " + sentence
-            } else {
-                log.e("unsuspected classinfo[0]: ", classinfo[0])
+            if(class_info[0] == "e"):
+                cat_evidence_sentence += " " + sentence
+            elif (class_info[0] == "c"):
+                cat_claims_sentence += " " + sentence
+            else:
+                log.e("unsuspected classinfo[0]: ", class_info[0])
                 log.e("suspected classinfo[0] is 'e' or 'c'")
                 exit()
-            }
 
             class_infos.append(class_info)
             sentences.append(sentence)
