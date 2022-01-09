@@ -376,14 +376,17 @@ DeepLを用いて日本語訳すると以下のようになる。
         - シャッフルを消す
             - 前処理前の記事との紐づけのため
             - 本当は必要
-    - **出来事の文章の特徴量ベクトルを作成**
+    - 出来事の文章の特徴量ベクトルを作成
         - process_03_articles_features_calculator.py
         - india-articles_process-03_calced-articles-features.txt
         - 出来事の文のみを結合
             - 一応主張、全文も作っておく
+            - 文の間にスペースを挿入
         - SBERTに入れる
         - 文頭にarticle-n;[e-feature-array];[c-feature-array];[all-feature-array]#を追加
-    - 主張の文の特徴量ベクトルを作成
+        - 記事にcが存在しない場合'-'を代入
+        - 記事にeが存在しない場合'-'を代入
+    - **主張の文の特徴量ベクトルを作成**
         - process_04_sentences_features_calculator.py
         - india-articles_process-04_calced-sentences-features.txt
         - #e:sent-1#c:sent-2...\n
