@@ -178,7 +178,7 @@ def main():
 
     for article_idx, _ in enumerate(articles_sentences):
 
-        article_id = nation_name + str(article_idx)
+        article_id = nation_name + '-' + str(article_idx)
         a_embed = str(all_sentences_embeddings[article_idx])
         e_embed = str(evidence_sentences_embeddings[article_idx])
         c_embed = str(claims_sentences_embeddings[article_idx])
