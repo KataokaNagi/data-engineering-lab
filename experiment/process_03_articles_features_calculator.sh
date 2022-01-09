@@ -1,26 +1,31 @@
 #!/bin/bash
 #
-# @file      process_02_exe_classifier_as_claim_or_evidence.sh
+# @file      process_03_articles_features_calculator.sh
 # @author    Kataoka Nagi (calm1836[at]gmail.com)
-# @brief     execute process_02_exe_classifier_as_claim_or_evidence with multi files
-# @date      2021-12-05 04:38:15
-# @version   1.1
-# @history   add log option
+# @brief     execute process_03_articles_features_calculator with multi files
+# @date      2022-01-09 06:03:51
+# @version   1.0
+# @history   add
 # @copyright (c) 2021 Kataoka Nagi This src is released under the MIT License, see LICENSE.
 # 
 
-SRC_DIR="process_02_exe_classifier_as_claim_or_evidence.py"
-ARTICLES_DIRS=(
-    "./covid-19-news-articles/india-articles_preprocess_03_spilt-sentences_with-stanza.txt"
-    "./covid-19-news-articles/japan-articles_preprocess_03_spilt-sentences_with-stanza.txt"
-    "./covid-19-news-articles/korea-articles_preprocess_03_spilt-sentences_with-stanza.txt"
-    # "./covid-19-news-articles/uk-articles_preprocess_03_spilt-sentences_with-stanza.txt"
+SRC_DIR="process_03_articles_features_calculator.py"
+NATION_NAMES=(
+    "IN"
+    "JP"
+    "KR"
 )
-DEST_DIRS=(
+ARTICLES_DIRS=(
     "./covid-19-news-articles/india-articles_process-02_classified-claim-or-evidence.txt"
     "./covid-19-news-articles/japan-articles_process-02_classified-claim-or-evidence.txt"
     "./covid-19-news-articles/korea-articles_process-02_classified-claim-or-evidence.txt"
     # "./covid-19-news-articles/uk-articles_process-02_classified-claim-or-evidence.txt"
+)
+DEST_DIRS=(
+    "./covid-19-news-articles/india-articles_preprocess_03_calced-articles-features.txt"
+    "./covid-19-news-articles/japan-articles_preprocess_03_calced-articles-features.txt"
+    "./covid-19-news-articles/korea-articles_preprocess_03_calced-articles-features.txt"
+    # "./covid-19-news-articles/uk-articles_preprocess_03_calced-articles-features.txt"
 )
 
 date=`date "+%Y%m%d-%H%M%S"`
@@ -44,7 +49,7 @@ done
 
 for i in {0..2}
 do
-    cmd="python3 ${SRC_DIR} ${ARTICLES_DIRS[$i]} ${DEST_DIRS[$i]}"
+    cmd="python3 ${SRC_DIR} ${NATION_NAMES[$i]} ${ARTICLES_DIRS[$i]} ${DEST_DIRS[$i]}"
 
     if "${do_debug}"; then
         cmd="${cmd} --debug"
