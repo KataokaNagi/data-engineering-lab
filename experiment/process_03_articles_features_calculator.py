@@ -179,12 +179,12 @@ def main():
     for article_idx, _ in enumerate(articles_sentences):
 
         article_id = nation_name + str(article_idx)
-        a_embed = all_sentences_embeddings[article_idx]
-        e_embed = evidence_sentences_embeddings[article_idx]
-        c_embed = claims_sentences_embeddings[article_idx]
+        a_embed = str(all_sentences_embeddings[article_idx])
+        e_embed = str(evidence_sentences_embeddings[article_idx])
+        c_embed = str(claims_sentences_embeddings[article_idx])
         informed_sentences = articles_informed_sentences[article_idx]
 
-        cat = [article_id, a_embed, e_embed, c_embed, informed_sentences]
+        cat = [article_id, a_embed, e_embed, c_embed] + informed_sentences
         joined = "#".join(cat).strip().strip('#')
 
         cats_class_embed_sentence.append(joined + "\n")
