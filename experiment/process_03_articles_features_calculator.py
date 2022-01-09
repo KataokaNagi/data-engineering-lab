@@ -5,7 +5,7 @@
 @brief     calc articles features with S-BERT
 @note      in : e;feature-x;feature-y;sent-1#c;feature-x;feature-y;sent-2...\n
 @note      out: nation-n;article-n;[e-embedding];[c-embedding];[all-embedding]#e;feature-x;feature-y;sent-1#c;feature-x;feature-y;sent-2...\n
-@note      python3 process_03_articles_features_calculator.py [in-dir] [dist-dir]
+@note      python3 process_03_articles_features_calculator.py [in-dir] [dist-dir] [nation-id]
 @note      mean pooling
 @date      2022-01-09 05:29:45
 @version   1.0
