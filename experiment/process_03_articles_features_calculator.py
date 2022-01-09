@@ -184,7 +184,9 @@ def main():
         c_embed = str(claims_sentences_embeddings[article_idx])
         informed_sentences = articles_informed_sentences[article_idx]
 
-        cat = [article_id, a_embed, e_embed, c_embed] + informed_sentences
+        article_info = ';'.join(
+            [article_id, a_embed, e_embed, c_embed]).strip().strip(';')
+        cat = [article_info] + informed_sentences
         joined = "#".join(cat).strip().strip('#')
 
         cats_class_embed_sentence.append(joined + "\n")
