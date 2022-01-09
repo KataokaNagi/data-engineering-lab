@@ -4,7 +4,7 @@
 @author    Kataoka Nagi (calm1836[at]gmail.com)
 @brief     calc articles features with S-BERT
 @note      in : e;feature-x;feature-y;sent-1#c;feature-x;feature-y;sent-2...\n
-@note      out: article-n;[e-embedding];[c-embedding];[all-embedding]#e;feature-x;feature-y;sent-1#c;feature-x;feature-y;sent-2...\n
+@note      out: nation-n;article-n;[e-embedding];[c-embedding];[all-embedding]#e;feature-x;feature-y;sent-1#c;feature-x;feature-y;sent-2...\n
 @note      python3 process_03_articles_features_calculator.py [in-dir] [dist-dir]
 @note      mean pooling
 @date      2022-01-09 05:29:45
@@ -182,7 +182,8 @@ def main():
 
     for article_idx, _ in enumerate(articles_sentences):
 
-        article_id = nation_name + '-' + str(article_idx)
+        nation_id = nation_name
+        article_id = str(article_idx)
         e_embed = str(evidence_sentences_embeddings[article_idx])
         c_embed = None
         a_embed = None
@@ -192,7 +193,7 @@ def main():
         informed_sentences = articles_informed_sentences[article_idx]
 
         article_info = ';'.join(
-            [article_id, e_embed]).strip().strip(';')
+            [nation_id, article_id, e_embed]).strip().strip(';')
         if RECORD_ADDITIONAL_EMBED:
             article_info = ';'.join(
                 [article_id, a_embed, e_embed, c_embed]).strip().strip(';')
