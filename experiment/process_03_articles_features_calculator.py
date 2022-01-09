@@ -20,7 +20,7 @@ from utils.log import Log as log
 import time
 import datetime
 from argparse import ArgumentParser
-from re import sub
+import re
 from sentence_transformers import SentenceTransformer
 
 NUM_DEBUG = 3
@@ -81,9 +81,9 @@ def main():
 
     articles_class_infos = []  # [[e;f-x;f-y, ...], ...]
     articles_sentences = []  # [[sent-1, ...], ...]
-    cat_sentences = []  # ["sent-1 sent-2 ...", ...]
-    evidence_cat_sentences = []  # ["sent-e1 sent-e2 ...", ...]
-    claims_cat_sentences = []  # ["sent-c1 sent-c2 ...", ...]
+    cats_sentences = []  # ["sent-1 sent-2 ...", ...]
+    cats_evidence_sentences = []  # ["sent-e1 sent-e2 ...", ...]
+    cats_claims_sentences = []  # ["sent-c1 sent-c2 ...", ...]
 
     # [e;feature-x;feature-y;sent-1, c;feature-x;feature-y;sent-2, ...]
     for informed_sentences in articles_informed_sentences:
@@ -91,8 +91,8 @@ def main():
         class_infos = []  # [e;-x;-y, ...]
         sentences = []  # [sent-1, ...]
         cat_sentence = ""  # "sent-1 sent-2 ..."
-        cat_evidence_sentence = ""  # "sent-e1 sent-e2 ..."
-        cat_claims_sentence = ""  # "sent-c1 sent-c2 ..."
+        cat_evidence_sentences = ""  # "sent-e1 sent-e2 ..."
+        cat_claims_sentences = ""  # "sent-c1 sent-c2 ..."
 
         # e;feature-x;feature-y;sent-1
         for informed_sentence in informed_sentences:
@@ -105,9 +105,9 @@ def main():
 
             cat_sentence += " " + sentence
             if(class_info[0] == "e"):
-                cat_evidence_sentence += " " + sentence
+                cat_evidence_sentences += " " + sentence
             elif (class_info[0] == "c"):
-                cat_claims_sentence += " " + sentence
+                cat_claims_sentences += " " + sentence
             else:
                 log.e("unsuspected classinfo[0]: ", class_info[0])
                 log.e("suspected classinfo[0] is 'e' or 'c'")
@@ -120,18 +120,20 @@ def main():
         articles_sentences.append(sentences)
 
         # delete str if all is space
-        evidence_sentence = re.sub(' {2,}', '', evidence_sentence).strip()
-        claims_sentence = re.sub(' {2,}', '', claims_sentence).strip()
+        cat_evidence_sentences = re.sub(
+            ' {2,}', '', cat_evidence_sentences).strip()
+        cat_claims_sentences = re.sub(
+            ' {2,}', '', cat_claims_sentences).strip()
 
-        cat_sentences.append(cat_sentence.strip())
-        evidence_cat_sentences.append(evidence_sentence)
-        claims_cat_sentences.append(claims_sentence)
+        cats_sentences.append(cat_sentence.strip())
+        cats_evidence_sentences.append(cat_evidence_sentences)
+        cats_claims_sentences.append(cat_claims_sentences)
 
     log.v("articles_class_infos[0]: ", articles_class_infos[0])
     log.v("articles_sentences[0]: ", articles_sentences[0])
-    log.v("cat_sentences[0]: ", cat_sentences[0])
-    log.v("evidence_cat_sentences[0]: ", evidence_cat_sentences[0])
-    log.v("claims_cat_sentences[0]: ", claims_cat_sentences[0])
+    log.v("cat_sentences[0]: ", cats_sentences[0])
+    log.v("evidence_cat_sentences[0]: ", cats_evidence_sentences[0])
+    log.v("claims_cat_sentences[0]: ", cats_claims_sentences[0])
     log.v()
 
     log.d("*** substitute articles' sentences for S-BERT ***")
@@ -144,9 +146,9 @@ def main():
     start_time = time.time()
 
     # embed
-    all_sentences_embeddings = model.encode(cat_sentences)
-    evidence_sentences_embeddings = model.encode(evidence_cat_sentences)
-    claims_sentences_embeddings = model.encode(claims_cat_sentences)
+    all_sentences_embeddings = model.encode(cats_sentences)
+    evidence_sentences_embeddings = model.encode(cats_evidence_sentences)
+    claims_sentences_embeddings = model.encode(cats_claims_sentences)
 
     log.v("all_sentences_embeddings[0]", all_sentences_embeddings[0])
     log.v("all_sentences_embeddings.shape", all_sentences_embeddings.shape)
