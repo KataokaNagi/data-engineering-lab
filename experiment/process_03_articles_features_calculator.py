@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
-"""process_02_exe_classifier_as_claim_or_evidence.py
+"""process_03_articles_features_calculator.py
 
 @author    Kataoka Nagi (calm1836[at]gmail.com)
-@brief     execute transformer txt classifier as claim or evidence
-@note      [sent-1#sent-2#...\n, ...] -> [e;[ec-score-array];sent-1#c;[ec-score-array];sent-2...\n, ...]
-@note      python3 process_02_exe_classifier_as_claim_or_evidence.py ARTICLE_DIR DEST_DIR [-d]
-@date      2021-12-01 00:38:55
+@brief     calc articles features with S-BERT
+@note      in : e;feature-x;feature-y;sent-1#c;feature-x;feature-y;sent-2...\n
+@note      out: article-n;[e-embedding];[c-embedding];[all-embedding]#e;feature-x;feature-y;sent-1#c;feature-x;feature-y;sent-2...\n
+@note      python3 process_03_articles_features_calculator.py [in-dir] [dist-dir]
+@note      mean pooling
+@date      2022-01-09 05:29:45
 @version   1.0
-@see       transformer_classifier_as_claim_or_evidence.ipynb
-@see       [hands-on-ml 16章 Sentiment Analysys](https://github.com/ageron/handson-ml2/blob/master/16_nlp_with_rnns_and_attention.ipynb)
-@copyright This file includes the work that is distributed in the [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
-@copyright This file includes the work that is distributed in the [CC BY-CA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)
-@copyright (c) 2021 Kataoka Nagi This src is released under the Apache License 2.0 & CC BY-CA 3.0, see LICENSE.
+@history   add
+@see       [SentenceTransformers Documentation](https://www.sbert.net/)
+@see       [はじめての自然言語処理 第9回 Sentence BERT による類似文章検索の検証](https://www.ogis-ri.co.jp/otc/hiroba/technical/similar-document-search/part9.html)
+@copyright (c) 2021 Kataoka Nagi
 
 """
 
@@ -20,23 +21,18 @@ import time
 import datetime
 from argparse import ArgumentParser
 from re import sub
-from simpletransformers.classification import ClassificationModel
+from sentence_transformers import SentenceTransformer
 
-CLASSIFICATION_MODEL_TYPE = 'roberta'
-MODEL_DIR = "outputs/"
 NUM_DEBUG = 3
+MODEL_NAME = 'paraphrase-MiniLM-L6-v2'
 
 
 def main():
-    """## 英記事で分類
 
-        # データのインポート
-        - preprocessed covid-19-news-articles
-    """
-    exe_time_dir = "./covid-19-news-articles/exe-time_process-02_classified-claim-or-evidence.txt"
+    exe_time_dir = "./covid-19-news-articles/exe-time/exe-time_process_03_articles_features_calculator.txt"
 
     # debug option
-    arg_parser = ArgumentParser(description='execute simple transformer')
+    arg_parser = ArgumentParser(description='execute S-BERT')
     arg_parser.add_argument(
         "articles_dir",
         help="article directory's path",
@@ -44,6 +40,10 @@ def main():
     arg_parser.add_argument(
         "dest_dir",
         help="destination directory's path",
+        type=str)
+    arg_parser.add_argument(
+        "nation_name",
+        help="IN/JP/KR",
         type=str)
     arg_parser.add_argument(
         "-d",
@@ -61,101 +61,147 @@ def main():
 
     log.d("*** import articles ***")
 
-    articles_sentences = []  # [articles][sentences]
+    # [[e;feature-x;feature-y;sent-1, c;feature-x;feature-y;sent-2, ...], ...]
+    articles_informed_sentences = []
 
     with open(arg.articles_dir, "r", encoding="utf_8") as f:
-        articles_sentences = [
+        articles_informed_sentences = [
             article.strip().split('#') for article in f.readlines()]
-        log.v("articles_sentences:")
-        log.v(articles_sentences[0])
-        log.v(articles_sentences[1])
-        log.v(articles_sentences[2])
+        log.v("articles:")
+        log.v(articles_informed_sentences[0])
+        log.v(articles_informed_sentences[1])
+        log.v(articles_informed_sentences[2])
         log.v()
 
     if do_debug:
-        articles_sentences = articles_sentences[:NUM_DEBUG]
+        articles_informed_sentences = articles_informed_sentences[:NUM_DEBUG]
 
-    """## 分類器へ代入"""
-    log.d("*** substitute articles' sentences for model ***")
+    # separate class info & sentence
+    # & cat sentences each articles (all sentences, evidence sentences, claims sentences)
 
-    # open model
-    model = ClassificationModel(
-        CLASSIFICATION_MODEL_TYPE,
-        MODEL_DIR
-    )
+    articles_class_infos = []  # [[e;f-x;f-y, ...], ...]
+    articles_sentences = []  # [[sent-1, ...], ...]
+    cat_sentences = []  # ["sent-1 sent-2 ...", ...]
+    evidence_cat_sentences = []  # ["sent-e1 sent-e2 ...", ...]
+    claims_cat_sentences = []  # ["sent-c1 sent-c2 ...", ...]
+
+    # [e;feature-x;feature-y;sent-1, c;feature-x;feature-y;sent-2, ...]
+    for informed_sentences in articles_informed_sentences:
+
+        class_infos = []  # [e;-x;-y, ...]
+        sentences = []  # [sent-1, ...]
+        cat_sentence = ""  # "sent-1 sent-2 ..."
+        evidence_sentence = ""  # "sent-e1 sent-e2 ..."
+        claims_sentence = ""  # "sent-c1 sent-c2 ..."
+
+        # e;feature-x;feature-y;sent-1
+        for informed_sentence in informed_sentences:
+
+            # [e, f-x, f-y, sent-1]
+            splits_with_semicolon = informed_sentence.split(';')
+
+            class_info = ';'.join(splits_with_semicolon[:-1])  # e;f-x;f-y
+            sentence = splits_with_semicolon[-1]  # sent-1
+
+            cat_sentence += " " + sentence
+            if(class_info[0] == "e") {
+                evidence_cat_sentence += " " + sentence
+            } elif (class_info[0] == "c") {
+                claims_cat_sentence += " " + sentence
+            } else {
+                log.e("unsuspected classinfo[0]: ", classinfo[0])
+                log.e("suspected classinfo[0] is 'e' or 'c'")
+                exit()
+            }
+
+            class_infos.append(class_info)
+            sentences.append(sentence)
+
+        articles_class_infos.append(class_infos)
+        articles_sentences.append(sentences)
+
+        # delete str if all is space
+        evidence_sentence = re.sub(' {2,}', '', evidence_sentence).strip()
+        claims_sentence = re.sub(' {2,}', '', claims_sentence).strip()
+
+        cat_sentences.append(cat_sentence.strip())
+        evidence_cat_sentences.append(evidence_sentence)
+        claims_cat_sentences.append(claims_sentence)
+
+    log.v("articles_class_infos[0]: ", articles_class_infos[0])
+    log.v("articles_sentences[0]: ", articles_sentences[0])
+    log.v("cat_sentences[0]: ", cat_sentences[0])
+    log.v("evidence_cat_sentences[0]: ", evidence_cat_sentences[0])
+    log.v("claims_cat_sentences[0]: ", claims_cat_sentences[0])
+    log.v()
+
+    log.d("*** substitute articles' sentences for S-BERT ***")
+
+    # set model
+    log.d(MODEL_NAME)
+    model = SentenceTransformer(MODEL_NAME)
 
     # time mesurement: start
     start_time = time.time()
 
-    # predict
-    predicts = [[model.predict([sentence]) for sentence in article]
-                for article in articles_sentences]
+    # embed
+    all_sentences_embeddings = model.encode(cat_sentences)
+    evidence_sentences_embeddings = model.encode(evidence_cat_sentences)
+    claims_sentences_embeddings = model.encode(claims_cat_sentences)
+
+    log.v("all_sentences_embeddings[0]", all_sentences_embeddings[0])
+    log.v("all_sentences_embeddings.shape", all_sentences_embeddings.shape)
+    log.v()
+
+    log.v("evidence_sentences_embeddings[0]", evidence_sentences_embeddings[0])
+    log.v("evidence_sentences_embeddings.shape",
+          evidence_sentences_embeddings.shape)
+    log.v()
+
+    log.v("claims_sentences_embeddings[0]", claims_sentences_embeddings[0])
+    log.v("claims_sentences_embeddings.shape",
+          claims_sentences_embeddings.shape)
+    log.v()
 
     # print time
-    predict_time = time.time() - start_time
-    log.d("predict time (sec):", predict_time)
+    embed_time = time.time() - start_time
+    log.d("embed time (sec):", embed_time)
 
-    log.v("predicts:", predicts, '\n')
-    log.v("predicts[0]:", predicts[0], '\n')
-    log.v("predicts[0][0]:", predicts[0][0], '\n')
-    log.v("predicts[0][0][0]:", predicts[0][0][0], '\n')
-    log.v("predicts[0][0][0][0]:", predicts[0][0][0][0], '\n')
-    log.v("predicts[0][0][1]:", predicts[0][0][1], '\n')
-    log.v("predicts[0][0][1][0]:", predicts[0][0][1][0], '\n')
-    log.v("type(predicts[0][0][1][0]):", type(predicts[0][0][1][0]), '\n')
-    x, y = predicts[0][0][1][0]
-    log.v("x, y = predicts[0][0][1][0]")
-    log.v("x:", x)
-    log.v("y:", y)
-    # log.v("predicts[0][0][1][0][0]:", predicts[0][0][0][0][0], '\n') # error
-    # log.v("predicts[0][0][1][0][0][0]:", predicts[0][0][1][0][0][0], '\n')
-    # log.v("predicts[0][0][1][0][0][0]:", predicts[0][0][1][0][0][1], '\n')
+    log.d("*** import articles ***")
 
-    """### 文章と分類結果の対応"""
+    # cat articles_class_infos, each embeddings, and articles_sentences
+    # adding article ID (1-1, 1-2, ..., 2-1, 2-2, ...)
+    # article-n;e-embedding;c-embedding;all-embedding#e;feature-x;feature-y;sent-1#c;feature-x;feature-y;sent-2...\n
+    cats_class_embed_sentence = []
+    nation_name = arg.nation_name
 
-    LABEL_IDX = 0
-    FEATURE_IDX = 1
+    for article_idx, _ in enumerate(articles_sentences):
 
-    CLAIMS_LABEL = 1
-    EVIDENCE_LABEL = 0
+        article_id = nation_name + str(article_idx)
+        a_embed = all_sentences_embeddings[article_idx]
+        e_embed = evidence_sentences_embeddings[article_idx]
+        c_embed = claims_sentences_embeddings[article_idx]
+        informed_sentences = articles_informed_sentences[article_idx]
 
-    # cat label and sentences
-    classified_articles_sentences = []
+        cat = [article_id, a_embed, e_embed, c_embed, informed_sentences]
+        joined = "#".join(cat).strip().strip('#')
 
-    for article_idx, article in enumerate(articles_sentences):
+        cats_class_embed_sentence.append(joined + "\n")
 
-        classified_sentences = []
+    log.v("cats_class_embed_sentence[0]:", cats_class_embed_sentence[0])
+    log.v()
 
-        for sentence_idx, sentence in enumerate(article):
-            pred_label = predicts[article_idx][sentence_idx][LABEL_IDX][0]
-            feature_x, feature_y = predicts[article_idx][sentence_idx][FEATURE_IDX][0]
-            feature_x, feature_y = str(feature_x), str(feature_y)
+    log.d("*** write destination data & embed time ***")
 
-            if pred_label == CLAIMS_LABEL:
-                classified_sentences.append(
-                    "c;" + feature_x + ";" + feature_y + ";" + sentence)
-            else:
-                classified_sentences.append(
-                    "e;" + feature_x + ";" + feature_y + ";" + sentence)
-
-        joined = "#".join(
-            classified_sentences).strip().strip('#')
-        classified_articles_sentences.append(joined + "\n")
-
-    log.v(
-        "classified_articles_sentences[0]:",
-        classified_articles_sentences[0])
-
-    # write dest
-    log.d("*** write destination data & predict time ***")
+    # write dist
     with open(dest_dir, "w+", encoding="utf_8") as f:
-        f.writelines(classified_articles_sentences)
+        f.writelines(cats_class_embed_sentence)
 
     # write time
     with open(exe_time_dir, "a+", encoding="utf_8") as f:
         f.write(str(datetime.datetime))
-        f.write(" predict_time(sec): ")
-        f.write(str(predict_time))
+        f.write(" embed_time(sec): ")
+        f.write(str(embed_time))
         f.write("\n")
 
 

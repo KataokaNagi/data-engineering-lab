@@ -65,9 +65,14 @@
 # utils.log.Log.e("error")
 # utils.log.Log.w("worning")
 
-from utils.log import Log as log
+# from utils.log import Log as log
 
-log.v("vorbose")
-log.d("debug")
-log.e("error")
-log.w("worning")
+# log.v("vorbose")
+# log.d("debug")
+# log.e("error")
+# log.w("worning")
+
+##################################################
+
+s = "  "
+print("left", s.strip(), "right")
