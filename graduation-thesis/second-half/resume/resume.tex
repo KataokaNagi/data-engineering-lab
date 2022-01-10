@@ -1,5 +1,6 @@
 \documentclass[a4paper, twocolumn, 10pt]{jarticle}
 \usepackage[dvipdfmx]{graphicx}
+\usepackage[dvipdfmx]{color}
 \usepackage{float}
 \usepackage{setspace}
 \usepackage[top=20mm,bottom=20mm,left=23mm,right=23mm]{geometry}
@@ -8,11 +9,12 @@
 
 \usepackage{comment}
 %\usepackage[subrefformat=parens]{subcaption}
-\usepackage{color}
 % \usepackage{jumoline}
 \usepackage[hyphens]{url}
 \usepackage[dvipdfmx, bookmarkstype=toc, colorlinks=false, pdfborder={0 0 0}, bookmarks=true, bookmarksnumbered=true]{hyperref}
 \usepackage{pxjahyper}
+\usepackage{here}
+\usepackage{otf}
 
 \makeatletter
 
@@ -50,7 +52,7 @@
 
 \begin{document}
 
-\title{記事トピックのクラスタを用いた多言語ニュース推薦手法の提案}
+\title{主張と根拠のクラスタを用いた多様な主張を提示するニュース推薦手法の提案}
 
 \maketitle
 
@@ -63,31 +65,64 @@
 
 ニュース記事となる出来事は，記者によって受け取り方や伝え方が異なる．
 RSF(Reporters Sans Frontières)は，政治や文化などの要因によって記者の主張が制限されていることを問題視している\cite{2021_world_press_freedom_index}．
-近年の
-% オンラインニュースサイト
-Webニュース
-には世界の記者たちの様々な主張が散見されるが，言語の違いによる時間的コストなどから，多くの読者はそれらの主張の一部しか把握できない．
+近年のWebニュースには世界中の記者たちの様々な主張が散見されるが，言語の違いによる時間的コストなどから，多くの読者はそれらの主張の一部しか把握できない．
 
-そこで本研究では，閲覧記事と取り扱う出来事が類似する世界の記事を抽出し，得た記事から主張が異なる文章を推薦するシステムを提案する．
-ここで，「出来事」は記者の解釈に依存しない事象とし，「主張」は記者が伝えるべきだと判断した出来事の解釈とする．
+Yangらは，ニュース読者が出来事を正確かつ迅速に把握できるように，
+階層的クラスタリングを用いて記事に対するツイートの主張をグループ化する手法を提案した\cite{yang_scalable_2021}．
+この研究ではcovid-19の話題に限定した記事について主張をグループ化しているが，この手法をWeb上の無数の話題の記事に適用した場合，無数の話題の主張のグループが生成されることになる．
+% 1度のクラスタリングで
+% 無数の主張のグループが生成されることになる．
+これでは，covid-19のワクチンに対する主張と脳炎のワクチンに対する主張が近くにグループ化されるといった事が起き得るため，同じ出来事の異なる主張の収集に時間を要してしまう．
+% 異なる話題の似た主張をグループ化するエラーに繋がりやすいと考えられる．
+
+% 近いグループに正確さ
+% カテゴリをcovid-19に限定させたニュースだけでも
+% ノイズとなり得る
+% Web上には世界の無数の記事には対応できない
+% クラスタ数がいうほど減っていない
+
+
+
+% より近い出来事を
+
+そこで本研究では，世界のニュース読者の正確かつ迅速な出来事の把握のため，閲覧記事と出来事が類似する世界の記事をグループ化し，同じ出来事のグループから主張が異なる文章を推薦する手法を提案する．図\ref{system_abstract}に提案手法のシステムの概要を示す．
+% ここで，「出来事」は記者の解釈に依存しない事象とし，「主張」は記者が伝えるべきだと判断した出来事の解釈とする．
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[keepaspectratio, width=60mm]{img/system_abstract.png}
+	% \includegraphics[keepaspectratio, width=60mm]{img/system_abstract.png}
+	% \includegraphics[keepaspectratio, width=60mm]{img/sample.png}
+	\caption{
+    提案手法のシステムの概要
+    \\$\rm(\hspace{.18em}i\hspace{.18em})$
+    記事の文章を出来事の文と主張の文に分類
+    \\$\rm(\hspace{.08em}ii\hspace{.08em})$
+    出来事の文章の類似度で記事をクラスタリング
+    \\$\rm(i\hspace{-.08em}i\hspace{-.08em}i)$
+    主張の文の類似度で主張の文をクラスタリング
+  }
+	\label{system_abstract}
+\end{figure}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Section 先行研究
+%% Section 関連研究
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{先行研究}
-意味や話題が類似する文章の推薦手法として，LDA(Latent Dirichlet Allocation)~\cite{tian_labeled_2018}やSentence-BERT~\cite{reimers_sentence-bert_2019}が提案されている．
-LDAは記事に関連の深い単語群とそれぞれの単語の関連度を出力するが，単語群同士の関係性が得られないという点で，出来事の類似度が高い記事は得にくいと考えられる．
-一方，Sentence-BERTは単語同士の関係性を加味した文意の数値ベクトルを出力するため，より高い出来事の類似度が得られると考えられる．
-しかし，記事の全文をSentence-BERTに入力した場合，出来事の類似度の算出に主張を述べる文も考慮することになり，より近い出来事に関する主張の違いを推薦できない．
+% \section{関連研究}
+% 意味や話題が類似する文章の推薦手法として，LDA(Latent Dirichlet Allocation)~\cite{tian_labeled_2018}やSentence-BERT~\cite{reimers_sentence-bert_2019}が提案されている．
+% LDAは記事に関連の深い単語群とそれぞれの単語の関連度を出力するが，単語群同士の関係性が得られないという点で，出来事の類似度が高い記事は得にくいと考えられる．
+% 一方，Sentence-BERTは単語同士の関係性を加味した文意の数値ベクトルを出力するため，より高い出来事の類似度が得られると考えられる．
+% しかし，記事の全文をSentence-BERTに入力した場合，出来事の類似度の算出に主張を述べる文も考慮することになり，より近い出来事に関する主張の違いを推薦できない．
 
-\begin{comment}
-SCDV, オントロジー, Transformer
-潜在的意味，同義語
-トピック同士の関係が考慮されない
-多言語に対応していない
-主張に着目した研究は少ない
-事象と主張が混在
-\end{comment}
+% \begin{comment}
+% SCDV, オントロジー, Transformer
+% 潜在的意味，同義語
+% トピック同士の関係が考慮されない
+% 多言語に対応していない
+% 主張に着目した研究は少ない
+% 事象と主張が混在
+% \end{comment}
 
 % \begin{table}[h]
 %   \caption{キャプション}
@@ -108,6 +143,9 @@ SCDV, オントロジー, Transformer
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{提案手法}
+
+% \subsection{データセットの選定と前処理}
+\subsection{RoBERTaによる出来事の文と主張の文の分類}
 
 まず，英文以外の記事をDeepL APIで英訳して用いる．
 % このとき
