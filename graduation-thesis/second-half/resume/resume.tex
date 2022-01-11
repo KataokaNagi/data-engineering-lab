@@ -165,7 +165,9 @@ RoBERTaは文意や文脈を加味した自然言語処理が可能な機械学�
 % で，Dense層を加えたモデルのエンコード部分を用いることで分類タスクに応用できる．
 % 入力部分にDense層を付加
 
-追加学習には，Wikipediaの英文をClaimを述べるかEvidenceを述べるかでラベル付けしたRutyらのIBM Debater$^{\textregistered}$ - Claims and Evidenceを利用した\cite{rinott_show_2015}．Claimは「トピックを直接サポートする一般的で簡潔な供述」，Evidenceは「トピックの文脈の中でClaimを直接サポートする文文章」と定義されており，本研究では主張とClaim，出来事とEvidenceを同じ定義で扱う．表\ref{claim_evidence_example}にClaimsとEvidenceの例を示す．
+追加学習には，Wikipediaの英文をClaimを述べるかEvidenceを述べるかでラベル付けしたRutyらのIBM Debater$^{\textregistered}$ - Claims and Evidenceを利用した\cite{rinott_show_2015}．
+Claimは「トピックを直接サポートする一般的で簡潔な文」，Evidenceは「トピックの文脈の中でClaimを直接サポートする文章」と定義されており，本研究では主張とClaim，出来事とEvidenceを同じ定義で扱う．
+表\ref{claim_evidence_example}にClaimとEvidenceの例を示す．
 
 \begin{table}[h]
   \caption{Claimの文(C)とEvidenceの文(E)の例}
