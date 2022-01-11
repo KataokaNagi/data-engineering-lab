@@ -170,7 +170,7 @@ Claimは「トピックを直接サポートする一般的で簡潔な文」，
 表\ref{claim_evidence_example}にClaimとEvidenceの例を示す．
 
 \begin{table}[h]
-  \caption{Claimの文(C)とEvidenceの文(E)の例}
+  \caption{IBM Debater$^{\textregistered}$ - Claims and Evidencでラベル付けされたClaimの文(C)とEvidenceの文(E)の例}
   \centering
   % \begin{tabular}{cp{6cm}}
   \begin{tabular}{llp{6cm}}
@@ -200,12 +200,13 @@ Claimは「トピックを直接サポートする一般的で簡潔な文」，
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% \subsection{}
+\subsection{階層的クラスタリングによる出来事の文章と主張の文のグループ化}
+
+加えて，入力文をモデルが解釈しやすい数値ベクトルに変換するために，多くのニュース記事を事前学習したRoBERTaを用いる．
 
 
 % 手動ラベルで評価する必要があるため．
 
-入力文をモデルが解釈しやすい数値ベクトルに変換するために，多くのニュース記事を事前学習したRoBERTaを用いる．
 前処理
 
 % この分類は，記事で二重引用符が用いられる際に様々な人物・組織が主張を述べている傾向があることに基づく．
