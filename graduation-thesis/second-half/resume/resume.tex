@@ -73,6 +73,7 @@ Yangらは，ニュース読者が出来事を正確かつ迅速に把握でき�
 % 1度のクラスタリングで
 % 無数の主張のグループが生成されることになる．
 これでは，COVID-19のワクチンに対する主張と脳炎のワクチンに対する主張が近くにグループ化されるといった事が起き得るため，同じ出来事の異なる主張の収集に時間を要してしまう．
+% これにより，ニュース読者の正確かつ迅速な出来事の把握の支援を目指す．
 % 異なる話題の似た主張をグループ化するエラーに繋がりやすいと考えられる．
 
 % 近いグループに正確さ
@@ -85,26 +86,10 @@ Yangらは，ニュース読者が出来事を正確かつ迅速に把握でき�
 
 % より近い出来事を
 
-そこで本研究では，まず世界の記事を出来事の類似度に基づいてグループ化し，同じグループの記事群から主張の類似度に基づいて再度グループ化し，より類似した出来事の異なる主張の文を推薦する手法を提案する．これにより，ニュース読者の正確かつ迅速な出来事の把握の支援を目指す．図\ref{system_abstract}に提案手法のシステムの概要を示す．
+そこで本研究では，まず世界の記事を出来事の類似度に基づいてグループ化し，同じグループの記事群から主張の類似度に基づいて再度グループ化\textcolor{red}{することにより}，より類似した出来事の異なる主張の文を推薦する手法を提案する．
+\textcolor{red}{~■■~}
+% これにより，ニュース読者の正確かつ迅速な出来事の把握の支援を目指す．
 % ここで，「出来事」は記者の解釈に依存しない事象とし，「主張」は記者が伝えるべきだと判断した出来事の解釈とする．
-
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[keepaspectratio, width=60mm]{img/system_abstract.png}
-	% \includegraphics[keepaspectratio, width=60mm]{img/system_abstract.png}
-	% \includegraphics[keepaspectratio, width=60mm]{img/sample.png}
-	\caption{
-    提案手法のシステムの概要
-    \\$\rm(\hspace{.18em}i\hspace{.18em})$
-    記事の文章を出来事の文と主張の文に分類
-    \\$\rm(\hspace{.08em}ii\hspace{.08em})$
-    出来事の文章の類似度で記事をクラスタリング
-    \\$\rm(i\hspace{-.08em}i\hspace{-.08em}i)$
-    主張の文の類似度で主張の文をクラスタリング
-  }
-	\label{system_abstract}
-\end{figure}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -144,11 +129,35 @@ Yangらは，ニュース読者が出来事を正確かつ迅速に把握でき�
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{提案手法}
+図\ref{system_abstract}に提案手法\textcolor{red}{■}の概要を示す．
+\textcolor{red}{
+まず
+$\rm(\hspace{.18em}i\hspace{.18em})$
+記事の文章を出来事の文と主張の文に分類し，
+次に
+$\rm(\hspace{.08em}ii\hspace{.08em})$
+出来事の文章の類似度で記事をクラスタリングし，
+その後
+$\rm(i\hspace{-.08em}i\hspace{-.08em}i)$
+主張の文の類似度で主張の文をクラスタリングする．
+}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[keepaspectratio, width=60mm]{img/system_abstract.png}
+	\caption{
+    提案手法\textcolor{red}{■}の概要\textcolor{red}{■}
+  }
+	\label{system_abstract}
+\end{figure}
 
 % \subsection{データセットの選定と前処理}
 \subsection{RoBERTaによる出来事の文と主張の文の分類}
 入力する記事には，Piyushらが収集したCOVID-19 News Articlesを選定した\cite{ghasiya_investigating_2021}．
-COVID-19はフェイクニュースが多い話題であり，またインド，日本，韓国の7社の英記事が含まれるため，政治や文化の違いに由来する多くの異なる主張が分析できると考えた．
+COVID-19はフェイクニュースが多い話題であり，またインド，日本，韓国の
+\textcolor{red}{約8万件}
+% 47342+21039+10076=78457
+の英記事が含まれるため，政治や文化の違いに由来する多くの異なる主張が分析できると考えた．
 また，11カ月間という短い期間で収集されているため，より類似した出来事に関する記事が得られると考えた．
 % 省略可能？
 Yangらの研究と同様に話題がCOVID-19に限定されてしまっているが，限定された話題でも同じ出来事の異なる主張がグループ化される様子は観測できると考えた．
@@ -159,14 +168,16 @@ Yangらの研究と同様に話題がCOVID-19に限定されてしまってい�
 % の各文章が，出来事と主張のどちらを述べているかを分類する．
 本研究では，記事の文章が出来事を述べる文と主張を述べる文に二分できると仮定する．
 % そして，出来事の文のみ，主張の文のみで2回に分けてクラスタリングすることで，より近い出来事に関する異なる主張の文の推薦を目指す．
-出来事と主張の文の分類には，RoBERTaを応用した分類器を用いる．
+出来事と主張の文の分類には，RoBERTaを\textcolor{red}{転移学習}した分類器を用いる．
 RoBERTaは文意や文脈を加味した自然言語処理が可能な機械学習モデルで，GLUE，SQuAD，RACEといったベンチマークで2019年の最先端のスコアを有している\cite{liu_roberta_2019}．
-ニュース記事を含む約160GBの文章データで事前に学習されたRoBERTa BASEモデルを利用し，これが分類タスクに特化するよう，主張か出来事かでラベル付けした文章で追加学習を行った．
+ニュース記事を含む約160GBの文章データで事前に学習されたRoBERTa BASEモデルを利用し，これが\textcolor{red}{出来事と主張の}分類\textcolor{red}{■}に\textcolor{red}{適用できる}よう，\textcolor{red}{出来事か主張か}でラベル付けした\textcolor{red}{文}で追加\textcolor{red}{の}学習を行った．
 % で，Dense層を加えたモデルのエンコード部分を用いることで分類タスクに応用できる．
 % 入力部分にDense層を付加
 
 追加学習には，Wikipediaの英文をClaimを述べるかEvidenceを述べるかでラベル付けしたRutyらのIBM Debater$^{\textregistered}$ - Claims and Evidenceを利用した\cite{rinott_show_2015}．
-Claimは「トピックを直接サポートする一般的で簡潔な文」，Evidenceは「トピックの文脈の中でClaimを直接サポートする文章」と定義されており，本研究では主張とClaim，出来事とEvidenceを同じ定義で扱う．
+\textcolor{red}{2294個の}Claimは「トピックを直接サポートする一般的で簡潔な文」，
+\textcolor{red}{4692組の}Evidenceは「トピックの文脈の中でClaimを直接サポートする文章」
+と定義されており，本研究では主張とClaim，出来事とEvidenceを同じ定義で扱う．
 表\ref{claim_evidence_example}にClaimとEvidenceの例を示す．
 
 \begin{table}[h]
@@ -209,14 +220,32 @@ Sentence-BERT，コサイン類似度，Ward法を用いた
 % による出来事の文章と主張の文のグループ化
 }
 
-「出来事と分類した文を記事ごとに結合した文章」と「主張と分類した文」のそれぞれを，Sentence-BERTを用いてクラスタリングしやすい数値ベクトルに変換した．
-Sentence-BERTは文章を文意を加味した数値ベクトルに変換できる機械学習モデルで，RoBERTaで65時間かかっていた文の類似度算出を約5秒に短縮し，STSタスク（Semantic Textual Similarity tasks）で2019年の最先端のスコアを有している\cite{reimers_sentence-bert_2019}．
+「出来事と分類した文を記事ごとに結合した文章」と「主張と分類した文」のそれぞれを，Sentence-BERTを用いて\textcolor{red}{機械が解釈}しやすい数\textcolor{red}{■}ベクトルに変換した．
+Sentence-BERTは文章を文意を加味した数\textcolor{red}{■}ベクトルに変換できる機械学習モデルで，RoBERTaで65時間かかっていた文の類似度算出を約5秒に短縮し，STSタスク（Semantic Textual Similarity tasks）で2019年の最先端のスコアを有している\cite{reimers_sentence-bert_2019}．
 事前に学習されたSentence-BERTのモデルには
 % ，ライブラリにデフォルトで提供されている
-paraphrase-MiniLM-L6-v2を使用した．
+\textcolor{red}{Nilsが公開している}paraphrase-MiniLM-L6-v2を使用した．
 % 省略可能
 
-文章の類似度の算出にはSentence-BERTの論文で用いられていたコサイン類似度を使用し，（Ward法について調べたこと，Ward法以外を試せたらそれについて書く）クラスタリングにはWard法を用いた．
+文章の類似度の算出には
+% Sentence-BERTの論文で用いられていた
+\textcolor{red}{■}
+コサイン類似度を使用し，
+% （Ward法について調べたこと，Ward法以外を試せたらそれについて書く）
+\textcolor{red}{階層的}
+クラスタリングにはWard法を用いた．
+\textcolor{red}
+{
+本研究ではより類似した出来事で異なる主張が得るために，
+具体的で有限個存在する出来事の文章を先にクラスタリングし，
+その後一般的で無数の出来事と対応する主張の文をクラスタリングした．
+}
+
+/**
+
+ここから未添削
+
+**/
 
 /**
 
@@ -277,6 +306,8 @@ T5の利用の検討
 エラーの原因と対策
 
 タイトル回収？
+
+手付けラベルをバイアスのない複数人の被験者で試す
 
 **/
 
