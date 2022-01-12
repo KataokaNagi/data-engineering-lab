@@ -140,16 +140,29 @@ AL18036 片岡 凪
             - あまりエポック数を回したくない
             - 本当は2層NNを追加する必要がある
 - 3エポックで分類を実行
-    - 20220109.2:10実行
+    - 20220109 2:10実行
     - 恐らく3日ほどかかる
         - 概要、本論、実装の時間
+    - 20220112 8:20
+        - インドが完了していることを確認
+            - インド47342記事
+                - 160MB
+            - 日本21039記事
+            - 韓国10076記事
+        - あと3日かかる？
+            - 記事あたりの文章量による
+            - 1/14(金)に完了？
+            - 6日と少しでS-BERTとクラスタリングがうまくいくといいが。
+            - 3日でクラスタリングと評価の実装や概要書作成
+        - 2.4GBを使っているので、実は3個くらいは並列実行できた
 - クラスタリングの実装
     - 記事IDは文章分割の前処理時点で割り振るべきだった
     - 主張がない記事を削る必要がある
     - 主張がない記事が多すぎてクラスのサイズが小さくなりそう
         - 何もしなくても多様性高くなってしまう
         - クラス内が似たものにならなくなりそう
-    - mean poolingをしたいのでc embeddingは全国一気にやりたい
+    - mean poolingをしたいのでc embeddingは全部一気にやりたい
+    - 出来事の文章のS-BERTは完了
 - TODO
     - 全体的に
         - printデバッグを増やす
@@ -188,9 +201,14 @@ AL18036 片岡 凪
         - 文頭にarticle-n;[e-feature-array];[c-feature-array];[all-feature-array]#を追加
         - 記事にcが存在しない場合'-'を代入
         - 記事にeが存在しない場合'-'を代入
-    - **主張の文の特徴量ベクトルを作成**
-        - process_04_sentences_features_calculator.py
-        - india-articles_process-04_calced-sentences-features.txt
+    - **3カ国の記事を結合して保存**
+        - process_04_nations_articles_concatenator.py
+        - process-04_concatenated-nations-articles.txt
+        - 国情報を付与
+            - nation-name;article-n;[e-feature-array];[c-feature-array];[all-feature-array]#nation-name;article-n;sentence-n;e;feature-x;feature-y;[feature-array];sent-1#nation-name;article-n;sentence-n;c;feature-x;feature-y;[feature-array];sent-2...\n
+    - 主張の文の特徴量ベクトルを作成
+        - process_05_sentences_features_calculator.py
+        - india-articles_process-05_calced-sentences-features.txt
         - #e:sent-1#c:sent-2...\n
         - S-BERTにsent-nを入れて特徴量を算出
         - article-n;[e-feature-array];[c-feature-array];[all-feature-array]#article-n;sentence-n;e;feature-x;feature-y;[feature-array];sent-1#article-n;sentence-n;c;feature-x;feature-y;[feature-array];sent-2...\n とする
@@ -198,11 +216,6 @@ AL18036 片岡 凪
             - 各文に番号を追加
             - #eのfeatureは不要だが、もしかしたら使うかも
         - txt保存
-    - 3カ国の記事を結合して保存
-        - process_05_nations_articles_concatenator.py
-        - process-05_concatenated-nations-articles.txt
-        - 国情報を付与
-            - nation-name;article-n;[e-feature-array];[c-feature-array];[all-feature-array]#nation-name;article-n;sentence-n;e;feature-x;feature-y;[feature-array];sent-1#nation-name;article-n;sentence-n;c;feature-x;feature-y;[feature-array];sent-2...\n
     - [e-feature-array]を基に記事（行）をクラスタリング
         - process_06_articles_cluster_generator.py
         - クラスタごとに名前を付けて保存
@@ -243,3 +256,106 @@ AL18036 片岡 凪
         - process-07_find-articles-cluster-of-selected-sentence-info.sh
         - process-08_sentences_cluster_generator.py
         - process-09_find-sentences-cluster-of-selected-sentence-info.sh
+- 概要書
+    - 卒研１からコピー
+    - 先輩の概要書を参照
+        - 疋田先輩
+            - はじめに
+                - 対象の基本知識
+                    - データの例（画像）
+                - 対象の問題点
+                - 関連研究の問題点
+                - 本研究での改善点
+            - 研究の概要
+                - 手順の箇条書き
+            - 研究結果
+                - データの工夫
+                - 手順の詳細
+                    - トライ＆エラー
+                    - 埋め込みの例
+                - 既存手法の取捨選択
+                - 損失関数
+                - 式の説明
+            - 評価実験
+                - 分類精度
+                - 計算時間
+                - 良く見える結果
+                - 気になるエラー例
+                - タイトル回収がいる？
+            - 考察
+                - 良く見える結果->実用性
+                - エラーの原因と対策
+                - タイトル回収がいる？
+            - まとめ
+                - 手法の目的を１文で説明
+                    - 主にタイトル
+                - 何をしたか
+                - 結果何ができたか
+                - 課題
+        - 加瀬先輩
+            - 研究背景と目的
+                - 技術の基礎知識
+                    - 具体例
+                    - できるようになったこと
+                    - 問題点
+                - 問題点を解決する先行研究
+                - 先行研究の欠損
+                - そこで本研究では～
+            - 関連研究
+                - 詳解
+                - 一部がなぜそうなるのかを検討
+            - 研究の概要
+                - 着眼点
+                - 手順の箇条書き
+                - データセットの解説
+            - 研究の結果
+                - 可視化して傾向を分析
+                    - 軌跡の屈折（非線形性）に着目
+                - 手順の箇条書き
+                - 表の読み方
+                    - 行と列のデータとの対応
+                - 気になる数値の傾向
+                    - 分散と予測の関係
+                    - 関係が見出せなかった
+                - なんでその手順を始めたかがわかりにくい
+                - 軌道の何を観察したのか
+                - コサイン類似度の結果
+            - 考察
+                - 予想と結果のギャップ
+                - 関連研究の発見との対応付け
+            - 結論
+                - 確認できたこと２つ
+                - 確認できなかったこと
+                - 手法の改善点
+    - まずはセクションタイトルを書く
+    - 関連研究の調査
+        - 全く同じような研究を見つけて絶望
+            - [1]M. Carlebach, R. Cheruvu, B. Walker, C. Ilharco MagalhaesとS. Jaume, 「News Aggregation with Diverse Viewpoint Identification Using Neural Embeddings and Semantic Understanding Models」, Proceedings of the 7th Workshop on Argument Mining, Online, 12月 2020, pp. 59–66. 参照: 1月 10, 2022. [Online]. Available at: https://aclanthology.org/2020.argmining-1.7
+            - https://t.co/f8035kaRDt
+                - 2020年12月
+                - ハーバードとGoogle検索
+                - かなりよく研究されてる
+                - アーキテクチャも使用モデルもかなり似てる
+                - 要約などを使った上位互換くさい
+                - 答え合わせをしてる気分
+                - 最近の技術を割と誤解なく使えてたらしい
+                - 文字数を気にせずに記入する
+                - 精度の比較は可能
+                    - アーキテクチャが完全一致してるわけではない
+                - 「一致してない部分に問題があって本研究で改善できると踏んだ！」と言うことは難しい
+                - 比較実験が間に合うかわからんから概要書に書けるかびみょい
+                - 同じデータセット使ってて感動
+        - クラスタリングを1回やっている研究
+            - 1回であることをダメ出ししたい
+            - [1]J. Yang, D. Vega-Oliveros, T. SeibtとA. Rocha, 「Scalable Fact-checking with Human-in-the-Loop」, 2021 IEEE International Workshop on Information Forensics and Security (WIFS), Montpellier, France, 12月 2021, pp. 1–6. doi: 10.1109/WIFS53200.2021.9648388.
+                - 要約するのいいな
+                    - 展望に書けそう
+                - クラスタリング→要約　では出来事のノイズが多そう
+                    - 階層的に調節できるのがよい
+    - 執筆
+        - 背景と目的
+        - 提案手法
+            - クラスタリングはまだ書けない
+        - 後でチェック
+            - 過去形が統一されてるか
+        - 
