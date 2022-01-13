@@ -106,15 +106,16 @@ def main():
                 ids = nation_and_article_ids + [str(i)]
                 # [nation-n, article-n, sentence-n]
 
-                log.v("informed_sentences", informed_sentences)
-                log.v("informed_sentences[0]", informed_sentences[0])
+                if do_debug:
+                    log.v("informed_sentences", informed_sentences)
+                    log.v("informed_sentences[0]", informed_sentences[0])
 
                 informed_sentences_with_id = [
                     ';'.join(
                         ids + [i_s]) for i_s in informed_sentences]
                 # [nation-n;article-n;sentence-id;nation-n;article-n;e-embedding, nation-n;article-n;sentence-id;e;feature-x;feature-y;sent-1, ...]
 
-                articles_informed_sentences[i] = informed_sentences[0] + \
+                articles_informed_sentences[i] = [informed_sentences[0]] + \
                     informed_sentences_with_id[1:]
                 # [nation-n;article-n;e-embedding, nation-n;article-n;sentence-id;e;feature-x;feature-y;sent-1, ...]
 
