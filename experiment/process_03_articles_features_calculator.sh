@@ -15,30 +15,30 @@ NATION_NAMES=(
     "JP"
     "KR"
 )
-# ARTICLES_DIRS=(
-#     "./covid-19-news-articles/india-articles_process-02_classified-claim-or-evidence.txt"
-#     "./covid-19-news-articles/japan-articles_process-02_classified-claim-or-evidence.txt"
-#     "./covid-19-news-articles/korea-articles_process-02_classified-claim-or-evidence.txt"
-#     # "./covid-19-news-articles/uk-articles_process-02_classified-claim-or-evidence.txt"
-# )
-# DEST_DIRS=(
-#     "./covid-19-news-articles/india-articles_preprocess_03_calced-articles-features.txt"
-#     "./covid-19-news-articles/japan-articles_preprocess_03_calced-articles-features.txt"
-#     "./covid-19-news-articles/korea-articles_preprocess_03_calced-articles-features.txt"
-#     # "./covid-19-news-articles/uk-articles_preprocess_03_calced-articles-features.txt"
-# )
 ARTICLES_DIRS=(
-    "./covid-19-news-articles/india-articles_process-02_classified-claim-or-evidence_debug.txt"
-    "./covid-19-news-articles/japan-articles_process-02_classified-claim-or-evidence_debug.txt"
-    "./covid-19-news-articles/korea-articles_process-02_classified-claim-or-evidence_debug.txt"
-    # "./covid-19-news-articles/uk-articles_process-02_classified-claim-or-evidence_debug.txt"
+    "./covid-19-news-articles/india-articles_process-02_classified-claim-or-evidence.txt"
+    "./covid-19-news-articles/japan-articles_process-02_classified-claim-or-evidence.txt"
+    "./covid-19-news-articles/korea-articles_process-02_classified-claim-or-evidence.txt"
+    # "./covid-19-news-articles/uk-articles_process-02_classified-claim-or-evidence.txt"
 )
 DEST_DIRS=(
-    "./covid-19-news-articles/india-articles_process_03_calced-articles-features_debug.txt"
-    "./covid-19-news-articles/japan-articles_process_03_calced-articles-features_debug.txt"
-    "./covid-19-news-articles/korea-articles_process_03_calced-articles-features_debug.txt"
-    # "./covid-19-news-articles/uk-articles_preprocess_03_calced-articles-features_debug.txt"
+    "./covid-19-news-articles/india-articles_preprocess_03_calced-articles-features.txt"
+    "./covid-19-news-articles/japan-articles_preprocess_03_calced-articles-features.txt"
+    "./covid-19-news-articles/korea-articles_preprocess_03_calced-articles-features.txt"
+    # "./covid-19-news-articles/uk-articles_preprocess_03_calced-articles-features.txt"
 )
+# ARTICLES_DIRS=(
+#     "./covid-19-news-articles/india-articles_process-02_classified-claim-or-evidence_debug.txt"
+#     "./covid-19-news-articles/japan-articles_process-02_classified-claim-or-evidence_debug.txt"
+#     "./covid-19-news-articles/korea-articles_process-02_classified-claim-or-evidence_debug.txt"
+#     # "./covid-19-news-articles/uk-articles_process-02_classified-claim-or-evidence_debug.txt"
+# )
+# DEST_DIRS=(
+#     "./covid-19-news-articles/india-articles_process_03_calced-articles-features_debug.txt"
+#     "./covid-19-news-articles/japan-articles_process_03_calced-articles-features_debug.txt"
+#     "./covid-19-news-articles/korea-articles_process_03_calced-articles-features_debug.txt"
+#     # "./covid-19-news-articles/uk-articles_preprocess_03_calced-articles-features_debug.txt"
+# )
 
 date=`date "+%Y%m%d-%H%M%S"`
 log_dir="./logs/${SRC_DIR/.py/_${date}.log}"
