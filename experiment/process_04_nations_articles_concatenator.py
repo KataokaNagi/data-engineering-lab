@@ -55,8 +55,9 @@ def main():
 
     # edit DEST_DIRS according to options
     if do_debug:
-        for i, _ in enumerate(articles_dirs):
-            articles_dirs[i] = re.sub("\\.txt", "_debug.txt", articles_dirs[i])
+        for article_id, _ in enumerate(articles_dirs):
+            articles_dirs[article_id] = re.sub(
+                "\\.txt", "_debug.txt", articles_dirs[article_id])
         dest_dir = re.sub("\\.txt", "_debug.txt", dest_dir)
         exe_time_dir = re.sub("\\.txt", "_debug.txt", exe_time_dir)
 
@@ -98,26 +99,23 @@ def main():
             log.v(articles_informed_sentences[0])
             log.v(articles_informed_sentences[1])
 
-            # put on ids to each sentences (nation-n;article-n;sentence-id)
-            for i, informed_sentences in enumerate(
+            # put ids on each sentences (nation-n;article-n;sentence-id)
+            for article_id, informed_sentences in enumerate(
                     articles_informed_sentences):
 
-                nation_and_article_ids = informed_sentences[0].split(';')[:2]
+                ids = informed_sentences[0].split(';')[:2]
                 # [nation-n, article-n]
-                ids = nation_and_article_ids + [str(i)]
-                # [nation-n, article-n, sentence-n]
 
                 if do_debug:
                     log.v("informed_sentences", informed_sentences)
                     log.v("informed_sentences[0]", informed_sentences[0])
 
-                informed_sentences_with_id = [
-                    ';'.join(
-                        ids + [i_s]) for i_s in informed_sentences]
+                informed_sentences_with_id = [';'.join(
+                    ids + [str(s_id), i_s]) for s_id, i_s in enumerate(informed_sentences)]
                 # [nation-n;article-n;sentence-id;nation-n;article-n;e-embedding, nation-n;article-n;sentence-id;e;feature-x;feature-y;sent-1, ...]
 
-                articles_informed_sentences[i] = [informed_sentences[0]] + \
-                    informed_sentences_with_id[1:]
+                articles_informed_sentences[article_id] = [
+                    informed_sentences[0]] + informed_sentences_with_id[1:]
                 # [nation-n;article-n;e-embedding, nation-n;article-n;sentence-id;e;feature-x;feature-y;sent-1, ...]
 
             nations_articles_informed_sentences.append(
