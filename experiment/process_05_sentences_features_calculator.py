@@ -99,7 +99,7 @@ def main():
     log.d("*** substitute articles' sentences for S-BERT ***")
 
     # set model
-    log.d(MODEL_NAME)
+    log.d("MODEL_NAME:", MODEL_NAME)
     model = SentenceTransformer(MODEL_NAME)
 
     # time mesurement: start
@@ -107,8 +107,8 @@ def main():
 
     # embed
     claim_sentences_embeddings = model.encode(claim_sentences)
-    log.v("evidence_sentences_embeddings[0]", claim_sentences_embeddings[0])
-    log.v("evidence_sentences_embeddings.shape",
+    log.v("claim_sentences_embeddings[0]", claim_sentences_embeddings[0])
+    log.v("claim_sentences_embeddings.shape",
           claim_sentences_embeddings.shape)
     log.v()
 
@@ -139,12 +139,24 @@ def main():
         elif len_splits_with_semicolon == 7:
             ec_class = splits_with_semicolon[CLASS_IDX]
             if ec_class == 'c':
-                embed = '[' + \
-                    ' '.join(claim_sentences_embeddings[embed_iter]) + ']'
+                embed_list = [str(e)
+                              for e in claim_sentences_embeddings[embed_iter]]
+                embed_str = ' '.join(embed_list)
                 embed_iter += 1
-                inserted_embed = splits_with_semicolon.insert(
-                    CLAIM__SENTENCE_IDX, embed)
-                article_info_or_sentences[line_idx] = inserted_embed
+
+                splits_with_semicolon.insert(CLAIM__SENTENCE_IDX, embed_str)
+
+                article_info_or_sentences[line_idx] = ";".join(
+                    splits_with_semicolon)
+
+                if do_debug:
+                    log.v("embed_list:", embed_list)
+                    log.v("embed_str:", embed_str)
+                    log.v("splits_with_semicolon:", splits_with_semicolon)
+                    log.v(
+                        "article_info_or_sentences[line_idx]:",
+                        article_info_or_sentences[line_idx])
+
             elif ec_class == 'e':
                 pass
             else:
