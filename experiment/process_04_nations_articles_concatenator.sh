@@ -1,44 +1,15 @@
 #!/bin/bash
 #
-# @file      process_03_articles_features_calculator.sh
+# @file      process_04_nations_articles_concatenator.sh
 # @author    Kataoka Nagi (calm1836[at]gmail.com)
-# @brief     execute process_03_articles_features_calculator with multi files
+# @brief     execute process_04_nations_articles_concatenator with multi files
 # @date      2022-01-09 06:03:51
 # @version   1.0
 # @history   add
 # @copyright (c) 2021 Kataoka Nagi This src is released under the MIT License, see LICENSE.
 # 
 
-SRC_DIR="process_03_articles_features_calculator.py"
-NATION_NAMES=(
-    "IN"
-    "JP"
-    "KR"
-)
-# ARTICLES_DIRS=(
-#     "./covid-19-news-articles/india-articles_process-02_classified-claim-or-evidence.txt"
-#     "./covid-19-news-articles/japan-articles_process-02_classified-claim-or-evidence.txt"
-#     "./covid-19-news-articles/korea-articles_process-02_classified-claim-or-evidence.txt"
-#     # "./covid-19-news-articles/uk-articles_process-02_classified-claim-or-evidence.txt"
-# )
-# DEST_DIRS=(
-#     "./covid-19-news-articles/india-articles_preprocess_03_calced-articles-features.txt"
-#     "./covid-19-news-articles/japan-articles_preprocess_03_calced-articles-features.txt"
-#     "./covid-19-news-articles/korea-articles_preprocess_03_calced-articles-features.txt"
-#     # "./covid-19-news-articles/uk-articles_preprocess_03_calced-articles-features.txt"
-# )
-ARTICLES_DIRS=(
-    "./covid-19-news-articles/india-articles_process-02_classified-claim-or-evidence_debug.txt"
-    "./covid-19-news-articles/japan-articles_process-02_classified-claim-or-evidence_debug.txt"
-    "./covid-19-news-articles/korea-articles_process-02_classified-claim-or-evidence_debug.txt"
-    # "./covid-19-news-articles/uk-articles_process-02_classified-claim-or-evidence_debug.txt"
-)
-DEST_DIRS=(
-    "./covid-19-news-articles/india-articles_process_03_calced-articles-features_debug.txt"
-    "./covid-19-news-articles/japan-articles_process_03_calced-articles-features_debug.txt"
-    "./covid-19-news-articles/korea-articles_process_03_calced-articles-features_debug.txt"
-    # "./covid-19-news-articles/uk-articles_preprocess_03_calced-articles-features_debug.txt"
-)
+SRC_DIR="process_04_nations_articles_concatenator.py"
 
 date=`date "+%Y%m%d-%H%M%S"`
 log_dir="./logs/${SRC_DIR/.py/_${date}.log}"
@@ -59,18 +30,15 @@ do
     esac
 done
 
-for i in {0..2}
-do
-    cmd="python3 ${SRC_DIR} ${ARTICLES_DIRS[$i]} ${DEST_DIRS[$i]} ${NATION_NAMES[$i]}"
+cmd="python3 ${SRC_DIR}"
 
-    if "${do_debug}"; then
-        cmd="${cmd} --debug"
-    fi
+if "${do_debug}"; then
+    cmd="${cmd} --debug"
+fi
 
-    if "${do_log}"; then
-        cmd="${cmd} ${log_cmd}"
-    fi
+if "${do_log}"; then
+    cmd="${cmd} ${log_cmd}"
+fi
 
-    echo "${cmd}"
-    eval "${cmd}"
-done
+echo "${cmd}"
+eval "${cmd}"

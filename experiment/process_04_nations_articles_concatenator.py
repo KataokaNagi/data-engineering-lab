@@ -1,51 +1,49 @@
 # -*- coding: utf-8 -*-
-"""process_03_articles_features_calculator.py
+"""process_04_nations_articles_concatenator.py
 
 @author    Kataoka Nagi (calm1836[at]gmail.com)
-@brief     calc articles features with S-BERT
-@note      in : e;feature-x;feature-y;sent-1#c;feature-x;feature-y;sent-2...\n
-@note      out: nation-n;article-n;[e-embedding];[c-embedding];[all-embedding]#e;feature-x;feature-y;sent-1#c;feature-x;feature-y;sent-2...\n
-@note      python3 process_03_articles_features_calculator.py [in-dir] [dist-dir] [nation-id]
-@note      mean pooling
-@date      2022-01-09 05:29:45
+@brief     cat 3 nations file adding sentence id
+@note      in: nation-n;article-n;[e-embedding]#e;feature-x;feature-y;sent-1#c;feature-x;feature-y;sent-2...\n
+@note      out: nation-n;article-n;[e-embedding]#nation-n;article-n;sentence-id;e;feature-x;feature-y;sent-1#...\n
+@note      python3 process_04_nations_articles_concatenator.py
+@date      2022-01-09 12:49:03
 @version   1.0
 @history   add
-@see       [SentenceTransformers Documentation](https://www.sbert.net/)
-@see       [はじめての自然言語処理 第9回 Sentence BERT による類似文章検索の検証](https://www.ogis-ri.co.jp/otc/hiroba/technical/similar-document-search/part9.html)
 @copyright (c) 2021 Kataoka Nagi
 
 """
 
+from experiment.process_02_exe_classifier_as_claim_or_evidence import NUM_DEBUG
 from utils.log import Log as log
 import time
 import datetime
 from argparse import ArgumentParser
 import re
-from sentence_transformers import SentenceTransformer
+import itertools
 
-NUM_DEBUG = 3
-MODEL_NAME = 'paraphrase-MiniLM-L6-v2'
-RECORD_ADDITIONAL_EMBED = False
+NATION_NAMES = [
+    "IN",
+    "JP",
+    "KR",
+    # "UK"
+]
+
+# NUM_DEBUG = 20
 
 
 def main():
-
-    exe_time_dir = "./covid-19-news-articles/archive/exe-time/exe-time_process_03_articles_features_calculator.txt"
+    articles_dirs = [
+        "./covid-19-news-articles/india-articles_process_03_calced-articles-features.txt",
+        "./covid-19-news-articles/japan-articles_process_03_calced-articles-features.txt",
+        "./covid-19-news-articles/korea-articles_process_03_calced-articles-features.txt"
+        # , "./covid-19-news-articles/uk-articles_preprocess_03_calced-articles-features.txt"
+    ]
+    dest_dir = "./covid-19-news-articles/process-04_concatenated-nations-articles.txt"
+    exe_time_dir = "./covid-19-news-articles/archive/exe-time/exe-time_process_04_nations_articles_concatenator.txt"
 
     # debug option
-    arg_parser = ArgumentParser(description='execute S-BERT')
-    arg_parser.add_argument(
-        "articles_dir",
-        help="article directory's path",
-        type=str)
-    arg_parser.add_argument(
-        "dest_dir",
-        help="destination directory's path",
-        type=str)
-    arg_parser.add_argument(
-        "nation_name",
-        help="IN/JP/KR",
-        type=str)
+    arg_parser = ArgumentParser(
+        description='process-04_concatenated-nations-articles')
     arg_parser.add_argument(
         "-d",
         "--debug",
@@ -55,168 +53,76 @@ def main():
     do_debug = arg.debug
 
     # edit DEST_DIRS according to options
-    dest_dir = arg.dest_dir
     if do_debug:
-        dest_dir = sub("\\.txt", "_debug.txt", dest_dir)
-        exe_time_dir = sub("\\.txt", "_debug.txt", exe_time_dir)
-
-    log.d("*** import articles ***")
-
-    # [[e;feature-x;feature-y;sent-1, c;feature-x;feature-y;sent-2, ...], ...]
-    articles_informed_sentences = []
-
-    with open(arg.articles_dir, "r", encoding="utf_8") as f:
-        articles_informed_sentences = [
-            article.strip().split('#') for article in f.readlines()]
-        log.v("articles:")
-        log.v(articles_informed_sentences[0])
-        log.v(articles_informed_sentences[1])
-        log.v(articles_informed_sentences[2])
-        log.v()
-
-    if do_debug:
-        articles_informed_sentences = articles_informed_sentences[:NUM_DEBUG]
-
-    # separate class info & sentence
-    # & cat sentences each articles (all sentences, evidence sentences, claims sentences)
-
-    articles_class_infos = []  # [[e;f-x;f-y, ...], ...]
-    articles_sentences = []  # [[sent-1, ...], ...]
-    cats_sentences = []  # ["sent-1 sent-2 ...", ...]
-    cats_evidence_sentences = []  # ["sent-e1 sent-e2 ...", ...]
-    cats_claims_sentences = []  # ["sent-c1 sent-c2 ...", ...]
-
-    # [e;feature-x;feature-y;sent-1, c;feature-x;feature-y;sent-2, ...]
-    for informed_sentences in articles_informed_sentences:
-
-        class_infos = []  # [e;-x;-y, ...]
-        sentences = []  # [sent-1, ...]
-        cat_sentence = ""  # "sent-1 sent-2 ..."
-        cat_evidence_sentences = ""  # "sent-e1 sent-e2 ..."
-        cat_claims_sentences = ""  # "sent-c1 sent-c2 ..."
-
-        # e;feature-x;feature-y;sent-1
-        for informed_sentence in informed_sentences:
-
-            # [e, f-x, f-y, sent-1]
-            splits_with_semicolon = informed_sentence.split(';')
-
-            class_info = ';'.join(splits_with_semicolon[:-1])  # e;f-x;f-y
-            sentence = splits_with_semicolon[-1]  # sent-1
-
-            cat_sentence += " " + sentence
-            if(class_info[0] == "e"):
-                cat_evidence_sentences += " " + sentence
-            elif (class_info[0] == "c"):
-                cat_claims_sentences += " " + sentence
-            else:
-                log.e("unsuspected classinfo[0]: ", class_info[0])
-                log.e("suspected classinfo[0] is 'e' or 'c'")
-                exit()
-
-            class_infos.append(class_info)
-            sentences.append(sentence)
-
-        articles_class_infos.append(class_infos)
-        articles_sentences.append(sentences)
-
-        # delete str if all is space
-        cat_evidence_sentences = re.sub(
-            ' {2,}', '', cat_evidence_sentences).strip()
-        cat_claims_sentences = re.sub(
-            ' {2,}', '', cat_claims_sentences).strip()
-
-        cats_sentences.append(cat_sentence.strip())
-        cats_evidence_sentences.append(cat_evidence_sentences)
-        cats_claims_sentences.append(cat_claims_sentences)
-
-    log.v("articles_class_infos[0]: ", articles_class_infos[0])
-    log.v("articles_sentences[0]: ", articles_sentences[0])
-    log.v("cat_sentences[0]: ", cats_sentences[0])
-    log.v("evidence_cat_sentences[0]: ", cats_evidence_sentences[0])
-    log.v("claims_cat_sentences[0]: ", cats_claims_sentences[0])
-    log.v()
-
-    log.d("*** substitute articles' sentences for S-BERT ***")
-
-    # set model
-    log.d(MODEL_NAME)
-    model = SentenceTransformer(MODEL_NAME)
+        for i, _ in enumerate(articles_dirs):
+            articles_dirs[i] = re.sub("\\.txt", "_debug.txt", articles_dirs[i])
+        dest_dir = re.sub("\\.txt", "_debug.txt", dest_dir)
+        exe_time_dir = re.sub("\\.txt", "_debug.txt", exe_time_dir)
 
     # time mesurement: start
     start_time = time.time()
 
-    # embed
-    evidence_sentences_embeddings = model.encode(cats_evidence_sentences)
-    log.v("evidence_sentences_embeddings[0]", evidence_sentences_embeddings[0])
-    log.v("evidence_sentences_embeddings.shape",
-          evidence_sentences_embeddings.shape)
-    log.v()
-
-    claims_sentences_embeddings = None
-    all_sentences_embeddings = None
-
-    if RECORD_ADDITIONAL_EMBED:
-        claims_sentences_embeddings = model.encode(cats_claims_sentences)
-        log.v("claims_sentences_embeddings[0]", claims_sentences_embeddings[0])
-        log.v("claims_sentences_embeddings.shape",
-              claims_sentences_embeddings.shape)
-        log.v()
-
-        all_sentences_embeddings = model.encode(cats_sentences)
-        log.v("all_sentences_embeddings[0]", all_sentences_embeddings[0])
-        log.v("all_sentences_embeddings.shape", all_sentences_embeddings.shape)
-        log.v()
-
-    # print time
-    embed_time = time.time() - start_time
-    log.d("embed time (sec):", embed_time)
-
     log.d("*** import articles ***")
 
-    # cat articles_class_infos, each embeddings, and articles_sentences
-    # adding article ID (1-1, 1-2, ..., 2-1, 2-2, ...)
-    # article-n;e-embedding;c-embedding;all-embedding#e;feature-x;feature-y;sent-1#c;feature-x;feature-y;sent-2...\n
-    cats_class_embed_sentence = []
-    nation_name = arg.nation_name
+    # nation-n;article-n;[e-embedding]#e;feature-x;feature-y;sent-1#c;feature-x;feature-y;sent-2...\n
+    nations_articles_informed_sentences = []
 
-    for article_idx, _ in enumerate(articles_sentences):
+    for i, _ in enumerate(articles_dirs):
+        with open(arg.articles_dir, "r", encoding="utf_8") as f:
+            articles_informed_sentences = [
+                article.strip().split('#') for article in f.readlines()]
+            # [[nation-n;article-n;e-embedding, e;feature-x;feature-y;sent-1, ...], [...], ...]
 
-        nation_id = nation_name
-        article_id = str(article_idx)
-        e_embed = str(evidence_sentences_embeddings[article_idx])
-        c_embed = None
-        a_embed = None
-        if RECORD_ADDITIONAL_EMBED:
-            c_embed = str(claims_sentences_embeddings[article_idx])
-            a_embed = str(all_sentences_embeddings[article_idx])
-        informed_sentences = articles_informed_sentences[article_idx]
+            # put on ids to each sentences (nation-n;article-n;sentence-id)
+            for i, informed_sentences in enumerate(
+                    articles_informed_sentences):
 
-        article_info = ';'.join(
-            [nation_id, article_id, e_embed]).strip().strip(';')
-        if RECORD_ADDITIONAL_EMBED:
-            article_info = ';'.join(
-                [article_id, a_embed, e_embed, c_embed]).strip().strip(';')
+                nation_and_article_ids = informed_sentences[0].split(';')[:2]
+                # [nation-n, article-n]
+                ids = nation_and_article_ids + [i]
+                # [nation-n, article-n, sentence-n]
 
-        cat = [article_info] + informed_sentences
-        joined = "#".join(cat).strip().strip('#')
+                informed_sentences_with_id = [
+                    ';'.join(
+                        ids +
+                        informed_sentence.split(';')) for informed_sentence in informed_sentences]
+                # [nation-n;article-n;sentence-id;nation-n;article-n;e-embedding, nation-n;article-n;sentence-id;e;feature-x;feature-y;sent-1, ...]
 
-        cats_class_embed_sentence.append(joined + "\n")
+                articles_informed_sentences[i] = informed_sentences[0] + \
+                    informed_sentences_with_id[1:]
+                # [nation-n;article-n;e-embedding, nation-n;article-n;sentence-id;e;feature-x;feature-y;sent-1, ...]
 
-    log.v("cats_class_embed_sentence[0]:", cats_class_embed_sentence[0])
-    log.v()
+            nations_articles_informed_sentences.append(
+                articles_informed_sentences)
+            # [[[nation-n;article-n;e-embedding, e;feature-x;feature-y;sent-1, ...], [...], ...], [...], ...]
+
+            log.v("articles:")
+            log.v(articles_informed_sentences[0])
+            log.v(articles_informed_sentences[1])
+            log.v(articles_informed_sentences[2])
+            log.v()
+
+    if do_debug:
+        nations_articles_informed_sentences = [articles_informed_sentences[:NUM_DEBUG]
+                                               for articles_informed_sentences in nations_articles_informed_sentences]
 
     log.d("*** write destination data & embed time ***")
 
     # write dist
     with open(dest_dir, "w+", encoding="utf_8") as f:
-        f.writelines(cats_class_embed_sentence)
+        cat_nations_articles_informed_sentences = [
+            (i_s for i_s in a_i_s) for a_i_s in nations_articles_informed_sentences]
+        f.writelines(cat_nations_articles_informed_sentences)
+
+    # print time
+    exe_time = time.time() - start_time
+    log.d("embed time (sec):", exe_time)
 
     # write time
     with open(exe_time_dir, "a+", encoding="utf_8") as f:
         f.write(str(datetime.datetime))
-        f.write(" embed_time(sec): ")
-        f.write(str(embed_time))
+        f.write(" exe_time(sec): ")
+        f.write(str(exe_time))
         f.write("\n")
 
 
