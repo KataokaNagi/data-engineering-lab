@@ -69,9 +69,33 @@ def main():
 
     for _, articles_dir in enumerate(articles_dirs):
         with open(articles_dir, "r", encoding="utf_8") as f:
-            articles_informed_sentences = [
-                article.strip().split('#') for article in f.readlines()]
-            # [[nation-n;article-n;e-embedding, e;feature-x;feature-y;sent-1, ...], [...], ...]
+
+            articles_informed_sentences = []
+            for line in f.readlines():
+                if not line or line == "":
+                    # EOF
+                    pass
+                elif (line[:2] == "IN") or (line[:2] == "JP") or (line[:2] == "KR"):
+                    # IN;0;[ 2.50864863e-01  9.60696563e-02 -3.66732895e-01
+                    # -4.08190429e-01
+                    articles_informed_sentences.append(line.rstrip())
+                elif line[0] == ' ':
+                    #  6.89589903e-02 -1.89311713e-01 -8.00815299e-02 -2.10148841e-01
+                    articles_informed_sentences[-1] += line.rstrip()
+                else:
+                    log.e("unexpected line:", line)
+
+            log.v("articles_informed_sentences:")
+            log.v(articles_informed_sentences[0])
+            log.v(articles_informed_sentences[1])
+
+            articles_informed_sentences = [article.strip().split(
+                '#') for article in articles_informed_sentences]
+            # [[nation-n;article-n;[e-embedding], e;feature-x;feature-y;sent-1, ...], [...], ...]
+
+            log.v("articles_informed_sentences (split with #):")
+            log.v(articles_informed_sentences[0])
+            log.v(articles_informed_sentences[1])
 
             # put on ids to each sentences (nation-n;article-n;sentence-id)
             for i, informed_sentences in enumerate(
@@ -84,8 +108,7 @@ def main():
 
                 informed_sentences_with_id = [
                     ';'.join(
-                        ids +
-                        informed_sentence.split(';')) for informed_sentence in informed_sentences]
+                        ids + i_s) for i_s in informed_sentences]
                 # [nation-n;article-n;sentence-id;nation-n;article-n;e-embedding, nation-n;article-n;sentence-id;e;feature-x;feature-y;sent-1, ...]
 
                 articles_informed_sentences[i] = informed_sentences[0] + \
@@ -96,7 +119,7 @@ def main():
                 articles_informed_sentences)
             # [[[nation-n;article-n;e-embedding, e;feature-x;feature-y;sent-1, ...], [...], ...], [...], ...]
 
-            log.v("articles:")
+            log.v("articles_informed_sentences:")
             log.v(articles_informed_sentences[0])
             log.v(articles_informed_sentences[1])
             log.v(articles_informed_sentences[2])
