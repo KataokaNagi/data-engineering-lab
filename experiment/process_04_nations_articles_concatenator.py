@@ -14,6 +14,7 @@
 """
 
 # from experiment.process_02_exe_classifier_as_claim_or_evidence import NUM_DEBUG
+import enum
 from utils.log import Log as log
 import time
 import datetime
@@ -132,14 +133,20 @@ def main():
     if do_debug:
         nations_articles_informed_sentences = [articles_informed_sentences[:NUM_DEBUG]
                                                for articles_informed_sentences in nations_articles_informed_sentences]
+        log.v("nations_articles_informed_sentences:",
+              nations_articles_informed_sentences)
 
     log.d("*** write destination data & embed time ***")
 
     # write dist
     with open(dest_dir, "w+", encoding="utf_8") as f:
-        cat_nations_articles_informed_sentences = [
-            (i_s for i_s in a_i_s) for a_i_s in nations_articles_informed_sentences]
-        f.writelines(cat_nations_articles_informed_sentences)
+        cat_nations_articles_informed_sentences = []
+        for _, n_a_i_s in enumerate(nations_articles_informed_sentences):
+            for _, a_i_s in enumerate(n_a_i_s):
+                cat_nations_articles_informed_sentences.extend(a_i_s)
+        if do_debug:
+            log.v(cat_nations_articles_informed_sentences)
+        f.write("\n".join(cat_nations_articles_informed_sentences))
 
     # print time
     exe_time = time.time() - start_time
