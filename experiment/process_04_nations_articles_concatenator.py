@@ -13,7 +13,7 @@
 
 """
 
-from experiment.process_02_exe_classifier_as_claim_or_evidence import NUM_DEBUG
+# from experiment.process_02_exe_classifier_as_claim_or_evidence import NUM_DEBUG
 from utils.log import Log as log
 import time
 import datetime
@@ -28,7 +28,7 @@ NATION_NAMES = [
     # "UK"
 ]
 
-# NUM_DEBUG = 20
+NUM_DEBUG = 20
 
 
 def main():
@@ -67,8 +67,8 @@ def main():
     # nation-n;article-n;[e-embedding]#e;feature-x;feature-y;sent-1#c;feature-x;feature-y;sent-2...\n
     nations_articles_informed_sentences = []
 
-    for i, _ in enumerate(articles_dirs):
-        with open(arg.articles_dir, "r", encoding="utf_8") as f:
+    for _, articles_dir in enumerate(articles_dirs):
+        with open(articles_dir, "r", encoding="utf_8") as f:
             articles_informed_sentences = [
                 article.strip().split('#') for article in f.readlines()]
             # [[nation-n;article-n;e-embedding, e;feature-x;feature-y;sent-1, ...], [...], ...]
@@ -116,7 +116,7 @@ def main():
 
     # print time
     exe_time = time.time() - start_time
-    log.d("embed time (sec):", exe_time)
+    log.d("exe time (sec):", exe_time)
 
     # write time
     with open(exe_time_dir, "a+", encoding="utf_8") as f:
