@@ -40,7 +40,6 @@ from scipy.spatial.distance import pdist
 NUM_DEBUG = 20
 METRIC = "cosine"
 METHOD = "ward"
-THRESHOLD = 0.02
 
 TITLE_SIZE = 48
 LABEL_TITLE_SIZE = 36
@@ -182,35 +181,6 @@ def main():
     log.v("embeds_square_form[2]:", embeds_square_form[2])
 
     ##################################################
-    log.d("*** draw dendrogram ***")
-    ##################################################
-
-    # time mesurement: start
-    drawing_dendrogram_start_time = time.time()
-
-    # exe
-    dendrogram_fig = plt.figure(figsize=(14.4, 19.2))
-    dendrogram(
-        result1,
-        orientation='right',
-        labels=[''] * len(nation_and_article_ids),
-        # labels=nation_and_article_ids,
-        color_threshold=THRESHOLD)
-    # plt.title(
-    #     "Article Dendrogram by Evidence Sentences",
-    #     fontsize=TITLE_SIZE - 6)
-    plt.xlabel("Threshold", fontsize=LABEL_TITLE_SIZE)
-    plt.ylabel("Article ID", fontsize=LABEL_TITLE_SIZE)
-    plt.grid()
-    plt.tick_params(labelsize=LABEL_SIZE)
-    # plt.show()
-    dendrogram_fig.savefig(dendrogram_dir)
-
-    # print time
-    drawing_dendrogram_time = time.time() - drawing_dendrogram_start_time
-    log.d("drawing dendrogram time (sec):", drawing_dendrogram_time)
-
-    ##################################################
     log.d("*** print clustering result ***")
     ##################################################
     result_df = pd.DataFrame(result1)
@@ -222,21 +192,6 @@ def main():
     log.v("result_df[1][0] (2nd node      ) :", result_df[1][0])
     log.v("result_df[2][0] (nodes distance) :", result_df[2][0])
     log.v("result_df[3][0] (cluster_id    ) :", result_df[3][0])
-
-    ##################################################
-    log.d("*** draw threshold dependency ***")
-    ##################################################
-    # time mesurement: start
-    drawing_threshold_dependency_start_time = time.time()
-
-    # exe
-    draw_threshold_dependency(result1, threshold_dependencies_dir)
-
-    # print time
-    drawing_threshold_dependency_time = time.time(
-    ) - drawing_threshold_dependency_start_time
-    log.d("drawing threshold dependency time (sec):",
-          drawing_threshold_dependency_time)
 
     ##################################################
     log.d("*** draw num of clusters dependency on silhouette coefficient ***")
@@ -281,6 +236,54 @@ def main():
     log.d("max_silhouette_coefficient: ", max_silhouette_coefficient)
     log.v("best_cluster_by_number: ", best_cluster_by_number)
     log.v()
+
+    ##################################################
+    log.d("*** draw threshold dependency ***")
+    ##################################################
+    # time mesurement: start
+    drawing_threshold_dependency_start_time = time.time()
+
+    # exe
+    best_threshold = draw_threshold_dependency(
+        result1,
+        threshold_dependencies_dir,
+        best_num_of_cluster)
+    log.d("best_threshold:", best_threshold)
+
+    # print time
+    drawing_threshold_dependency_time = time.time(
+    ) - drawing_threshold_dependency_start_time
+    log.d("drawing threshold dependency time (sec):",
+          drawing_threshold_dependency_time)
+
+    ##################################################
+    log.d("*** draw dendrogram ***")
+    ##################################################
+
+    # time mesurement: start
+    drawing_dendrogram_start_time = time.time()
+
+    # exe
+    dendrogram_fig = plt.figure(figsize=(14.4, 19.2))
+    dendrogram(
+        result1,
+        orientation='right',
+        labels=[''] * len(nation_and_article_ids),
+        # labels=nation_and_article_ids,
+        color_threshold=best_threshold)
+    # plt.title(
+    #     "Article Dendrogram by Evidence Sentences",
+    #     fontsize=TITLE_SIZE - 6)
+    plt.xlabel("Threshold", fontsize=LABEL_TITLE_SIZE)
+    plt.ylabel("Article ID", fontsize=LABEL_TITLE_SIZE)
+    plt.grid()
+    plt.tick_params(labelsize=LABEL_SIZE)
+    # plt.show()
+    dendrogram_fig.savefig(dendrogram_dir)
+
+    # print time
+    drawing_dendrogram_time = time.time() - drawing_dendrogram_start_time
+    log.d("drawing dendrogram time (sec):", drawing_dendrogram_time)
 
     ##################################################
     log.d("*** draw best_num_of_cluster ***")
@@ -332,7 +335,10 @@ def main():
     ##################################################
 
 
-def draw_threshold_dependency(result, threshold_dependencies_dir):
+def draw_threshold_dependency(
+        result,
+        threshold_dependencies_dir,
+        best_num_of_cluster):
     n_clusters = len(result)
     n_samples = len(result)
     df1 = pd.DataFrame(result)
@@ -340,6 +346,7 @@ def draw_threshold_dependency(result, threshold_dependencies_dir):
     y1 = []
     x2 = []
     y2 = []
+    best_threshold = 0.0
     for i in range(len(result) - 1):
         n1 = int(result[i][0])
         n2 = int(result[i][1])
@@ -349,6 +356,8 @@ def draw_threshold_dependency(result, threshold_dependencies_dir):
         x2.append(val)
         y1.append(n_clusters)
         y2.append(float(n_samples) / float(n_clusters))
+        if n_clusters == best_num_of_cluster:
+            best_threshold = val
 
     dependencies_fig = plt.figure(figsize=(19.2, 14.4))
     plt.subplot(2, 1, 1)
@@ -367,6 +376,7 @@ def draw_threshold_dependency(result, threshold_dependencies_dir):
     plt.tick_params(labelsize=LABEL_SIZE)
     # plt.show()
     dependencies_fig.savefig(threshold_dependencies_dir)
+    return best_threshold
 
 
 # 指定したクラスタ数でクラスタを得る関数を作る。
