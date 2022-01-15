@@ -49,7 +49,7 @@ TITLE_SIZE = 48
 LABEL_TITLE_SIZE = 36
 LABEL_SIZE = 28
 
-REDUCED_NUM = 40000
+REDUCED_NUM = 959
 RANDOM_SEED = 2021
 
 
@@ -83,22 +83,23 @@ def main():
 
     if reduce_data:
         log.d("*** edit DEST_DIRS according to --reduce ***")
+        replace_str = "_reduced-data-to-" + str(REDUCED_NUM)
         embeds_pdist_dir = re.sub(
             "\\.txt",
-            "_reduced-data.txt",
+            replace_str + ".txt",
             embeds_pdist_dir)
-        dest_dir = re.sub("\\.txt", "_reduced-data.txt", dest_dir)
-        dendrogram_dir = re.sub("\\.png", "_reduced-data.png", dendrogram_dir)
+        dest_dir = re.sub("\\.txt", replace_str + ".txt", dest_dir)
+        dendrogram_dir = re.sub("\\.png", replace_str + ".png", dendrogram_dir)
         color_dendrogram_dir = re.sub(
-            "\\.png", "_reduced-data.png", color_dendrogram_dir)
-        result_dir = re.sub("\\.csv", "_reduced-data.csv", result_dir)
+            "\\.png", replace_str + ".png", color_dendrogram_dir)
+        result_dir = re.sub("\\.csv", replace_str + ".csv", result_dir)
         threshold_dependencies_dir = re.sub(
-            "\\.png", "_reduced-data.png", threshold_dependencies_dir)
+            "\\.png", replace_str + ".png", threshold_dependencies_dir)
         num_of_cluster_dir = re.sub(
-            "\\.png", "_reduced-data.png", num_of_cluster_dir)
+            "\\.png", replace_str + ".png", num_of_cluster_dir)
         silhouette_coefficient_dir = re.sub(
-            "\\.png", "_reduced-data.png", silhouette_coefficient_dir)
-        exe_time_dir = re.sub("\\.txt", "_reduced-data.txt", exe_time_dir)
+            "\\.png", replace_str + ".png", silhouette_coefficient_dir)
+        exe_time_dir = re.sub("\\.txt", replace_str + ".txt", exe_time_dir)
 
     if do_debug:
         log.d("*** edit DEST_DIRS according to --debug ***")
