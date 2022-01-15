@@ -113,7 +113,7 @@ y1 = [10, 20, 30, 50, 80, 130]
 x2 = x1
 y2 = x1
 
-fig1 = plt.figure()
+fig1 = plt.figure(figsize=(19.2, 14.4))
 
 # 1つ目のデータをplotメソッドでプロット
 plt.plot(x1, y1, color='red', marker='o')
@@ -136,7 +136,7 @@ x = np.random.normal(50, 20, 100000)
 
 # 画像のプロット先の準備をします。
 # ここでは、Figure(432x288)のようなデータが準備されています。
-fig2 = plt.figure()
+fig2 = plt.figure(figsize=(19.2, 14.4))
 
 # plt（matplotlibにあるpyplotというモジュール）の
 # histメソッドを利用してヒストグラムの描画をしています。
