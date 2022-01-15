@@ -5,22 +5,26 @@
 @brief     calc best article cluster with evidence embed & silhouette-coefficient
 # nation-id;article-id;sentence-id;e;feature-x;feature-y;sent-1#nation-id;article-id;sentence-id;c;feature-x;feature-y;[feature-array];sent-2...\n
 @note      in: nation-id;article-id;[e-embedding]
-@note      out : process-06_articles-cluster_n.txt x n
+@note      out : process-05_calced-sentences-features.txt
+@note      out : process-05_articles-cluster_embeds-pdist.txt
+@note      out : process-06_articles-cluster/process-06_articles-cluster.txt
 @note      out : process-06_articles-cluster_dendrogram.png
 @note      out : process-06_articles-cluster_result.csv
-@note      out : process-06_articles-cluster_threshold-dependency-on-num-of-clusters.png
-@note      out : process-06_articles-cluster_threshold-dependency-on-ave-clusters-size.png
+@note      out : process-06_articles-cluster_threshold-dependencies.png
+@note      out : process-06_articles-cluster_num_of_cluster.png
 @note      out : process-06_articles-cluster_num-of-clusters-dependency-on-silhouette-coefficient.png
 @note      python3 process_06_articles_cluster_generator.py
-@date      2022-01-15 07:26:47
+@date      2022-01-15 13:59:47
 @version   1.0
 @history   add
 @see       [階層的クラスタリングとシルエット係数](https://qiita.com/maskot1977/items/a35ac2fdc2c7448ee526#%E9%9A%8E%E5%B1%A4%E7%9A%84%E3%82%AF%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%AA%E3%83%B3%E3%82%B0)
-@see       [【python】scipyで階層型クラスタリングするときの知見まとめ](https://www.haya-programming.com/entry/2019/02/11/035943#%E9%96%A2%E6%95%B0%E3%81%8C%E3%81%84%E3%81%A3%E3%81%B1%E3%81%84%E3%81%82%E3%82%8B)
+@see       [階層的クラスタリングでユークリッド距離とコサイン類似度の結果を比べてみる](https://irukanobox.blogspot.com/2018/08/blog-post.html)
+@see       [scipyで距離行列を計算する](https://analytics-note.xyz/programming/scipy-pdist/)
 @copyright (c) 2021 Kataoka Nagi
 
 """
 
+from scipy.spatial.distance import squareform
 import math
 import matplotlib.pyplot as plt
 from utils.log import Log as log
@@ -31,6 +35,7 @@ import re
 from scipy.cluster.hierarchy import linkage, dendrogram
 import numpy as np
 import pandas as pd
+from scipy.spatial.distance import pdist
 
 NUM_DEBUG = 20
 METRIC = "cosine"
@@ -40,6 +45,7 @@ THRESHOLD = 0.02
 
 def main():
     articles_dir = "./covid-19-news-articles/process-05_calced-sentences-features.txt"
+    embeds_pdist_dir = "./covid-19-news-articles/process-05_articles-cluster_embeds-pdist.txt"
     dest_dir = "./covid-19-news-articles/process-06_articles-cluster/process-06_articles-cluster.txt"
     dendrogram_dir = "./covid-19-news-articles/process-06_articles-cluster_dendrogram.png"
     result_dir = "./covid-19-news-articles/process-06_articles-cluster_result.csv"
@@ -61,6 +67,7 @@ def main():
     if do_debug:
         log.d("*** edit DEST_DIRS according to options ***")
         articles_dir = re.sub("\\.txt", "_debug.txt", articles_dir)
+        embeds_pdist_dir = re.sub("\\.txt", "_debug.txt", embeds_pdist_dir)
         dest_dir = re.sub("\\.txt", "_debug.txt", dest_dir)
         dendrogram_dir = re.sub("\\.png", "_debug.png", dendrogram_dir)
         result_dir = re.sub("\\.csv", "_debug.csv", result_dir)
@@ -150,11 +157,25 @@ def main():
     clustering_start_time = time.time()
 
     # exe
-    result1 = linkage(article_embeds, metric=METRIC, method=METHOD)
+    # result1 = linkage(article_embeds, metric=METRIC, method=METHOD)
+    embeds_pdist = pdist(article_embeds, metric=METRIC)
+    result1 = linkage(embeds_pdist, method=METHOD)
 
     # print time
     clustering_time = time.time() - clustering_start_time
     log.d("clustering time (sec):", clustering_time)
+
+    # save embed pdist
+    with open(embeds_pdist_dir, "w+", encoding="utf_8") as f:
+        embeds_pdist_2_str = [str(e) for e in embeds_pdist]
+        f.write("\n".join(embeds_pdist_2_str))
+
+    # debug
+    embeds_square_form = squareform(embeds_pdist)
+    log.v("embeds_pdist[0]:", embeds_pdist[0])
+    log.v("embeds_square_form[0]:", embeds_square_form[0])
+    log.v("embeds_square_form[1]:", embeds_square_form[1])
+    log.v("embeds_square_form[2]:", embeds_square_form[2])
 
     ##################################################
     log.d("*** draw dendrogram ***")
