@@ -193,12 +193,14 @@ def main():
     dendrogram(
         result1,
         orientation='right',
-        labels=nation_and_article_ids,
+        labels=[''] * len(nation_and_article_ids),
+        # labels=nation_and_article_ids,
         color_threshold=THRESHOLD)
-    plt.title(
-        "Article Dendrogram by Evidence Sentences",
-        fontsize=TITLE_SIZE - 6)
+    # plt.title(
+    #     "Article Dendrogram by Evidence Sentences",
+    #     fontsize=TITLE_SIZE - 6)
     plt.xlabel("Threshold", fontsize=LABEL_TITLE_SIZE)
+    plt.ylabel("Article ID", fontsize=LABEL_TITLE_SIZE)
     plt.grid()
     plt.tick_params(labelsize=LABEL_SIZE)
     # plt.show()
@@ -285,6 +287,8 @@ def main():
     ##################################################
     num_of_cluster_fig = plt.figure(figsize=(19.2, 14.4))
     plt.hist(best_cluster_by_number)
+    plt.xlabel("Cluster ID", fontsize=LABEL_TITLE_SIZE)
+    plt.ylabel("Num of Article", fontsize=LABEL_TITLE_SIZE)
     plt.tick_params(labelsize=LABEL_SIZE)
     plt.grid()
     num_of_cluster_fig.savefig(num_of_cluster_dir)
@@ -349,14 +353,17 @@ def draw_threshold_dependency(result, threshold_dependencies_dir):
     dependencies_fig = plt.figure(figsize=(19.2, 14.4))
     plt.subplot(2, 1, 1)
     plt.plot(x1, y1, 'yo-')
-    plt.title(
-        'Threshold Dependency of Hierarchical Clustering',
-        fontsize=TITLE_SIZE)
+    # plt.title(
+    #     'Threshold Dependency of Hierarchical Clustering',
+    #     fontsize=TITLE_SIZE)
     plt.ylabel('Num of Clusters', fontsize=LABEL_TITLE_SIZE)
+    plt.grid()
+    plt.tick_params(labelsize=LABEL_SIZE)
     plt.subplot(2, 1, 2)
     plt.plot(x2, y2, 'ro-')
     plt.xlabel('Threshold', fontsize=LABEL_TITLE_SIZE)
     plt.ylabel('Average of Cluster Size', fontsize=LABEL_TITLE_SIZE)
+    plt.grid()
     plt.tick_params(labelsize=LABEL_SIZE)
     # plt.show()
     dependencies_fig.savefig(threshold_dependencies_dir)
