@@ -5,6 +5,7 @@
 @brief     calc best article cluster with evidence embed & silhouette-coefficient
 # nation-id;article-id;sentence-id;e;feature-x;feature-y;sent-1#nation-id;article-id;sentence-id;c;feature-x;feature-y;[feature-array];sent-2...\n
 @note      in: nation-id;article-id;[e-embedding]
+<<<<<<< HEAD
 @note      out : process-05_calced-sentences-features.txt
 @note      out : process-05_articles-cluster_embeds-pdist.txt
 @note      out : process-06_articles-cluster/process-06_articles-cluster.txt
@@ -20,11 +21,28 @@
 @see       [階層的クラスタリングとシルエット係数](https://qiita.com/maskot1977/items/a35ac2fdc2c7448ee526#%E9%9A%8E%E5%B1%A4%E7%9A%84%E3%82%AF%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%AA%E3%83%B3%E3%82%B0)
 @see       [階層的クラスタリングでユークリッド距離とコサイン類似度の結果を比べてみる](https://irukanobox.blogspot.com/2018/08/blog-post.html)
 @see       [scipyで距離行列を計算する](https://analytics-note.xyz/programming/scipy-pdist/)
+=======
+@note      out : process-06_articles-cluster_n.txt x n
+@note      out : process-06_articles-cluster_dendrogram.png
+@note      out : process-06_articles-cluster_result.csv
+@note      out : process-06_articles-cluster_threshold-dependency-on-num-of-clusters.png
+@note      out : process-06_articles-cluster_threshold-dependency-on-ave-clusters-size.png
+@note      out : process-06_articles-cluster_num-of-clusters-dependency-on-silhouette-coefficient.png
+@note      python3 process_06_articles_cluster_generator.py
+@date      2022-01-15 07:26:47
+@version   1.0
+@history   add
+@see       [階層的クラスタリングとシルエット係数](https://qiita.com/maskot1977/items/a35ac2fdc2c7448ee526#%E9%9A%8E%E5%B1%A4%E7%9A%84%E3%82%AF%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%AA%E3%83%B3%E3%82%B0)
+@see       [【python】scipyで階層型クラスタリングするときの知見まとめ](https://www.haya-programming.com/entry/2019/02/11/035943#%E9%96%A2%E6%95%B0%E3%81%8C%E3%81%84%E3%81%A3%E3%81%B1%E3%81%84%E3%81%82%E3%82%8B)
+>>>>>>> 082401538be5d5f76b6ff904ac604669fa5a2d21
 @copyright (c) 2021 Kataoka Nagi
 
 """
 
+<<<<<<< HEAD
 from scipy.spatial.distance import squareform
+=======
+>>>>>>> 082401538be5d5f76b6ff904ac604669fa5a2d21
 import math
 import matplotlib.pyplot as plt
 from utils.log import Log as log
@@ -35,7 +53,10 @@ import re
 from scipy.cluster.hierarchy import linkage, dendrogram
 import numpy as np
 import pandas as pd
+<<<<<<< HEAD
 from scipy.spatial.distance import pdist
+=======
+>>>>>>> 082401538be5d5f76b6ff904ac604669fa5a2d21
 
 NUM_DEBUG = 20
 METRIC = "cosine"
@@ -45,7 +66,10 @@ THRESHOLD = 0.02
 
 def main():
     articles_dir = "./covid-19-news-articles/process-05_calced-sentences-features.txt"
+<<<<<<< HEAD
     embeds_pdist_dir = "./covid-19-news-articles/process-05_articles-cluster_embeds-pdist.txt"
+=======
+>>>>>>> 082401538be5d5f76b6ff904ac604669fa5a2d21
     dest_dir = "./covid-19-news-articles/process-06_articles-cluster/process-06_articles-cluster.txt"
     dendrogram_dir = "./covid-19-news-articles/process-06_articles-cluster_dendrogram.png"
     result_dir = "./covid-19-news-articles/process-06_articles-cluster_result.csv"
@@ -69,6 +93,7 @@ def main():
         articles_dir = re.sub("\\.txt", "_debug.txt", articles_dir)
         embeds_pdist_dir = re.sub("\\.txt", "_debug.txt", embeds_pdist_dir)
         dest_dir = re.sub("\\.txt", "_debug.txt", dest_dir)
+<<<<<<< HEAD
         dendrogram_dir = re.sub("\\.png", "_debug.png", dendrogram_dir)
         result_dir = re.sub("\\.csv", "_debug.csv", result_dir)
         threshold_dependencies_dir = re.sub(
@@ -76,6 +101,15 @@ def main():
         num_of_cluster_dir = re.sub("\\.png", "_debug.png", num_of_cluster_dir)
         silhouette_coefficient_dir = re.sub(
             "\\.png", "_debug.png", silhouette_coefficient_dir)
+=======
+        dendrogram_dir = re.sub("\\.txt", "_debug.txt", dendrogram_dir)
+        result_dir = re.sub("\\.txt", "_debug.txt", result_dir)
+        threshold_dependencies_dir = re.sub(
+            "\\.txt", "_debug.txt", threshold_dependencies_dir)
+        num_of_cluster_dir = re.sub("\\.txt", "_debug.txt", num_of_cluster_dir)
+        silhouette_coefficient_dir = re.sub(
+            "\\.txt", "_debug.txt", silhouette_coefficient_dir)
+>>>>>>> 082401538be5d5f76b6ff904ac604669fa5a2d21
         exe_time_dir = re.sub("\\.txt", "_debug.txt", exe_time_dir)
 
     ##################################################
@@ -100,7 +134,11 @@ def main():
     ##################################################
     articles_lines = []
     nation_and_article_ids = []  # ["IN;n"]
+<<<<<<< HEAD
     article_embeds = []  # [2.50864863e-01, 9.60696563e-02, ...]
+=======
+    article_embeds = np.empty()  # [2.50864863e-01, 9.60696563e-02, ...]
+>>>>>>> 082401538be5d5f76b6ff904ac604669fa5a2d21
     NATION_ID_IDX = 0
     ARTICLE_ID_IDX = 1
     EMBED_IDX = 2
@@ -125,9 +163,14 @@ def main():
             article_embed_str = article_embed_str.lstrip('[ ')
             article_embed_str = article_embed_str.rstrip(' ]\n')
             article_embed_strs = article_embed_str.split()
+<<<<<<< HEAD
             article_embed = [float(embed_str)
                              for embed_str in article_embed_strs]
             article_embeds.append(article_embed)
+=======
+            article_embeds.append([float(embed_str)
+                                  for embed_str in article_embed_strs])
+>>>>>>> 082401538be5d5f76b6ff904ac604669fa5a2d21
 
             # extract lines by each articles
             articles_lines.append(article_info_or_sentence)
@@ -157,14 +200,19 @@ def main():
     clustering_start_time = time.time()
 
     # exe
+<<<<<<< HEAD
     # result1 = linkage(article_embeds, metric=METRIC, method=METHOD)
     embeds_pdist = pdist(article_embeds, metric=METRIC)
     result1 = linkage(embeds_pdist, method=METHOD)
+=======
+    result1 = linkage(article_embeds, metric=METRIC, method=METHOD)
+>>>>>>> 082401538be5d5f76b6ff904ac604669fa5a2d21
 
     # print time
     clustering_time = time.time() - clustering_start_time
     log.d("clustering time (sec):", clustering_time)
 
+<<<<<<< HEAD
     # save embed pdist
     with open(embeds_pdist_dir, "w+", encoding="utf_8") as f:
         embeds_pdist_2_str = [str(e) for e in embeds_pdist]
@@ -224,6 +272,49 @@ def main():
     draw_threshold_dependency(result1, threshold_dependencies_dir)
 
     # print time
+=======
+    ##################################################
+    log.d("*** draw dendrogram ***")
+    ##################################################
+
+    # time mesurement: start
+    drawing_dendrogram_start_time = time.time()
+
+    # exe
+    dendrogram_fig = plt.figure(figsize=(14.4, 19.2))
+    dendrogram(
+        result1,
+        orientation='right',
+        labels=nation_and_article_ids,
+        color_threshold=THRESHOLD)
+    plt.title("Article Dedrogram with Evidence Sentences")
+    plt.xlabel("Threshold")
+    plt.grid()
+    # plt.show()
+    dendrogram_fig.savefig(dendrogram_dir)
+
+    # print time
+    drawing_dendrogram_time = time.time() - drawing_dendrogram_start_time
+    log.d("drawing dendrogram time (sec):", drawing_dendrogram_time)
+
+    ##################################################
+    log.d("*** print clustering result ***")
+    ##################################################
+    result_df = pd.DataFrame(result1)
+    result_df.to_csv(result_dir)
+    log.v("result_df[0]:", result_df[0])
+
+    ##################################################
+    log.d("*** draw threshold dependency ***")
+    ##################################################
+    # time mesurement: start
+    drawing_threshold_dependency_start_time = time.time()
+
+    # exe
+    draw_threshold_dependency(result1, threshold_dependencies_dir)
+
+    # print time
+>>>>>>> 082401538be5d5f76b6ff904ac604669fa5a2d21
     drawing_threshold_dependency_time = time.time(
     ) - drawing_threshold_dependency_start_time
     log.d("drawing threshold dependency time (sec):",
@@ -290,7 +381,11 @@ def main():
     # write
     for _, cluster_id in enumerate(best_cluster_by_number):
         dest_dir_each_cluster_id = re.sub(
+<<<<<<< HEAD
             "\\.txt", "_" + str(cluster_id) + ".txt", dest_dir)
+=======
+            "\\.txt", "_" + cluster_id + ".txt", dest_dir)
+>>>>>>> 082401538be5d5f76b6ff904ac604669fa5a2d21
         with open(dest_dir_each_cluster_id, "w+", encoding="utf_8") as f:
             f.write(clusters_articles[cluster_id])
 
@@ -417,6 +512,7 @@ def get_distance_matrix(df):
 
 
 def silhouette_coefficient2(clusters, distance_matrix):
+<<<<<<< HEAD
     do_debug = False
     if do_debug:
         log.v("clusters:", clusters)
@@ -425,14 +521,19 @@ def silhouette_coefficient2(clusters, distance_matrix):
         log.v("len(distance_matrix):", len(distance_matrix))
         log.v("clusters[0]:", clusters[0])
         log.v("distance_matrix[0]:", distance_matrix[0])
+=======
+>>>>>>> 082401538be5d5f76b6ff904ac604669fa5a2d21
     a_same = []
     b_diff = []
     for i, j in enumerate(clusters):
         for k, l in enumerate(clusters):
             if i < k:
+<<<<<<< HEAD
                 # log.v("i, k:", i, k)
                 if k == len(distance_matrix):
                     continue  # kataoka edit
+=======
+>>>>>>> 082401538be5d5f76b6ff904ac604669fa5a2d21
                 dist = distance_matrix[i][k]
                 if j == l:  # same cluster
                     a_same.append(dist)
@@ -442,6 +543,7 @@ def silhouette_coefficient2(clusters, distance_matrix):
     b = sum(b_diff) / len(b_diff)
     return (b - a) / max(b, a)
 
+<<<<<<< HEAD
 
 # distance_matrix = get_distance_matrix(df)
 # x = []
@@ -459,6 +561,8 @@ def silhouette_coefficient2(clusters, distance_matrix):
 # plt.ylabel("silhouette coefficient")
 # plt.grid()
 # plt.show()
+=======
+>>>>>>> 082401538be5d5f76b6ff904ac604669fa5a2d21
 
 if __name__ == "__main__":
     main()
