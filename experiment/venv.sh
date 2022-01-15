@@ -92,6 +92,10 @@ sudo apt install rename
 # process_03_articles_features_calculator
 python3 -m pip install sentence-transformers
 
+# process_06_articles_cluster_generator
+python3 -m pip install cycler
+python3 -m pip install -U matplotlib
+
 
 ##################################################
 # LaTeX
