@@ -42,6 +42,10 @@ METRIC = "cosine"
 METHOD = "ward"
 THRESHOLD = 0.02
 
+TITLE_SIZE = 48
+LABEL_TITLE_SIZE = 36
+LABEL_SIZE = 28
+
 
 def main():
     articles_dir = "./covid-19-news-articles/process-05_calced-sentences-features.txt"
@@ -191,9 +195,12 @@ def main():
         orientation='right',
         labels=nation_and_article_ids,
         color_threshold=THRESHOLD)
-    plt.title("Article Dedrogram with Evidence Sentences")
-    plt.xlabel("Threshold")
+    plt.title(
+        "Article Dendrogram by Evidence Sentences",
+        fontsize=TITLE_SIZE - 6)
+    plt.xlabel("Threshold", fontsize=LABEL_TITLE_SIZE)
     plt.grid()
+    plt.tick_params(labelsize=LABEL_SIZE)
     # plt.show()
     dendrogram_fig.savefig(dendrogram_dir)
 
@@ -255,9 +262,10 @@ def main():
 
     silhouette_fig = plt.figure(figsize=(19.2, 14.4))
     plt.plot(x, y)
-    plt.xlabel("Num of Clusters")
-    plt.ylabel("Silhouette Coefficient")
+    plt.xlabel("Num of Clusters", fontsize=LABEL_TITLE_SIZE)
+    plt.ylabel("Silhouette Coefficient", fontsize=LABEL_TITLE_SIZE)
     plt.grid()
+    plt.tick_params(labelsize=LABEL_SIZE)
     # plt.show()
     silhouette_fig.savefig(silhouette_coefficient_dir)
 
@@ -277,6 +285,7 @@ def main():
     ##################################################
     num_of_cluster_fig = plt.figure(figsize=(19.2, 14.4))
     plt.hist(best_cluster_by_number)
+    plt.tick_params(labelsize=LABEL_SIZE)
     plt.grid()
     num_of_cluster_fig.savefig(num_of_cluster_dir)
 
@@ -340,12 +349,15 @@ def draw_threshold_dependency(result, threshold_dependencies_dir):
     dependencies_fig = plt.figure(figsize=(19.2, 14.4))
     plt.subplot(2, 1, 1)
     plt.plot(x1, y1, 'yo-')
-    plt.title('Threshold Dependency of Hierarchical Clustering')
-    plt.ylabel('Num of Clusters')
+    plt.title(
+        'Threshold Dependency of Hierarchical Clustering',
+        fontsize=TITLE_SIZE)
+    plt.ylabel('Num of Clusters', fontsize=LABEL_TITLE_SIZE)
     plt.subplot(2, 1, 2)
     plt.plot(x2, y2, 'ro-')
-    plt.xlabel('Threshold')
-    plt.ylabel('Average of Cluster Size')
+    plt.xlabel('Threshold', fontsize=LABEL_TITLE_SIZE)
+    plt.ylabel('Average of Cluster Size', fontsize=LABEL_TITLE_SIZE)
+    plt.tick_params(labelsize=LABEL_SIZE)
     # plt.show()
     dependencies_fig.savefig(threshold_dependencies_dir)
 
