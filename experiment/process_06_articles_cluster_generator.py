@@ -9,6 +9,7 @@
 @note      out : process-05_articles-cluster_embeds-pdist.txt
 @note      out : process-06_articles-cluster/process-06_articles-cluster.txt
 @note      out : process-06_articles-cluster_dendrogram.png
+@note      out : process-06_articles-cluster_color_dendrogram.png
 @note      out : process-06_articles-cluster_result.csv
 @note      out : process-06_articles-cluster_threshold-dependencies.png
 @note      out : process-06_articles-cluster_num_of_cluster.png
@@ -51,6 +52,7 @@ def main():
     embeds_pdist_dir = "./covid-19-news-articles/process-05_articles-cluster_embeds-pdist.txt"
     dest_dir = "./covid-19-news-articles/process-06_articles-cluster/process-06_articles-cluster.txt"
     dendrogram_dir = "./covid-19-news-articles/process-06_articles-cluster_dendrogram.png"
+    color_dendrogram_dir = "./covid-19-news-articles/process-06_articles-cluster_color_dendrogram.png"
     result_dir = "./covid-19-news-articles/process-06_articles-cluster_result.csv"
     threshold_dependencies_dir = "./covid-19-news-articles/process-06_articles-cluster_threshold-dependencies.png"
     num_of_cluster_dir = "./covid-19-news-articles/process-06_articles-cluster_num_of_cluster.png"
@@ -73,6 +75,8 @@ def main():
         embeds_pdist_dir = re.sub("\\.txt", "_debug.txt", embeds_pdist_dir)
         dest_dir = re.sub("\\.txt", "_debug.txt", dest_dir)
         dendrogram_dir = re.sub("\\.png", "_debug.png", dendrogram_dir)
+        color_dendrogram_dir = re.sub(
+            "\\.png", "_debug.png", color_dendrogram_dir)
         result_dir = re.sub("\\.csv", "_debug.csv", result_dir)
         threshold_dependencies_dir = re.sub(
             "\\.png", "_debug.png", threshold_dependencies_dir)
@@ -270,7 +274,8 @@ def main():
         orientation='right',
         labels=[''] * len(nation_and_article_ids),
         # labels=nation_and_article_ids,
-        color_threshold=best_threshold)
+        # color_threshold=best_threshold
+        )
     # plt.title(
     #     "Article Dendrogram by Evidence Sentences",
     #     fontsize=TITLE_SIZE - 6)
@@ -280,6 +285,24 @@ def main():
     plt.tick_params(labelsize=LABEL_SIZE)
     # plt.show()
     dendrogram_fig.savefig(dendrogram_dir)
+
+    # exe color ver
+    color_dendrogram_fig = plt.figure(figsize=(14.4, 19.2))
+    dendrogram(
+        result1,
+        orientation='right',
+        labels=[''] * len(nation_and_article_ids),
+        # labels=nation_and_article_ids,
+        color_threshold=best_threshold)
+    # plt.title(
+    #     "Article Dendrogram by Evidence Sentences",
+    #     fontsize=TITLE_SIZE - 6)
+    plt.xlabel("Threshold", fontsize=LABEL_TITLE_SIZE)
+    plt.ylabel("Article ID", fontsize=LABEL_TITLE_SIZE)
+    plt.grid()
+    plt.tick_params(labelsize=LABEL_SIZE)
+    # plt.show()
+    color_dendrogram_fig.savefig(color_dendrogram_dir)
 
     # print time
     drawing_dendrogram_time = time.time() - drawing_dendrogram_start_time
