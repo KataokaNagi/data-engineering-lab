@@ -25,6 +25,8 @@
 
 """
 
+from scipy.cluster import hierarchy
+from matplotlib.pyplot import cm
 from scipy.spatial.distance import squareform
 import math
 import matplotlib.pyplot as plt
@@ -37,6 +39,7 @@ from scipy.cluster.hierarchy import linkage, dendrogram
 import numpy as np
 import pandas as pd
 from scipy.spatial.distance import pdist
+import matplotlib as mpl
 
 NUM_DEBUG = 20
 METRIC = "cosine"
@@ -274,8 +277,8 @@ def main():
         orientation='right',
         labels=[''] * len(nation_and_article_ids),
         # labels=nation_and_article_ids,
-        # color_threshold=best_threshold
-        )
+        color_threshold=0.0
+    )
     # plt.title(
     #     "Article Dendrogram by Evidence Sentences",
     #     fontsize=TITLE_SIZE - 6)
@@ -287,13 +290,21 @@ def main():
     dendrogram_fig.savefig(dendrogram_dir)
 
     # exe color ver
+
+    # set color
+    # @see https://www.webdevqa.jp.net/ja/python/python%EF%BC%88linkcolorfunc%EF%BC%9F%EF%BC%89%E3%81%AEscipy%E6%A8%B9%E7%8A%B6%E5%9B%B3%E3%81%AE%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%AF%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%BC%E3%82%AB%E3%83%A9%E3%83%BC/825416841/
+    # cmap = cm.Rainbow(np.linspace(0, 1, best_num_of_cluster))
+    # link_cols = [mpl.colors.rgb2hex(rgb[:3]) for rgb in cmap]
+
     color_dendrogram_fig = plt.figure(figsize=(14.4, 19.2))
     dendrogram(
         result1,
         orientation='right',
         labels=[''] * len(nation_and_article_ids),
         # labels=nation_and_article_ids,
-        color_threshold=best_threshold)
+        color_threshold=best_threshold,
+        # link_color_func=lambda x: link_cols[x]
+    )
     # plt.title(
     #     "Article Dendrogram by Evidence Sentences",
     #     fontsize=TITLE_SIZE - 6)
