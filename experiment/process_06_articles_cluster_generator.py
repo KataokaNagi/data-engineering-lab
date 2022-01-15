@@ -423,8 +423,8 @@ def silhouette_coefficient2(clusters, distance_matrix):
         log.v("distance_matrix:", distance_matrix)
         log.v("len(clusters):", len(clusters))
         log.v("len(distance_matrix):", len(distance_matrix))
-    log.v("clusters[0]:", clusters[0])
-    log.v("distance_matrix[0]:", distance_matrix[0])
+        log.v("clusters[0]:", clusters[0])
+        log.v("distance_matrix[0]:", distance_matrix[0])
     a_same = []
     b_diff = []
     for i, j in enumerate(clusters):
