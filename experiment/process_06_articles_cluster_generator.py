@@ -269,14 +269,14 @@ def main():
 
     log.d("best_num_of_cluster: ", best_num_of_cluster)
     log.d("max_silhouette_coefficient: ", max_silhouette_coefficient)
-    log.v("best_cluster_by_number[0]: ", best_cluster_by_number[0])
+    log.v("best_cluster_by_number: ", best_cluster_by_number)
     log.v()
 
     ##################################################
     log.d("*** draw best_num_of_cluster ***")
     ##################################################
     num_of_cluster_fig = plt.figure(figsize=(19.2, 14.4))
-    plt.hist(best_num_of_cluster)
+    plt.hist(best_cluster_by_number)
     plt.grid()
     num_of_cluster_fig.savefig(num_of_cluster_dir)
 
