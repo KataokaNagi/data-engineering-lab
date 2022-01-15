@@ -206,7 +206,13 @@ def main():
     ##################################################
     result_df = pd.DataFrame(result1)
     result_df.to_csv(result_dir)
-    log.v("result_df[0]:", result_df[0])
+
+    if do_debug:
+        log.v("result_df:", result_df)
+    log.v("result_df[0][0] (1st node      ) :", result_df[0][0])
+    log.v("result_df[1][0] (2nd node      ) :", result_df[1][0])
+    log.v("result_df[2][0] (nodes distance) :", result_df[2][0])
+    log.v("result_df[3][0] (cluster_id    ) :", result_df[3][0])
 
     ##################################################
     log.d("*** draw threshold dependency ***")
