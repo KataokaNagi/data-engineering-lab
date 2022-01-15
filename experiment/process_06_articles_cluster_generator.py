@@ -417,11 +417,22 @@ def get_distance_matrix(df):
 
 
 def silhouette_coefficient2(clusters, distance_matrix):
+    do_debug = False
+    if do_debug:
+        log.v("clusters:", clusters)
+        log.v("distance_matrix:", distance_matrix)
+        log.v("len(clusters):", len(clusters))
+        log.v("len(distance_matrix):", len(distance_matrix))
+    log.v("clusters[0]:", clusters[0])
+    log.v("distance_matrix[0]:", distance_matrix[0])
     a_same = []
     b_diff = []
     for i, j in enumerate(clusters):
         for k, l in enumerate(clusters):
             if i < k:
+                # log.v("i, k:", i, k)
+                if k == len(distance_matrix):
+                    continue  # kataoka edit
                 dist = distance_matrix[i][k]
                 if j == l:  # same cluster
                     a_same.append(dist)
@@ -431,6 +442,23 @@ def silhouette_coefficient2(clusters, distance_matrix):
     b = sum(b_diff) / len(b_diff)
     return (b - a) / max(b, a)
 
+
+# distance_matrix = get_distance_matrix(df)
+# x = []
+# y = []
+# for i in range(2, len(df)):
+#     x.append(i)
+#     y.append(
+#         silhouette_coefficient2(
+#             get_cluster_by_number(
+#                 result1,
+#                 i),
+#             distance_matrix))
+# plt.plot(x, y)
+# plt.xlabel("Num of clusters")
+# plt.ylabel("silhouette coefficient")
+# plt.grid()
+# plt.show()
 
 if __name__ == "__main__":
     main()
