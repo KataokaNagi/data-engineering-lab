@@ -25,6 +25,7 @@
 
 """
 
+import random
 from scipy.cluster import hierarchy
 from matplotlib.pyplot import cm
 from scipy.spatial.distance import squareform
@@ -41,13 +42,15 @@ import pandas as pd
 from scipy.spatial.distance import pdist
 import matplotlib as mpl
 
-NUM_DEBUG = 20
 METRIC = "cosine"
 METHOD = "ward"
 
 TITLE_SIZE = 48
 LABEL_TITLE_SIZE = 36
 LABEL_SIZE = 28
+
+REDUCED_NUM = 40000
+RANDOM_SEED = 2021
 
 
 def main():
@@ -69,11 +72,36 @@ def main():
         "--debug",
         help="optional debug",
         action="store_true")
+    arg_parser.add_argument(
+        "-r",
+        "--reduce",
+        help="reduce data",
+        action="store_true")
     arg = arg_parser.parse_args()
     do_debug = arg.debug
+    reduce_data = arg.reduce
+
+    if reduce_data:
+        log.d("*** edit DEST_DIRS according to --reduce ***")
+        embeds_pdist_dir = re.sub(
+            "\\.txt",
+            "_reduced-data.txt",
+            embeds_pdist_dir)
+        dest_dir = re.sub("\\.txt", "_reduced-data.txt", dest_dir)
+        dendrogram_dir = re.sub("\\.png", "_reduced-data.png", dendrogram_dir)
+        color_dendrogram_dir = re.sub(
+            "\\.png", "_reduced-data.png", color_dendrogram_dir)
+        result_dir = re.sub("\\.csv", "_reduced-data.csv", result_dir)
+        threshold_dependencies_dir = re.sub(
+            "\\.png", "_reduced-data.png", threshold_dependencies_dir)
+        num_of_cluster_dir = re.sub(
+            "\\.png", "_reduced-data.png", num_of_cluster_dir)
+        silhouette_coefficient_dir = re.sub(
+            "\\.png", "_reduced-data.png", silhouette_coefficient_dir)
+        exe_time_dir = re.sub("\\.txt", "_reduced-data.txt", exe_time_dir)
 
     if do_debug:
-        log.d("*** edit DEST_DIRS according to options ***")
+        log.d("*** edit DEST_DIRS according to --debug ***")
         articles_dir = re.sub("\\.txt", "_debug.txt", articles_dir)
         embeds_pdist_dir = re.sub("\\.txt", "_debug.txt", embeds_pdist_dir)
         dest_dir = re.sub("\\.txt", "_debug.txt", dest_dir)
@@ -108,9 +136,9 @@ def main():
     log.d("*** extract nation id, article id, & article embedding ***")
     log.d("*** & save lines by each articles ***")
     ##################################################
-    articles_lines = []
+    articles_lines = []  # [[lines eacch articles], ...]
     nation_and_article_ids = []  # ["IN;n"]
-    article_embeds = []  # [2.50864863e-01, 9.60696563e-02, ...]
+    article_embeds = []  # [[2.50864863e-01, 9.60696563e-02, ...], ...]
     NATION_ID_IDX = 0
     ARTICLE_ID_IDX = 1
     EMBED_IDX = 2
@@ -158,6 +186,23 @@ def main():
     log.v("articles_lines[0]: ", articles_lines[0])
     log.v("articles_lines[-1]: ", articles_lines[-1])
     log.v()
+
+    # reduce data num (because of memory size error)
+    if reduce_data:
+        shuffle_idxs = list(range(len(nation_and_article_ids)))
+        random.seed(RANDOM_SEED)
+        random.shuffle(shuffle_idxs)
+        nation_and_article_ids = [
+            nation_and_article_ids[i] for i in shuffle_idxs[:REDUCED_NUM]]
+        article_embeds = [article_embeds[i]
+                          for i in shuffle_idxs[:REDUCED_NUM]]
+        articles_lines = [articles_lines[i]
+                          for i in shuffle_idxs[:REDUCED_NUM]]
+        log.v("nation_and_article_ids[:10]: ",
+              nation_and_article_ids[:(10 % REDUCED_NUM)])
+        log.v("article_embeds[0]: ", article_embeds[0])
+        log.v("articles_lines[0]: ", articles_lines[0])
+        log.v()
 
     ##################################################
     log.d("*** clustering (substitute article_embeds) ***")

@@ -17,11 +17,14 @@ log_cmd="2>&1 | tee -a ${log_dir}"
 
 # debug [-d] or not
 do_debug=false
+reduce_data=false
 do_log=false
-while getopts ":dl" OPT
+while getopts ":drl" OPT
 do
     case $OPT in
         d) do_debug=true
+        ;;
+        r) reduce_data=true
         ;;
         l) do_log=true
         ;;
@@ -36,9 +39,14 @@ if "${do_debug}"; then
     cmd="${cmd} --debug"
 fi
 
+if "${reduce_data}"; then
+    cmd="${cmd} --reduce"
+fi
+
 if "${do_log}"; then
     cmd="${cmd} ${log_cmd}"
 fi
+
 
 echo "${cmd}"
 eval "${cmd}"
