@@ -290,7 +290,7 @@ def main():
     # write
     for _, cluster_id in enumerate(best_cluster_by_number):
         dest_dir_each_cluster_id = re.sub(
-            "\\.txt", "_" + cluster_id + ".txt", dest_dir)
+            "\\.txt", "_" + str(cluster_id) + ".txt", dest_dir)
         with open(dest_dir_each_cluster_id, "w+", encoding="utf_8") as f:
             f.write(clusters_articles[cluster_id])
 
