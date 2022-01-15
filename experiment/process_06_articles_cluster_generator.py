@@ -118,8 +118,8 @@ def main():
             article_embed_str = article_embed_str.lstrip('[ ')
             article_embed_str = article_embed_str.rstrip(' ]\n')
             article_embed_strs = article_embed_str.split()
-            article_embed = np.ndarray([float(embed_str)
-                                        for embed_str in article_embed_strs])
+            article_embed = [float(embed_str)
+                             for embed_str in article_embed_strs]
             article_embeds.append(article_embed)
 
             # extract lines by each articles
@@ -136,11 +136,8 @@ def main():
                 len_splits_with_semicolon)
             exit()
 
-    article_embeds_np = np.ndarray(article_embeds)
-
     log.v("nation_and_article_ids[0]: ", nation_and_article_ids[0])
     log.v("article_embeds[0]: ", article_embeds[0])
-    log.v("article_embeds_np[0]: ", article_embeds_np[0])
     log.v("articles_lines[0]: ", articles_lines[0])
     log.v("articles_lines[-1]: ", articles_lines[-1])
     log.v()
@@ -153,7 +150,7 @@ def main():
     clustering_start_time = time.time()
 
     # exe
-    result1 = linkage(article_embeds_np, metric=METRIC, method=METHOD)
+    result1 = linkage(article_embeds, metric=METRIC, method=METHOD)
 
     # print time
     clustering_time = time.time() - clustering_start_time
