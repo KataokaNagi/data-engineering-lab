@@ -74,5 +74,26 @@
 
 ##################################################
 
-s = "  "
-print("left", s.strip(), "right")
+# s = "  "
+# print("left", s.strip(), "right")
+
+##################################################
+
+aaa = [[["1", "2"], ["3", "4"]], [["5", "6"], ["7", "8"]]]
+
+# b = [a for a in aa for aa in aaa]
+
+# b = [((a) for a in aa) for aa in aaa]
+
+# b = [aa for aa in aaa]
+# c = [a for a in aa]
+
+# b = " ".join(aaa)
+
+b = []
+for _, aa in enumerate(aaa):
+    for _, a in enumerate(aa):
+        b.extend(a)
+
+print(b)
+# print(c)
