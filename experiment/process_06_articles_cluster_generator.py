@@ -82,9 +82,9 @@ def main():
     with open(articles_dir, "r", encoding="utf_8") as f:
         article_info_or_sentences = f.readlines()
         log.v("articles:")
-        log.v(article_info_or_sentences[0])
-        log.v(article_info_or_sentences[1])
-        log.v(article_info_or_sentences[2])
+        log.v("article_info_or_sentences[0]:", article_info_or_sentences[0])
+        log.v("article_info_or_sentences[1]:", article_info_or_sentences[1])
+        log.v("article_info_or_sentences[2]:", article_info_or_sentences[2])
         log.v()
 
     ##################################################
@@ -93,7 +93,7 @@ def main():
     ##################################################
     articles_lines = []
     nation_and_article_ids = []  # ["IN;n"]
-    article_embeds = np.empty()  # [2.50864863e-01, 9.60696563e-02, ...]
+    article_embeds = []  # [2.50864863e-01, 9.60696563e-02, ...]
     NATION_ID_IDX = 0
     ARTICLE_ID_IDX = 1
     EMBED_IDX = 2
@@ -118,8 +118,9 @@ def main():
             article_embed_str = article_embed_str.lstrip('[ ')
             article_embed_str = article_embed_str.rstrip(' ]\n')
             article_embed_strs = article_embed_str.split()
-            article_embeds.append([float(embed_str)
-                                  for embed_str in article_embed_strs])
+            article_embed = np.ndarray([float(embed_str)
+                                        for embed_str in article_embed_strs])
+            article_embeds.append(article_embed)
 
             # extract lines by each articles
             articles_lines.append(article_info_or_sentence)
@@ -135,8 +136,11 @@ def main():
                 len_splits_with_semicolon)
             exit()
 
+    article_embeds_np = np.ndarray(article_embeds)
+
     log.v("nation_and_article_ids[0]: ", nation_and_article_ids[0])
     log.v("article_embeds[0]: ", article_embeds[0])
+    log.v("article_embeds_np[0]: ", article_embeds_np[0])
     log.v("articles_lines[0]: ", articles_lines[0])
     log.v("articles_lines[-1]: ", articles_lines[-1])
     log.v()
@@ -149,7 +153,7 @@ def main():
     clustering_start_time = time.time()
 
     # exe
-    result1 = linkage(article_embeds, metric=METRIC, method=METHOD)
+    result1 = linkage(article_embeds_np, metric=METRIC, method=METHOD)
 
     # print time
     clustering_time = time.time() - clustering_start_time
