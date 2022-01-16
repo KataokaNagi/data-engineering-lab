@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""process_06_articles_cluster_generator.py
+"""process_06_articles_cluster_generator_with_maximal_silhoette.py
 
 @author    Kataoka Nagi (calm1836[at]gmail.com)
 @brief     calc best article cluster with evidence embed & silhouette-coefficient
@@ -14,7 +14,7 @@
 @note      out : process-06_articles-cluster_threshold-dependencies.png
 @note      out : process-06_articles-cluster_num_of_cluster.png
 @note      out : process-06_articles-cluster_num-of-clusters-dependency-on-silhouette-coefficient.png
-@note      python3 process_06_articles_cluster_generator.py
+@note      python3 process_06_articles_cluster_generator_with_maximal_silhoette.py
 @date      2022-01-15 13:59:47
 @version   1.0
 @history   add
@@ -65,7 +65,7 @@ def main():
     threshold_dependencies_dir = "./covid-19-news-articles/process-06_articles-cluster_threshold-dependencies.png"
     num_of_cluster_dir = "./covid-19-news-articles/process-06_articles-cluster_num_of_cluster.png"
     silhouette_coefficient_dir = "./covid-19-news-articles/process-06_articles-cluster_num-of-clusters-dependency-on-silhouette-coefficient.png"
-    exe_time_dir = "./covid-19-news-articles/archive/exe-time/exe-time_process_06_articles_cluster_generator.txt"
+    exe_time_dir = "./covid-19-news-articles/archive/exe-time/exe-time_process_06_articles_cluster_generator_with_maximal_silhoette.txt"
 
     # debug option
     arg_parser = ArgumentParser(description='execute S-BERT')
