@@ -52,7 +52,7 @@ LABEL_SIZE = 28
 REDUCED_NUM = 10000
 RANDOM_SEED = 2021
 
-NUM_OF_CLUSTER = 3650
+MAX_NUM_OF_CLUSTER_RATE = 19.0 / 20.0
 
 log.d("METRIC:", METRIC)
 log.d("METHOD:", METHOD)
@@ -61,7 +61,7 @@ log.v("LABEL_TITLE_SIZE:", LABEL_TITLE_SIZE)
 log.v("LABEL_SIZE:", LABEL_SIZE)
 log.d("REDUCED_NUM:", REDUCED_NUM)
 log.d("RANDOM_SEED:", RANDOM_SEED)
-log.v("NUM_OF_CLUSTER:", NUM_OF_CLUSTER)
+log.v("MAX_NUM_OF_CLUSTER_RATE:", MAX_NUM_OF_CLUSTER_RATE)
 
 
 def main():
@@ -282,13 +282,16 @@ def main():
     best_num_of_cluster = 0
     best_cluster_by_number = []
     max_silhouette_coefficient = -100100100
+    max_num_of_cluster = REDUCED_NUM * MAX_NUM_OF_CLUSTER_RATE
+    # max_num_of_cluster = len(result_df) * MAX_NUM_OF_CLUSTER_RATE
     x = []
     y = []
     for num_of_cluster in range(2, len(result_df)):
         cluster_by_number = get_cluster_by_number(result1, num_of_cluster)
         silhouette_coefficient = silhouette_coefficient2(
             cluster_by_number, distance_matrix)
-        if silhouette_coefficient > max_silhouette_coefficient:
+        # if silhouette_coefficient > max_silhouette_coefficient:
+        if silhouette_coefficient > max_silhouette_coefficient and num_of_cluster <= max_num_of_cluster:
             best_num_of_cluster = num_of_cluster
             best_cluster_by_number = cluster_by_number
             max_silhouette_coefficient = silhouette_coefficient
