@@ -5,8 +5,8 @@
 @brief     calc best article cluster with evidence embed & silhouette-coefficient
 # nation-id;article-id;sentence-id;e;feature-x;feature-y;sent-1#nation-id;article-id;sentence-id;c;feature-x;feature-y;[feature-array];sent-2...\n
 @note      in: nation-id;article-id;[e-embedding]
-@note      out : process-05_calced-sentences-features.txt
-@note      out : process-05_articles-cluster_embeds-pdist.txt
+@note      in : process-05_calced-sentences-features.txt
+@note      out : process-06_articles-cluster_embeds-pdist.txt
 @note      out : process-06_articles-cluster/process-06_articles-cluster.txt
 @note      out : process-06_articles-cluster_dendrogram.png
 @note      out : process-06_articles-cluster_color_dendrogram.png
@@ -57,7 +57,7 @@ NUM_OF_CLUSTER = 3650
 
 def main():
     articles_dir = "./covid-19-news-articles/process-05_calced-sentences-features.txt"
-    embeds_pdist_dir = "./covid-19-news-articles/process-05_articles-cluster_embeds-pdist.txt"
+    embeds_pdist_dir = "./covid-19-news-articles/process-06_articles-cluster_embeds-pdist.txt"
     dest_dir = "./covid-19-news-articles/process-06_articles-cluster/process-06_articles-cluster.txt"
     dendrogram_dir = "./covid-19-news-articles/process-06_articles-cluster_dendrogram.png"
     color_dendrogram_dir = "./covid-19-news-articles/process-06_articles-cluster_color_dendrogram.png"
