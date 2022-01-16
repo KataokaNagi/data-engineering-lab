@@ -88,8 +88,7 @@ def main():
         "process-07_sentences-cluster_num_of_cluster.png"
     silhouette_coefficient_dir = basis_dir + \
         "process-07_sentences-cluster_num-of-clusters-dependency-on-silhouette-coefficient.png"
-    exe_time_dir = basis_dir + \
-        "archive/exe-time/exe-time_process-07_sentences_cluster_generator.txt"
+    exe_time_dir = "./covid-19-news-articles/archive/exe-time/exe-time_process-07_sentences_cluster_generator.txt"
 
     log.v(articles_dir)
     log.v(embeds_pdist_dir)
