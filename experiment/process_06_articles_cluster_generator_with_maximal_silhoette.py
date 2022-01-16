@@ -54,6 +54,15 @@ RANDOM_SEED = 2021
 
 NUM_OF_CLUSTER = 3650
 
+log.d("METRIC:", METRIC)
+log.d("METHOD:", METHOD)
+log.v("TITLE_SIZE:", TITLE_SIZE)
+log.v("LABEL_TITLE_SIZE:", LABEL_TITLE_SIZE)
+log.v("LABEL_SIZE:", LABEL_SIZE)
+log.d("REDUCED_NUM:", REDUCED_NUM)
+log.d("RANDOM_SEED:", RANDOM_SEED)
+log.v("NUM_OF_CLUSTER:", NUM_OF_CLUSTER)
+
 
 def main():
     articles_dir = "./covid-19-news-articles/process-05_calced-sentences-features.txt"
@@ -66,6 +75,17 @@ def main():
     num_of_cluster_dir = "./covid-19-news-articles/process-06_articles-cluster_num_of_cluster.png"
     silhouette_coefficient_dir = "./covid-19-news-articles/process-06_articles-cluster_num-of-clusters-dependency-on-silhouette-coefficient.png"
     exe_time_dir = "./covid-19-news-articles/archive/exe-time/exe-time_process_06_articles_cluster_generator_with_maximal_silhoette.txt"
+
+    log.v(articles_dir)
+    log.v(embeds_pdist_dir)
+    log.v(dest_dir)
+    log.v(dendrogram_dir)
+    log.v(color_dendrogram_dir)
+    log.v(result_dir)
+    log.v(threshold_dependencies_dir)
+    log.v(num_of_cluster_dir)
+    log.v(silhouette_coefficient_dir)
+    log.v(exe_time_dir)
 
     # debug option
     arg_parser = ArgumentParser(description='execute S-BERT')
@@ -82,6 +102,9 @@ def main():
     arg = arg_parser.parse_args()
     do_debug = arg.debug
     reduce_data = arg.reduce
+
+    log.v(do_debug)
+    log.v(reduce_data)
 
     if reduce_data:
         log.d("*** edit DEST_DIRS according to --reduce ***")
