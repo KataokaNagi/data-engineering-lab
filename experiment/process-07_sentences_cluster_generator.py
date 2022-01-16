@@ -1,21 +1,20 @@
 # -*- coding: utf-8 -*-
-"""process_06_articles_cluster_generator_with_maximal_silhoette.py
+"""process-07_sentences_cluster_generator.py
 
 @author    Kataoka Nagi (calm1836[at]gmail.com)
-@brief     calc best article cluster with evidence embed & silhouette-coefficient
-# nation-id;article-id;sentence-id;e;feature-x;feature-y;sent-1#nation-id;article-id;sentence-id;c;feature-x;feature-y;[feature-array];sent-2...\n
-@note      in: nation-id;article-id;[e-embedding]
-@note      in : process-05_calced-sentences-features.txt
-@note      out : process-06_articles-cluster_embeds-pdist.txt
-@note      out : process-06_articles-cluster/process-06_articles-cluster.txt
-@note      out : process-06_articles-cluster_dendrogram.png
-@note      out : process-06_articles-cluster_color_dendrogram.png
-@note      out : process-06_articles-cluster_result.csv
-@note      out : process-06_articles-cluster_threshold-dependencies.png
-@note      out : process-06_articles-cluster_num_of_cluster.png
-@note      out : process-06_articles-cluster_num-of-clusters-dependency-on-silhouette-coefficient.png
-@note      python3 process_06_articles_cluster_generator_with_maximal_silhoette.py
-@date      2022-01-15 13:59:47
+@brief     calc best sentence cluster with claim embeds & silhouette-coefficient
+@note      in : process-06_articles-cluster/process-06_articles-cluster.txt
+@note      in:  nation-id;article-id;sentence-id;e;feature-x;feature-y;sent-1#nation-id;article-id;sentence-id;c;feature-x;feature-y;[feature-array];sent-2...\n
+@note      out : process-07_sentences-cluster_embeds-pdist.txt
+@note      out : process-07_sentences-cluster.txt
+@note      out : process-07_sentences-cluster_dendrogram.png
+@note      out : process-07_sentences-cluster_color_dendrogram.png
+@note      out : process-07_sentences-cluster_result.csv
+@note      out : process-07_sentences-cluster_threshold-dependencies.png
+@note      out : process-07_sentences-cluster_num_of_cluster.png
+@note      out : process-07_sentences-cluster_num-of-clusters-dependency-on-silhouette-coefficient.png
+@note      python3 process-07_sentences_cluster_generator.py
+@date      2022-01-16 11:57:32
 @version   1.0
 @history   add
 @see       [階層的クラスタリングとシルエット係数](https://qiita.com/maskot1977/items/a35ac2fdc2c7448ee526#%E9%9A%8E%E5%B1%A4%E7%9A%84%E3%82%AF%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%AA%E3%83%B3%E3%82%B0)
@@ -54,6 +53,11 @@ RANDOM_SEED = 2021
 
 MAX_NUM_OF_CLUSTER_RATE = 19.0 / 20.0
 
+ARTICLES_CLUSTER_ID = 0
+ARTICLES_DIR = "./covid-19-news-articles/process-06_articles-cluster/" +\
+    "process-06_articles-cluster_reduced-data-to-5000/" + \
+    "process-06_articles-cluster_reduced-data-to-5000_" + str(ARTICLES_CLUSTER_ID) + ".txt"
+
 log.d("METRIC:", METRIC)
 log.d("METHOD:", METHOD)
 log.v("TITLE_SIZE:", TITLE_SIZE)
@@ -65,16 +69,27 @@ log.v("MAX_NUM_OF_CLUSTER_RATE:", MAX_NUM_OF_CLUSTER_RATE)
 
 
 def main():
-    articles_dir = "./covid-19-news-articles/process-05_calced-sentences-features.txt"
-    embeds_pdist_dir = "./covid-19-news-articles/process-06_articles-cluster_embeds-pdist.txt"
-    dest_dir = "./covid-19-news-articles/process-06_articles-cluster/process-06_articles-cluster.txt"
-    dendrogram_dir = "./covid-19-news-articles/process-06_articles-cluster_dendrogram.png"
-    color_dendrogram_dir = "./covid-19-news-articles/process-06_articles-cluster_color_dendrogram.png"
-    result_dir = "./covid-19-news-articles/process-06_articles-cluster_result.csv"
-    threshold_dependencies_dir = "./covid-19-news-articles/process-06_articles-cluster_threshold-dependencies.png"
-    num_of_cluster_dir = "./covid-19-news-articles/process-06_articles-cluster_num_of_cluster.png"
-    silhouette_coefficient_dir = "./covid-19-news-articles/process-06_articles-cluster_num-of-clusters-dependency-on-silhouette-coefficient.png"
-    exe_time_dir = "./covid-19-news-articles/archive/exe-time/exe-time_process_06_articles_cluster_generator_with_maximal_silhoette.txt"
+    articles_dir = ARTICLES_DIR
+
+    basis_dir = "./covid-19-news-articles/process-07_sentences-cluster/"
+    embeds_pdist_dir = basis_dir + \
+        "process-07_sentences-cluster_embeds-pdist.txt"
+    dest_dir = basis_dir + \
+        "process-07_sentences-cluster/process-07_sentences-cluster.txt"
+    dendrogram_dir = basis_dir + \
+        "process-07_sentences-cluster_dendrogram.png"
+    color_dendrogram_dir = basis_dir + \
+        "process-07_sentences-cluster_color_dendrogram.png"
+    result_dir = basis_dir + \
+        "process-07_sentences-cluster_result.csv"
+    threshold_dependencies_dir = basis_dir + \
+        "process-07_sentences-cluster_threshold-dependencies.png"
+    num_of_cluster_dir = basis_dir + \
+        "process-07_sentences-cluster_num_of_cluster.png"
+    silhouette_coefficient_dir = basis_dir + \
+        "process-07_sentences-cluster_num-of-clusters-dependency-on-silhouette-coefficient.png"
+    exe_time_dir = basis_dir + \
+        "archive/exe-time/exe-time_process-07_sentences_cluster_generator.txt"
 
     log.v(articles_dir)
     log.v(embeds_pdist_dir)
@@ -147,7 +162,7 @@ def main():
     ##################################################
 
     # nation-n;article-n;[e-embedding]
-    # nation-n;article-n;sentence-id;e;feature-x;feature-y;sent-1#...\n
+    # nation-n;article-n;sentence-id;c;feature-x;feature-y;c-embedding;sent-1#...\n
     article_info_or_sentences = []
 
     with open(articles_dir, "r", encoding="utf_8") as f:
@@ -159,47 +174,47 @@ def main():
         log.v()
 
     ##################################################
-    log.d("*** extract nation id, article id, & article embedding ***")
-    log.d("*** & save lines by each articles ***")
+    log.d("*** extract nation id, article id, c-sentence-id & claim sentence embeddings ***")
+    log.d("*** & save lines by each claim sentences ***")
     ##################################################
-    articles_lines = []  # [[lines eacch articles], ...]
-    nation_and_article_ids = []  # ["IN;n"]
-    article_embeds = []  # [[2.50864863e-01, 9.60696563e-02, ...], ...]
+    nation_article_claim_ids = []  # ["IN;n;sentence-id(claim)"]
+    claim_lines = []  # [[lines each articles], ...]
+    claim_embeds = []  # [[2.50864863e-01, 9.60696563e-02, ...], ...]
     NATION_ID_IDX = 0
     ARTICLE_ID_IDX = 1
-    EMBED_IDX = 2
+    CLAIM_SENTENCE_ID_IDX = 1
+    EMBED_IDX = 6
 
     # nation-n;article-n;[e-embedding]
-    # nation-n;article-n;sentence-id;e;feature-x;feature-y;sent-1#...\n
+    # nation-n;article-n;sentence-id;c;feature-x;feature-y;c-embedding;sent-1#...\n
     for article_info_or_sentence in article_info_or_sentences:
 
         splits_with_semicolon = article_info_or_sentence.split(';')
         len_splits_with_semicolon = len(splits_with_semicolon)
 
-        # article info
-        if len_splits_with_semicolon == 3:
-            # extract nation_and_article_ids
-            nation_id = splits_with_semicolon[NATION_ID_IDX]
-            article_id = splits_with_semicolon[ARTICLE_ID_IDX]
-            ids = nation_id + ';' + article_id
-            nation_and_article_ids.append(ids)
+        # article or evidence sentence info
+        if len_splits_with_semicolon == 3 or len_splits_with_semicolon == 7:
+            pass
 
-            # extract article_embeds
-            article_embed_str = splits_with_semicolon[EMBED_IDX]
-            article_embed_str = article_embed_str.lstrip('[ ')
-            article_embed_str = article_embed_str.rstrip(' ]\n')
-            article_embed_strs = article_embed_str.split()
-            article_embed = [float(embed_str)
-                             for embed_str in article_embed_strs]
-            article_embeds.append(article_embed)
+        # claim sentence info
+        elif len_splits_with_semicolon == 8:
+            # extract nation_article_claim_ids
+            nation_id = str(splits_with_semicolon[NATION_ID_IDX])
+            claim_idx = str(splits_with_semicolon[ARTICLE_ID_IDX])
+            claim_idx = str(
+                splits_with_semicolon[CLAIM_SENTENCE_ID_IDX])
+            ids = ';'.join([nation_id, claim_idx, claim_idx])
+            nation_article_claim_ids.append(ids)
 
-            # extract lines by each articles
-            articles_lines.append(article_info_or_sentence)
+            # extract lines by each claim sentences
+            claim_lines.append(article_info_or_sentence)
 
-        # sentence info
-        elif len_splits_with_semicolon == 7 or len_splits_with_semicolon == 8:
-            # extract lines by each articles
-            articles_lines[-1] += article_info_or_sentence
+            # extract sentence_embeds
+            claim_embed_str = splits_with_semicolon[EMBED_IDX]
+            claim_embed_strs = claim_embed_str.strip().split()
+            claim_embed = [float(embed_str)
+                           for embed_str in claim_embed_strs]
+            claim_embeds.append(claim_embed)
         # error
         else:
             log.e(
@@ -207,40 +222,40 @@ def main():
                 len_splits_with_semicolon)
             exit()
 
-    log.v("nation_and_article_ids[0]: ", nation_and_article_ids[0])
-    log.v("article_embeds[0]: ", article_embeds[0])
-    log.v("articles_lines[0]: ", articles_lines[0])
-    log.v("articles_lines[-1]: ", articles_lines[-1])
+    log.v("nation_article_claim_ids[0]: ", nation_article_claim_ids[0])
+    log.v("claim_embeds[0]: ", claim_embeds[0])
+    log.v("claim_lines[0]: ", claim_lines[0])
+    log.v("claim_lines[-1]: ", claim_lines[-1])
     log.v()
 
     # reduce data num (because of memory size error)
-    if reduce_data:
-        shuffle_idxs = list(range(len(nation_and_article_ids)))
-        random.seed(RANDOM_SEED)
-        random.shuffle(shuffle_idxs)
-        nation_and_article_ids = [
-            nation_and_article_ids[i] for i in shuffle_idxs[:REDUCED_NUM]]
-        article_embeds = [article_embeds[i]
-                          for i in shuffle_idxs[:REDUCED_NUM]]
-        articles_lines = [articles_lines[i]
-                          for i in shuffle_idxs[:REDUCED_NUM]]
-        log.v("nation_and_article_ids[:10]: ",
-              nation_and_article_ids[:(10 % REDUCED_NUM)])
-        log.v("article_embeds[0]: ", article_embeds[0])
-        log.v("articles_lines[0]: ", articles_lines[0])
-        log.v()
+    # if reduce_data:
+    #     shuffle_idxs = list(range(len(nation_and_article_ids)))
+    #     random.seed(RANDOM_SEED)
+    #     random.shuffle(shuffle_idxs)
+    #     nation_and_article_ids = [
+    #         nation_and_article_ids[i] for i in shuffle_idxs[:REDUCED_NUM]]
+    #     article_embeds = [article_embeds[i]
+    #                       for i in shuffle_idxs[:REDUCED_NUM]]
+    #     articles_lines = [articles_lines[i]
+    #                       for i in shuffle_idxs[:REDUCED_NUM]]
+    #     log.v("nation_and_article_ids[:10]: ",
+    #           nation_and_article_ids[:(10 % REDUCED_NUM)])
+    #     log.v("article_embeds[0]: ", article_embeds[0])
+    #     log.v("articles_lines[0]: ", articles_lines[0])
+    #     log.v()
 
     ##################################################
-    log.d("*** clustering (substitute article_embeds) ***")
+    log.d("*** clustering (substitute claim_embeds) ***")
     ##################################################
 
     # time mesurement: start
     clustering_start_time = time.time()
 
     # exe
-    # result1 = linkage(article_embeds, metric=METRIC, method=METHOD)
-    embeds_pdist = pdist(article_embeds, metric=METRIC)
-    result1 = linkage(embeds_pdist, method=METHOD)
+    embeds_pdist = pdist(claim_embeds, metric=METRIC)
+    clustering_result = linkage(embeds_pdist, method=METHOD)
+    # clustering_result = linkage(claim_embeds, metric=METRIC, method=METHOD)
 
     # print time
     clustering_time = time.time() - clustering_start_time
@@ -248,7 +263,7 @@ def main():
 
     # save embed pdist
     with open(embeds_pdist_dir, "w+", encoding="utf_8") as f:
-        embeds_pdist_2_str = [str(e) for e in embeds_pdist]
+        embeds_pdist_2_str = [str(p) for p in embeds_pdist]
         f.write("\n".join(embeds_pdist_2_str))
 
     # debug
@@ -261,7 +276,7 @@ def main():
     ##################################################
     log.d("*** print clustering result ***")
     ##################################################
-    result_df = pd.DataFrame(result1)
+    result_df = pd.DataFrame(clustering_result)
     result_df.to_csv(result_dir)
 
     if do_debug:
@@ -282,12 +297,13 @@ def main():
     best_num_of_cluster = 0
     best_cluster_by_number = []
     max_silhouette_coefficient = -100100100
-    max_num_of_cluster = REDUCED_NUM * MAX_NUM_OF_CLUSTER_RATE
-    # max_num_of_cluster = len(result_df) * MAX_NUM_OF_CLUSTER_RATE
+    # max_num_of_cluster = REDUCED_NUM * MAX_NUM_OF_CLUSTER_RATE
+    max_num_of_cluster = len(result_df) * MAX_NUM_OF_CLUSTER_RATE
     x = []
     y = []
     for num_of_cluster in range(2, len(result_df)):
-        cluster_by_number = get_cluster_by_number(result1, num_of_cluster)
+        cluster_by_number = get_cluster_by_number(
+            clustering_result, num_of_cluster)
         silhouette_coefficient = silhouette_coefficient2(
             cluster_by_number, distance_matrix)
         # if silhouette_coefficient > max_silhouette_coefficient:
@@ -326,7 +342,7 @@ def main():
 
     # exe
     best_threshold = draw_threshold_dependency(
-        result1,
+        clustering_result,
         threshold_dependencies_dir,
         best_num_of_cluster)
     log.d("best_threshold:", best_threshold)
@@ -347,17 +363,17 @@ def main():
     # exe
     dendrogram_fig = plt.figure(figsize=(14.4, 19.2))
     dendrogram(
-        result1,
+        clustering_result,
         orientation='right',
-        labels=[''] * len(nation_and_article_ids),
-        # labels=nation_and_article_ids,
+        labels=[''] * len(nation_article_claim_ids),
+        # labels=nation_article_claim_ids,
         color_threshold=0.0
     )
     # plt.title(
     #     "Article Dendrogram by Evidence Sentences",
     #     fontsize=TITLE_SIZE - 6)
     plt.xlabel("Threshold", fontsize=LABEL_TITLE_SIZE)
-    plt.ylabel("Article ID", fontsize=LABEL_TITLE_SIZE)
+    plt.ylabel("Claim Sentence ID", fontsize=LABEL_TITLE_SIZE)
     plt.grid()
     plt.tick_params(labelsize=LABEL_SIZE)
     # plt.show()
@@ -372,10 +388,10 @@ def main():
 
     color_dendrogram_fig = plt.figure(figsize=(14.4, 19.2))
     dendrogram(
-        result1,
+        clustering_result,
         orientation='right',
-        labels=[''] * len(nation_and_article_ids),
-        # labels=nation_and_article_ids,
+        labels=[''] * len(nation_article_claim_ids),
+        # labels=nation_article_claim_ids,
         color_threshold=best_threshold,
         # link_color_func=lambda x: link_cols[x]
     )
@@ -383,7 +399,7 @@ def main():
     #     "Article Dendrogram by Evidence Sentences",
     #     fontsize=TITLE_SIZE - 6)
     plt.xlabel("Threshold", fontsize=LABEL_TITLE_SIZE)
-    plt.ylabel("Article ID", fontsize=LABEL_TITLE_SIZE)
+    plt.ylabel("Claim Sentence ID", fontsize=LABEL_TITLE_SIZE)
     plt.grid()
     plt.tick_params(labelsize=LABEL_SIZE)
     # plt.show()
@@ -407,16 +423,18 @@ def main():
     ##################################################
     log.d("*** save lines in each cluster with best_cluster_by_number ***")
     ##################################################
-    clusters_articles = [''] * best_num_of_cluster
-    for article_id, cluster_id in enumerate(best_cluster_by_number):
-        clusters_articles[cluster_id] += articles_lines[article_id]
+    # [["(claim line 1 of cluster 1 including \n)(claim line 2 of cluster 1 including \n)..."], ...]
+    clusters_claims = [''] * best_num_of_cluster
+    for claim_idx, cluster_id in enumerate(best_cluster_by_number):
+        claim_line = claim_lines[claim_idx]
+        clusters_claims[cluster_id] += claim_line
 
     # write
     for _, cluster_id in enumerate(best_cluster_by_number):
         dest_dir_each_cluster_id = re.sub(
             "\\.txt", "_" + str(cluster_id) + ".txt", dest_dir)
         with open(dest_dir_each_cluster_id, "w+", encoding="utf_8") as f:
-            f.write(clusters_articles[cluster_id])
+            f.write(clusters_claims[cluster_id])
 
     ##################################################
     log.d("*** save time logs ***")
