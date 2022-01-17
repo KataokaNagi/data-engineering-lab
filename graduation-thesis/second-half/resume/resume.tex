@@ -171,6 +171,7 @@ Yangらの研究と同様に話題がCOVID-19に限定されてしまってい�
 出来事と主張の文の分類には，RoBERTaを\textcolor{red}{転移学習}した分類器を用いる．
 RoBERTaは文意や文脈を加味した自然言語処理が可能な機械学習モデルで，GLUE，SQuAD，RACEといったベンチマークで2019年の最先端のスコアを有している\cite{liu_roberta_2019}．
 ニュース記事を含む約160GBの文章データで事前に学習されたRoBERTa BASEモデルを利用し，これが\textcolor{red}{出来事と主張の}分類\textcolor{red}{■}に\textcolor{red}{適用できる}よう，\textcolor{red}{出来事か主張か}でラベル付けした\textcolor{red}{文}で追加\textcolor{red}{の}学習を行った．
+% 学習の活性化関数には？？？を，損失関数には交差エントロピーを用いた．
 % で，Dense層を加えたモデルのエンコード部分を用いることで分類タスクに応用できる．
 % 入力部分にDense層を付加
 
@@ -179,11 +180,14 @@ RoBERTaは文意や文脈を加味した自然言語処理が可能な機械学�
 \textcolor{red}{4692組の}Evidenceは「トピックの文脈の中でClaimを直接サポートする文章」
 と定義されており，本研究では主張とClaim，出来事とEvidenceを同じ定義で扱う．
 表\ref{claim_evidence_example}にClaimとEvidenceの例を示す．
+\textcolor{red}{
+  データの数が不均衡であるため，Evidenceの学習の重みに$\frac{2294}{4692}$を乗算し，Evidenceを学習しにくくした．
+  学習の損失関数には交差エントロピーを使用した．
+}
 
-\begin{table}[h]
+\begin{table}[H]
   \caption{IBM Debater$^{\textregistered}$ - Claims and Evidencでラベル付けされたClaimの文(C)とEvidenceの文(E)の例}
   \centering
-  % \begin{tabular}{cp{6cm}}
   \begin{tabular}{llp{6cm}}
     \hline
     C & global carbon emissions are caused by de-
@@ -241,28 +245,80 @@ Sentence-BERTは文章を文意を加味した数\textcolor{red}{■}ベクト�
 その後一般的で無数の出来事と対応する主張の文をクラスタリングした．
 }
 
-/**
-
-ここから未添削
-
-**/
-
-/**
-
-「根拠」のタイトル回収ができなていない
-
-（出来事にすればよかった）
-
-（出来事と主張の順にすればよかった）
-
-（論文タイトルは変更できますか？）
-
-**/
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Section 評価実験
+%% Section 実験
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{評価実験}
+\textcolor{red}{\section{実験}}
+
+\subsection{出来事の文と主張の文の分類器の調整と評価}
+
+分類器の学習では，IBM Debater$^{\textregistered}$ - Claims and Evidenceの8割を訓練用，2割をテスト用に分割して評価を行った．
+学習は全データを40文ごと
+% GPUが許す限り大きくした
+% RoBERTaの論文にバッチサイズは大きいほど良いとの記載
+% 一般の学習ではバッチサイズが大きすぎると収束しにくい
+% イテレーション数 128回
+% バッチサイズはそれぞれ40文, 10文
+に分割して行い，評価は全データの学習回数（エポック数）ごとに行った．
+また，COVID-19 News Articlesでの分類精度を確認するため，
+% IBM Debater$^{\textregistered}$ - Claims and Evidenceのラベル付けの傾向を
+COVID-19 News Articlesのそれぞれの国から3つの記事の文章を抽出し，手動で主張の文と出来事の文にラベル付けし，分類器で付与したラベルとの比較評価を行った．
+
+評価指標には，
+正しく主張の文と判断した数（TP），
+正しく出来事の文と判断した数（TN），
+誤って主張の文と判断した数（FP），
+誤って出来事の文と判断した数（FN）
+を基に計算した適合率，再現率，マシューズ相関係数（MCC）を用いた．
+適合率は主張だと判断した文のうち正しく判断できた文の割合，
+再現率は主張の文のうち正しく判断できた主張の文の割合を示す．
+MCCは分類器の精度を総合的に評価する指標で，TP，TN，FP，FNが不均衡なときにも頑健に評価できる．
+どの指標も1に近いことが望ましい．
+
+表\ref{classification_evaluation}に評価結果を示す．
+損失関数の出力が単調増加していたため，エポック数が大きいと訓練データ以外のデータ
+% COVID-19 News Articlesを始めとした一般的なデータ
+で分類精度が悪くなると判断し，少ないエポック数で評価を比較した．
+% 省略可能
+
+% \cite{chicco_advantages_2020}
+
+\begin{table}[H]
+  \caption{
+    % 使用データとエポック数ごとの
+    分類器の評価
+    （IBM：IBM Debater$^{\textregistered}$ - Claims and Evidence，News：COVID-19 News Articles）
+    }
+  \centering
+  {\tabcolsep=0.15cm
+    \begin{tabular}{cccccp{6cm}}
+    \hline
+    データ & 評価指標 & $2$ epochs & $\mathbf{3}$ \textbf{epochs} & $4$ epochs
+    \\
+    \hline
+    IBM & Loss & $\mathbf{0.21}$ & $0.24$ & $0.30$
+    \\
+    IBM & MCC & $0.82$ & $\mathbf{0.83}$ & $0.82$
+    \\
+    News & TP & $4$ & $\mathbf{6}$ & $5$
+    \\
+    News & TN & $\mathbf{148}$ & $\mathbf{148}$ & $147$
+    \\
+    News & FP & $\mathbf{0}$ & $\mathbf{0}$ & $1$
+    \\
+    News & FN & $11$ & $\mathbf{9}$ & $10$
+    \\
+    News & 適合率 & $\mathbf{1.00}$ & $\mathbf{1.00}$ & $0.83$
+    \\
+    News & 再現率 & $0.27$ & $\mathbf{0.40}$ & $0.33$
+    \\
+    News & MCC & $0.50$ & $\mathbf{0.61}$ & $0.50$
+    \\
+    \hline
+    \end{tabular}
+  }
+  \label{classification_evaluation}
+\end{table}
 
 /**
 
@@ -291,7 +347,7 @@ Sentence-BERTは文章を文意を加味した数\textcolor{red}{■}ベクト�
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Section 考察
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{考察}
+\textcolor{red}{\section{考察}}
 
 /**
 
@@ -331,6 +387,11 @@ T5の利用の検討
 
 **/
 
+/**
+
+参考文献は半分程度に減らす予定
+
+**/
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Section 研究状況
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
