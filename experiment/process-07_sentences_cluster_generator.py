@@ -46,14 +46,18 @@ METHOD = "ward"
 
 TITLE_SIZE = 48
 LABEL_TITLE_SIZE = 36
-LABEL_SIZE = 28
+# LABEL_SIZE = 28
+LABEL_SIZE = 14
 
 REDUCED_NUM = 959
 RANDOM_SEED = 2021
 
 MAX_NUM_OF_CLUSTER_RATE = 19.0 / 20.0
 
-ARTICLES_CLUSTER_ID = 0
+# DRAW_IDS = False
+DRAW_IDS = True
+
+ARTICLES_CLUSTER_ID = 23
 ARTICLES_DIR = "./covid-19-news-articles/process-06_articles-cluster/" +\
     "process-06_articles-cluster_" + \
     "with-maximal-silhoette_" + \
@@ -188,7 +192,7 @@ def main():
     claim_embeds = []  # [[2.50864863e-01, 9.60696563e-02, ...], ...]
     NATION_ID_IDX = 0
     ARTICLE_ID_IDX = 1
-    CLAIM_SENTENCE_ID_IDX = 1
+    CLAIM_SENTENCE_ID_IDX = 2
     EMBED_IDX = 6
 
     # nation-n;article-n;[e-embedding]
@@ -206,10 +210,10 @@ def main():
         elif len_splits_with_semicolon == 8:
             # extract nation_article_claim_ids
             nation_id = str(splits_with_semicolon[NATION_ID_IDX])
-            claim_idx = str(splits_with_semicolon[ARTICLE_ID_IDX])
+            article_idx = str(splits_with_semicolon[ARTICLE_ID_IDX])
             claim_idx = str(
                 splits_with_semicolon[CLAIM_SENTENCE_ID_IDX])
-            ids = ';'.join([nation_id, claim_idx, claim_idx])
+            ids = ';'.join([nation_id, article_idx, claim_idx])
             nation_article_claim_ids.append(ids)
 
             # extract lines by each claim sentences
@@ -290,7 +294,7 @@ def main():
     log.v("result_df[0][0] (1st node      ) :", result_df[0][0])
     log.v("result_df[1][0] (2nd node      ) :", result_df[1][0])
     log.v("result_df[2][0] (nodes distance) :", result_df[2][0])
-    log.v("result_df[3][0] (cluster_id    ) :", result_df[3][0])
+    log.v("result_df[3][0] (cluster size  ) :", result_df[3][0])
 
     ##################################################
     log.d("*** draw num of clusters dependency on silhouette coefficient ***")
@@ -366,13 +370,15 @@ def main():
     # time mesurement: start
     drawing_dendrogram_start_time = time.time()
 
+    id_labels = nation_article_claim_ids if DRAW_IDS else [
+        ''] * len(nation_article_claim_ids)
+
     # exe
     dendrogram_fig = plt.figure(figsize=(14.4, 19.2))
     dendrogram(
         clustering_result,
         orientation='right',
-        labels=[''] * len(nation_article_claim_ids),
-        # labels=nation_article_claim_ids,
+        labels=id_labels,
         color_threshold=0.0
     )
     # plt.title(
@@ -396,8 +402,7 @@ def main():
     dendrogram(
         clustering_result,
         orientation='right',
-        labels=[''] * len(nation_article_claim_ids),
-        # labels=nation_article_claim_ids,
+        labels=id_labels,
         color_threshold=best_threshold,
         # link_color_func=lambda x: link_cols[x]
     )
@@ -421,7 +426,7 @@ def main():
     num_of_cluster_fig = plt.figure(figsize=(19.2, 14.4))
     plt.hist(best_cluster_by_number)
     plt.xlabel("Cluster ID", fontsize=LABEL_TITLE_SIZE)
-    plt.ylabel("Num of Article", fontsize=LABEL_TITLE_SIZE)
+    plt.ylabel("Num of Claim Sentences", fontsize=LABEL_TITLE_SIZE)
     plt.tick_params(labelsize=LABEL_SIZE)
     plt.grid()
     num_of_cluster_fig.savefig(num_of_cluster_dir)
