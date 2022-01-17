@@ -49,7 +49,10 @@ LABEL_TITLE_SIZE = 36
 # LABEL_SIZE = 28
 LABEL_SIZE = 14
 
-REDUCED_NUM = 959
+# REDUCED_NUM = 959
+REDUCED_NUM = 5000
+# REDUCED_NUM = 10000
+
 RANDOM_SEED = 2021
 
 MAX_NUM_OF_CLUSTER_RATE = 19.0 / 20.0
@@ -57,7 +60,9 @@ MAX_NUM_OF_CLUSTER_RATE = 19.0 / 20.0
 # DRAW_IDS = False
 DRAW_IDS = True
 
-ARTICLES_CLUSTER_ID = 23
+# ARTICLES_CLUSTER_ID = 23
+ARTICLES_CLUSTER_ID = 151
+# ARTICLES_CLUSTER_ID =
 ARTICLES_DIR = "./covid-19-news-articles/process-06_articles-cluster/" +\
     "process-06_articles-cluster_" + \
     "with-maximal-silhoette_" + \
@@ -278,6 +283,8 @@ def main():
 
     # debug
     embeds_square_form = squareform(embeds_pdist)
+    log.v("clustering_result[0]:", clustering_result[0])
+    log.v("len(clustering_result):", len(clustering_result))
     log.v("embeds_pdist[0]:", embeds_pdist[0])
     log.v("embeds_square_form[0]:", embeds_square_form[0])
     log.v("embeds_square_form[1]:", embeds_square_form[1])
@@ -306,9 +313,10 @@ def main():
     distance_matrix = get_distance_matrix(result_df)
     best_num_of_cluster = 0
     best_cluster_by_number = []
-    max_silhouette_coefficient = -100100100
+    best_silhouette_coefficient = -100100100
     # max_num_of_cluster = REDUCED_NUM * MAX_NUM_OF_CLUSTER_RATE
-    max_num_of_cluster = len(result_df) * MAX_NUM_OF_CLUSTER_RATE
+    max_num_of_cluster = len(nation_article_claim_ids) * \
+        MAX_NUM_OF_CLUSTER_RATE
     x = []
     y = []
     for num_of_cluster in range(2, len(result_df)):
@@ -317,10 +325,10 @@ def main():
         silhouette_coefficient = silhouette_coefficient2(
             cluster_by_number, distance_matrix)
         # if silhouette_coefficient > max_silhouette_coefficient:
-        if silhouette_coefficient > max_silhouette_coefficient and num_of_cluster <= max_num_of_cluster:
+        if silhouette_coefficient > best_silhouette_coefficient and num_of_cluster <= max_num_of_cluster:
             best_num_of_cluster = num_of_cluster
             best_cluster_by_number = cluster_by_number
-            max_silhouette_coefficient = silhouette_coefficient
+            best_silhouette_coefficient = silhouette_coefficient
         x.append(num_of_cluster)
         y.append(silhouette_coefficient)
 
@@ -339,8 +347,10 @@ def main():
     log.d("drawing num and silhouette time (sec):",
           drawing_num_and_silhouette_time)
 
+    log.d("len(nation_article_claim_ids): ", len(nation_article_claim_ids))
+    log.d("max_num_of_cluster: ", max_num_of_cluster)
     log.d("best_num_of_cluster: ", best_num_of_cluster)
-    log.d("max_silhouette_coefficient: ", max_silhouette_coefficient)
+    log.d("max_silhouette_coefficient: ", best_silhouette_coefficient)
     log.v("best_cluster_by_number: ", best_cluster_by_number)
     log.v()
 
@@ -476,25 +486,25 @@ def draw_threshold_dependency(
         result,
         threshold_dependencies_dir,
         best_num_of_cluster):
-    n_clusters = len(result)
+    n_clusters = len(result) + 1
     n_samples = len(result)
-    df1 = pd.DataFrame(result)
+    # df1 = pd.DataFrame(result)
     x1 = []
     y1 = []
     x2 = []
     y2 = []
     best_threshold = 0.0
-    for i in range(len(result) - 1):
-        n1 = int(result[i][0])
-        n2 = int(result[i][1])
+    for i in range(len(result)):
+        # n1 = int(result[i][0])
+        # n2 = int(result[i][1])
         val = result[i][2]
-        n_clusters -= 1
+        if n_clusters == best_num_of_cluster:
+            best_threshold = val
         x1.append(val)
         x2.append(val)
         y1.append(n_clusters)
         y2.append(float(n_samples) / float(n_clusters))
-        if n_clusters == best_num_of_cluster:
-            best_threshold = val
+        n_clusters -= 1
 
     dependencies_fig = plt.figure(figsize=(19.2, 14.4))
     plt.subplot(2, 1, 1)
