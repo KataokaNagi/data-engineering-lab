@@ -66,26 +66,26 @@ log.v("MAX_NUM_OF_CLUSTER_RATE:", MAX_NUM_OF_CLUSTER_RATE)
 
 def main():
     articles_dir = "./covid-19-news-articles/process-05_calced-sentences-features.txt"
-
     base_dir = "./covid-19-news-articles/process-06_articles-cluster/"
-    embeds_pdist_dir = base_dir + \
-        "process-06_articles-cluster_embeds-pdist_with_maximal_silhoette.txt"
-    dest_dir = base_dir + \
-        "process-06_articles-cluster/process-06_articles-cluster_with_maximal_silhoette.txt"
-    dendrogram_dir = base_dir + \
-        "process-06_articles-cluster_dendrogram_with_maximal_silhoette.png"
-    color_dendrogram_dir = base_dir + \
-        "process-06_articles-cluster_color_dendrogram_with_maximal_silhoette.png"
-    result_dir = base_dir + \
-        "process-06_articles-cluster_result_with_maximal_silhoette.csv"
-    threshold_dependencies_dir = base_dir + \
-        "process-06_articles-cluster_threshold-dependencies_with_maximal_silhoette.png"
-    num_of_cluster_dir = base_dir + \
-        "process-06_articles-cluster_num_of_cluster_with_maximal_silhoette.png"
-    silhouette_coefficient_dir = base_dir + \
-        "process-06_articles-cluster_num-of-clusters-dependency-on-silhouette-coefficient_with_maximal_silhoette.png"
 
-    exe_time_dir = "./covid-19-news-articles/archive/exe-time/exe-time_process_06_articles_cluster_generator_with_maximal_silhoette.txt"
+    embeds_pdist_dir = base_dir + \
+        "process-06_articles-cluster_embeds-pdist_with-maximal-silhoette.txt"
+    dest_dir = base_dir + "process-06_articles-cluster_with-maximal-silhoette_reduced-data-to-" + \
+        str(REDUCED_NUM) + "/" + "process-06_articles-cluster_with-maximal-silhoette.txt"
+    dendrogram_dir = base_dir + \
+        "process-06_articles-cluster_dendrogram_with-maximal-silhoette.png"
+    color_dendrogram_dir = base_dir + \
+        "process-06_articles-cluster_color_dendrogram_with-maximal-silhoette.png"
+    result_dir = base_dir + \
+        "process-06_articles-cluster_result_with-maximal-silhoette.csv"
+    threshold_dependencies_dir = base_dir + \
+        "process-06_articles-cluster_threshold-dependencies_with-maximal-silhoette.png"
+    num_of_cluster_dir = base_dir + \
+        "process-06_articles-cluster_num_of_cluster_with-maximal-silhoette.png"
+    silhouette_coefficient_dir = base_dir + \
+        "process-06_articles-cluster_num-of-clusters-dependency-on-silhouette-coefficient_with-maximal-silhoette.png"
+
+    exe_time_dir = "./covid-19-news-articles/archive/exe-time/exe-time_process_06_articles_cluster_generator_with-maximal-silhoette.txt"
 
     log.v(articles_dir)
     log.v(embeds_pdist_dir)
