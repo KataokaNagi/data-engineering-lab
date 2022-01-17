@@ -46,8 +46,8 @@ METHOD = "ward"
 
 TITLE_SIZE = 48
 LABEL_TITLE_SIZE = 36
-# LABEL_SIZE = 28
-LABEL_SIZE = 14
+LABEL_SIZE = 28
+# LABEL_SIZE = 14
 
 # REDUCED_NUM = 959
 REDUCED_NUM = 5000
@@ -61,7 +61,8 @@ MAX_NUM_OF_CLUSTER_RATE = 19.0 / 20.0
 DRAW_IDS = True
 
 # ARTICLES_CLUSTER_ID = 23
-ARTICLES_CLUSTER_ID = 151
+# ARTICLES_CLUSTER_ID = 151
+ARTICLES_CLUSTER_ID = 988
 # ARTICLES_CLUSTER_ID =
 ARTICLES_DIR = "./covid-19-news-articles/process-06_articles-cluster/" +\
     "process-06_articles-cluster_" + \
@@ -397,7 +398,7 @@ def main():
     plt.xlabel("Threshold", fontsize=LABEL_TITLE_SIZE)
     plt.ylabel("Claim Sentence ID", fontsize=LABEL_TITLE_SIZE)
     plt.grid()
-    plt.tick_params(labelsize=LABEL_SIZE)
+    plt.tick_params(labelsize=LABEL_SIZE/2)
     # plt.show()
     dendrogram_fig.savefig(dendrogram_dir)
 
@@ -422,7 +423,7 @@ def main():
     plt.xlabel("Threshold", fontsize=LABEL_TITLE_SIZE)
     plt.ylabel("Claim Sentence ID", fontsize=LABEL_TITLE_SIZE)
     plt.grid()
-    plt.tick_params(labelsize=LABEL_SIZE)
+    plt.tick_params(labelsize=LABEL_SIZE/2)
     # plt.show()
     color_dendrogram_fig.savefig(color_dendrogram_dir)
 
