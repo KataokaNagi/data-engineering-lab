@@ -48,15 +48,20 @@ TITLE_SIZE = 48
 LABEL_TITLE_SIZE = 36
 LABEL_SIZE = 28
 
-REDUCED_NUM = 10000
+REDUCED_NUM = 959
 RANDOM_SEED = 2021
 
 MAX_NUM_OF_CLUSTER_RATE = 19.0 / 20.0
 
 ARTICLES_CLUSTER_ID = 0
 ARTICLES_DIR = "./covid-19-news-articles/process-06_articles-cluster/" +\
-    "process-06_articles-cluster_reduced-data-to-5000/" + \
-    "process-06_articles-cluster_reduced-data-to-5000_" + str(ARTICLES_CLUSTER_ID) + ".txt"
+    "process-06_articles-cluster_" + \
+    "with-maximal-silhoette_" + \
+    "reduced-data-to-" + str(REDUCED_NUM) + '/' + \
+    "process-06_articles-cluster_" + \
+    "with-maximal-silhoette_" + \
+    "reduced-data-to-" + str(REDUCED_NUM) + "_" + \
+    str(ARTICLES_CLUSTER_ID) + ".txt"
 
 log.d("METRIC:", METRIC)
 log.d("METHOD:", METHOD)
@@ -70,23 +75,25 @@ log.v("MAX_NUM_OF_CLUSTER_RATE:", MAX_NUM_OF_CLUSTER_RATE)
 
 def main():
     articles_dir = ARTICLES_DIR
+    base_dir = "./covid-19-news-articles/process-07_sentences-cluster/"
 
-    basis_dir = "./covid-19-news-articles/process-07_sentences-cluster/"
-    embeds_pdist_dir = basis_dir + \
+    embeds_pdist_dir = base_dir + \
         "process-07_sentences-cluster_embeds-pdist.txt"
-    dest_dir = basis_dir + \
-        "process-07_sentences-cluster/process-07_sentences-cluster.txt"
-    dendrogram_dir = basis_dir + \
+    dest_dir = base_dir + \
+        "process-07_sentences-cluster_reduced-data-to-" + \
+        str(REDUCED_NUM) + '/' + \
+        "process-07_sentences-cluster.txt"
+    dendrogram_dir = base_dir + \
         "process-07_sentences-cluster_dendrogram.png"
-    color_dendrogram_dir = basis_dir + \
+    color_dendrogram_dir = base_dir + \
         "process-07_sentences-cluster_color_dendrogram.png"
-    result_dir = basis_dir + \
+    result_dir = base_dir + \
         "process-07_sentences-cluster_result.csv"
-    threshold_dependencies_dir = basis_dir + \
+    threshold_dependencies_dir = base_dir + \
         "process-07_sentences-cluster_threshold-dependencies.png"
-    num_of_cluster_dir = basis_dir + \
+    num_of_cluster_dir = base_dir + \
         "process-07_sentences-cluster_num_of_cluster.png"
-    silhouette_coefficient_dir = basis_dir + \
+    silhouette_coefficient_dir = base_dir + \
         "process-07_sentences-cluster_num-of-clusters-dependency-on-silhouette-coefficient.png"
     exe_time_dir = "./covid-19-news-articles/archive/exe-time/exe-time_process-07_sentences_cluster_generator.txt"
 
@@ -117,8 +124,8 @@ def main():
     do_debug = arg.debug
     reduce_data = arg.reduce
 
-    log.v(do_debug)
-    log.v(reduce_data)
+    log.v("do_debug:", do_debug)
+    log.v("reduce_data:", reduce_data)
 
     if reduce_data:
         log.d("*** edit DEST_DIRS according to --reduce ***")
