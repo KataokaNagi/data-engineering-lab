@@ -49,24 +49,27 @@ LABEL_TITLE_SIZE = 36
 LABEL_SIZE = 28
 # LABEL_SIZE = 14
 
-# REDUCED_NUM = 959
-REDUCED_NUM = 5000
+REDUCED_NUM = 959
+# REDUCED_NUM = 5000
 # REDUCED_NUM = 10000
 
 RANDOM_SEED = 2021
 
-MAX_NUM_OF_CLUSTER_RATE = 19.0 / 20.0
+MAX_NUM_OF_CLUSTER_RATE = 0.95
 
 # DRAW_IDS = False
 DRAW_IDS = True
 
-# ARTICLES_CLUSTER_ID = 23
-# ARTICLES_CLUSTER_ID = 151
-ARTICLES_CLUSTER_ID = 988
-# ARTICLES_CLUSTER_ID = 703
-# ARTICLES_CLUSTER_ID = 866
-# ARTICLES_CLUSTER_ID = 1480
-# ARTICLES_CLUSTER_ID =
+# ** REDUCED_NUM = 959 **
+# ARTICLES_CLUSTER_ID = 741
+# ARTICLES_CLUSTER_ID = 718
+ARTICLES_CLUSTER_ID = 100
+
+# ** REDUCED_NUM = 5000 **
+
+# ** REDUCED_NUM = 10000 **
+
+
 ARTICLES_DIR = "./covid-19-news-articles/process-06_articles-cluster/" +\
     "process-06_articles-cluster_" + \
     "with-maximal-silhoette_" + \
@@ -84,6 +87,7 @@ log.v("LABEL_SIZE:", LABEL_SIZE)
 log.d("REDUCED_NUM:", REDUCED_NUM)
 log.d("RANDOM_SEED:", RANDOM_SEED)
 log.v("MAX_NUM_OF_CLUSTER_RATE:", MAX_NUM_OF_CLUSTER_RATE)
+log.v("ARTICLES_CLUSTER_ID:", ARTICLES_CLUSTER_ID)
 
 
 def main():
@@ -612,8 +616,10 @@ def silhouette_coefficient2(clusters, distance_matrix):
         log.v("clusters[0]:", clusters[0])
         log.v("distance_matrix[0]:", distance_matrix[0])
 
-    a_same = []
-    b_diff = []
+    num_clusters = max(clusters) + 1
+    same_clusters_dists = [[] for _ in range(num_clusters)]
+    diff_clusters_dists = [[[] for two in range(num_clusters)]
+                           for one in range(num_clusters)]
 
     for sentence_id_1, cluster_id_1 in enumerate(clusters):
         for sentence_id_2, cluster_id_2 in enumerate(clusters):
@@ -625,17 +631,55 @@ def silhouette_coefficient2(clusters, distance_matrix):
                 # mat
                 dist = distance_matrix[sentence_id_1][sentence_id_2]
                 if cluster_id_1 == cluster_id_2:  # same cluster
-                    a_same.append(dist)
+                    same_clusters_dists[cluster_id_1].append(dist)
                 else:  # different cluster
-                    b_diff.append(dist)
+                    diff_clusters_dists[cluster_id_1][cluster_id_2].append(
+                        dist)
 
-    # calc a & b
-    a = sum(a_same) / len(a_same)
-    # b = sum(b_diff) / len(b_diff)
-    b = min(b_diff)
+    # log.v("same_clusters_dists", same_clusters_dists)
+    # log.v("diff_clusters_dists", diff_clusters_dists)
+
+    silhouette_coefficients = []
+
+    # calc silhouette_coefficient about each clusters
+    for cluster_id_1 in range(num_clusters):
+        a = 0
+        b = 0
+
+        if same_clusters_dists[cluster_id_1] == []:
+            # num of cluster member = 1
+            pass
+        else:
+            a = sum(same_clusters_dists[cluster_id_1]) / \
+                len(same_clusters_dists[cluster_id_1])
+
+        aves_diffs_clusters_dists = []
+        for cluster_id_2 in range(num_clusters):
+            if cluster_id_1 == cluster_id_2:
+                continue
+
+            current_diffs_clusters_dists = diff_clusters_dists[cluster_id_1][cluster_id_2]
+            current_diffs_clusters_dists += diff_clusters_dists[cluster_id_2][cluster_id_1]
+
+            current_ave = 0
+            if current_diffs_clusters_dists == []:
+                # num of cluster = 1
+                pass
+            else:
+                current_ave = sum(current_diffs_clusters_dists) / \
+                    len(current_diffs_clusters_dists)
+            aves_diffs_clusters_dists.append(current_ave)
+
+        b = min(aves_diffs_clusters_dists)
+
+        # log.v("a", a)
+        # log.v("b", b)
+        # log.v("aves_diffs_clusters_dists:", aves_diffs_clusters_dists)
+
+        silhouette_coefficients.append((b - a) / max(b, a))
 
     # calc silhouette coefficient
-    return (b - a) / max(b, a)
+    return sum(silhouette_coefficients) / len(silhouette_coefficients)
 
 
 if __name__ == "__main__":
