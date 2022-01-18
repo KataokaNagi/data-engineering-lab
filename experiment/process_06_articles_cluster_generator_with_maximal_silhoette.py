@@ -290,7 +290,8 @@ def main():
     # time mesurement: start
     drawing_num_and_silhouette_start_time = time.time()
 
-    distance_matrix = get_distance_matrix(result_df)
+    # distance_matrix = get_distance_matrix(result_df)
+    distance_matrix = embeds_square_form
     best_num_of_cluster = 0
     best_cluster_by_number = []
     max_silhouette_coefficient = -100100100
@@ -549,19 +550,19 @@ def get_cluster_by_number(result, number):
     return output_cluster_ids
 
 
-def get_distance_matrix(df):
-    distance_matrix = []
-    for i in range(len(df)):
-        vec1 = df.iloc[i, :].values
-        distance_array = []
-        for j in range(len(df)):
-            vec2 = df.iloc[j, :].values
-            dist = 0.
-            for v1, v2 in zip(vec1, vec2):
-                dist += (v1 - v2) ** 2
-            distance_array.append(math.sqrt(dist))
-        distance_matrix.append(distance_array)
-    return distance_matrix
+# def get_distance_matrix(df):
+#     distance_matrix = []
+#     for i in range(len(df)):
+#         vec1 = df.iloc[i, :].values
+#         distance_array = []
+#         for j in range(len(df)):
+#             vec2 = df.iloc[j, :].values
+#             dist = 0.
+#             for v1, v2 in zip(vec1, vec2):
+#                 dist += (v1 - v2) ** 2
+#             distance_array.append(math.sqrt(dist))
+#         distance_matrix.append(distance_array)
+#     return distance_matrix
 
 
 def silhouette_coefficient2(clusters, distance_matrix):
@@ -579,8 +580,6 @@ def silhouette_coefficient2(clusters, distance_matrix):
         for k, l in enumerate(clusters):
             if i < k:
                 # log.v("i, k:", i, k)
-                if k == len(distance_matrix):
-                    continue  # kataoka edit
                 dist = distance_matrix[i][k]
                 if j == l:  # same cluster
                     a_same.append(dist)
