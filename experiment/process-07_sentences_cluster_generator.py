@@ -62,7 +62,10 @@ DRAW_IDS = True
 
 # ARTICLES_CLUSTER_ID = 23
 # ARTICLES_CLUSTER_ID = 151
-ARTICLES_CLUSTER_ID = 988
+# ARTICLES_CLUSTER_ID = 988
+# ARTICLES_CLUSTER_ID = 703
+# ARTICLES_CLUSTER_ID = 866
+ARTICLES_CLUSTER_ID = 1480
 # ARTICLES_CLUSTER_ID =
 ARTICLES_DIR = "./covid-19-news-articles/process-06_articles-cluster/" +\
     "process-06_articles-cluster_" + \
@@ -398,7 +401,7 @@ def main():
     plt.xlabel("Threshold", fontsize=LABEL_TITLE_SIZE)
     plt.ylabel("Claim Sentence ID", fontsize=LABEL_TITLE_SIZE)
     plt.grid()
-    plt.tick_params(labelsize=LABEL_SIZE/2)
+    plt.tick_params(labelsize=LABEL_SIZE / 2)
     # plt.show()
     dendrogram_fig.savefig(dendrogram_dir)
 
@@ -423,7 +426,7 @@ def main():
     plt.xlabel("Threshold", fontsize=LABEL_TITLE_SIZE)
     plt.ylabel("Claim Sentence ID", fontsize=LABEL_TITLE_SIZE)
     plt.grid()
-    plt.tick_params(labelsize=LABEL_SIZE/2)
+    plt.tick_params(labelsize=LABEL_SIZE / 2)
     # plt.show()
     color_dendrogram_fig.savefig(color_dendrogram_dir)
 
@@ -616,7 +619,8 @@ def silhouette_coefficient2(clusters, distance_matrix):
                 else:  # different cluster
                     b_diff.append(dist)
     a = sum(a_same) / len(a_same)
-    b = sum(b_diff) / len(b_diff)
+    # b = sum(b_diff) / len(b_diff)
+    b = min(b_diff)
     return (b - a) / max(b, a)
 
 
