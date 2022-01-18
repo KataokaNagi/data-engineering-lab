@@ -492,7 +492,7 @@ def draw_threshold_dependency(
         threshold_dependencies_dir,
         best_num_of_cluster):
     n_clusters = len(result) + 1
-    n_samples = len(result)
+    n_samples = len(result) + 1
     # df1 = pd.DataFrame(result)
     x1 = []
     y1 = []
