@@ -49,10 +49,11 @@ TITLE_SIZE = 48
 LABEL_TITLE_SIZE = 36
 LABEL_SIZE = 28
 
-REDUCED_NUM = 5000
+REDUCED_NUM = 959
 RANDOM_SEED = 2021
 
-MAX_NUM_OF_CLUSTER_RATE = 19.0 / 20.0
+# MAX_NUM_OF_CLUSTER_RATE = 19.0 / 20.0
+MAX_NUM_OF_CLUSTER_RATE = 1.0 / 2.0
 
 log.d("METRIC:", METRIC)
 log.d("METHOD:", METHOD)
@@ -324,6 +325,8 @@ def main():
     log.d("drawing num and silhouette time (sec):",
           drawing_num_and_silhouette_time)
 
+    log.d("len(nation_and_article_ids): ", len(nation_and_article_ids))
+    log.d("max_num_of_cluster: ", max_num_of_cluster)
     log.d("best_num_of_cluster: ", best_num_of_cluster)
     log.d("max_silhouette_coefficient: ", max_silhouette_coefficient)
     log.v("best_cluster_by_number: ", best_cluster_by_number)
@@ -458,25 +461,22 @@ def draw_threshold_dependency(
         result,
         threshold_dependencies_dir,
         best_num_of_cluster):
-    n_clusters = len(result)
-    n_samples = len(result)
-    df1 = pd.DataFrame(result)
+    n_clusters = len(result) + 1
+    n_samples = len(result) + 1
     x1 = []
     y1 = []
     x2 = []
     y2 = []
     best_threshold = 0.0
-    for i in range(len(result) - 1):
-        n1 = int(result[i][0])
-        n2 = int(result[i][1])
+    for i in range(len(result)):
         val = result[i][2]
-        n_clusters -= 1
         x1.append(val)
         x2.append(val)
         y1.append(n_clusters)
         y2.append(float(n_samples) / float(n_clusters))
         if n_clusters == best_num_of_cluster:
             best_threshold = val
+        n_clusters -= 1
 
     dependencies_fig = plt.figure(figsize=(19.2, 14.4))
     plt.subplot(2, 1, 1)
