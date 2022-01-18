@@ -587,7 +587,8 @@ def silhouette_coefficient2(clusters, distance_matrix):
                 else:  # different cluster
                     b_diff.append(dist)
     a = sum(a_same) / len(a_same)
-    b = sum(b_diff) / len(b_diff)
+    # b = sum(b_diff) / len(b_diff)
+    b = min(b_diff)
     return (b - a) / max(b, a)
 
 
