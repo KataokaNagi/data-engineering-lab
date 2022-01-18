@@ -62,10 +62,10 @@ DRAW_IDS = True
 
 # ARTICLES_CLUSTER_ID = 23
 # ARTICLES_CLUSTER_ID = 151
-# ARTICLES_CLUSTER_ID = 988
+ARTICLES_CLUSTER_ID = 988
 # ARTICLES_CLUSTER_ID = 703
 # ARTICLES_CLUSTER_ID = 866
-ARTICLES_CLUSTER_ID = 1480
+# ARTICLES_CLUSTER_ID = 1480
 # ARTICLES_CLUSTER_ID =
 ARTICLES_DIR = "./covid-19-news-articles/process-06_articles-cluster/" +\
     "process-06_articles-cluster_" + \
@@ -314,7 +314,8 @@ def main():
     # time mesurement: start
     drawing_num_and_silhouette_start_time = time.time()
 
-    distance_matrix = get_distance_matrix(result_df)
+    # distance_matrix = get_distance_matrix(result_df)
+    distance_matrix = embeds_square_form
     best_num_of_cluster = 0
     best_cluster_by_number = []
     best_silhouette_coefficient = -100100100
@@ -498,18 +499,21 @@ def draw_threshold_dependency(
     x2 = []
     y2 = []
     best_threshold = 0.0
+
+    # get distances of each connection from result
     for i in range(len(result)):
         # n1 = int(result[i][0])
         # n2 = int(result[i][1])
-        val = result[i][2]
+        distasnce = result[i][2]
         if n_clusters == best_num_of_cluster:
-            best_threshold = val
-        x1.append(val)
-        x2.append(val)
+            best_threshold = distasnce
+        x1.append(distasnce)  # threshold
+        x2.append(distasnce)  # threshold
         y1.append(n_clusters)
         y2.append(float(n_samples) / float(n_clusters))
         n_clusters -= 1
 
+    # draw
     dependencies_fig = plt.figure(figsize=(19.2, 14.4))
     plt.subplot(2, 1, 1)
     plt.plot(x1, y1, 'yo-')
@@ -527,52 +531,51 @@ def draw_threshold_dependency(
     plt.tick_params(labelsize=LABEL_SIZE)
     # plt.show()
     dependencies_fig.savefig(threshold_dependencies_dir)
+
+    # for finding best clustering
     return best_threshold
 
 
-# 指定したクラスタ数でクラスタを得る関数を作る。
-def get_cluster_by_number(result, number):
+# get cluster = [class(sentence idx), ...] from num of clusters
+def get_cluster_by_number(result, num_clusters):
     output_clusters = []
-    x_result, y_result = result.shape
-    n_clusters = x_result + 1
-    cluster_id = x_result + 1
+    num_connect, _ = result.shape
+    current_num_clusters = num_connect + 1
+    current_cluster_id = num_connect + 1
     father_of = {}
-    x1 = []
-    y1 = []
-    x2 = []
-    y2 = []
-    for i in range(len(result) - 1):
-        n1 = int(result[i][0])
-        n2 = int(result[i][1])
-        val = result[i][2]
-        n_clusters -= 1
-        if n_clusters >= number:
-            father_of[n1] = cluster_id
-            father_of[n2] = cluster_id
 
-        cluster_id += 1
+    for i in range(len(result) - 1):
+        node_1_idx = int(result[i][0])
+        node_2_idx = int(result[i][1])
+        # distance = result[i][2]
+        current_num_clusters -= 1
+        if current_num_clusters >= num_clusters:
+            father_of[node_1_idx] = current_cluster_id
+            father_of[node_2_idx] = current_cluster_id
+
+        current_cluster_id += 1
 
     cluster_dict = {}
-    for n in range(x_result + 1):
-        if n not in father_of:
-            output_clusters.append([n])
+    for connect_idx in range(num_connect + 1):
+        if connect_idx not in father_of:
+            output_clusters.append([connect_idx])
             continue
 
-        n2 = n
+        node_2_idx = connect_idx
         m = False
-        while n2 in father_of:
-            m = father_of[n2]
+        while node_2_idx in father_of:
+            m = father_of[node_2_idx]
             #print [n2, m]
-            n2 = m
+            node_2_idx = m
 
         if m not in cluster_dict:
             cluster_dict.update({m: []})
-        cluster_dict[m].append(n)
+        cluster_dict[m].append(connect_idx)
 
     output_clusters += cluster_dict.values()
 
     output_cluster_id = 0
-    output_cluster_ids = [0] * (x_result + 1)
+    output_cluster_ids = [0] * (num_connect + 1)
     for cluster in sorted(output_clusters):
         for i in cluster:
             output_cluster_ids[i] = output_cluster_id
@@ -581,19 +584,22 @@ def get_cluster_by_number(result, number):
     return output_cluster_ids
 
 
-def get_distance_matrix(df):
-    distance_matrix = []
-    for i in range(len(df)):
-        vec1 = df.iloc[i, :].values
-        distance_array = []
-        for j in range(len(df)):
-            vec2 = df.iloc[j, :].values
-            dist = 0.
-            for v1, v2 in zip(vec1, vec2):
-                dist += (v1 - v2) ** 2
-            distance_array.append(math.sqrt(dist))
-        distance_matrix.append(distance_array)
-    return distance_matrix
+# def get_distance_matrix(df):
+#     distance_matrix = []
+#     for i in range(len(df)):
+#         vec1 = df.iloc[i, :].values
+#         distance_array = []
+#         # log.v("vec1", vec1)
+#         for j in range(len(df)):
+#             vec2 = df.iloc[j, :].values
+#             dist = 0.
+#             for v1, v2 in zip(vec1, vec2):
+#                 # log.v("v1", v1)
+
+#                 dist += (v1 - v2) ** 2
+#             distance_array.append(math.sqrt(dist))
+#         distance_matrix.append(distance_array)
+#     return distance_matrix
 
 
 def silhouette_coefficient2(clusters, distance_matrix):
@@ -605,22 +611,32 @@ def silhouette_coefficient2(clusters, distance_matrix):
         log.v("len(distance_matrix):", len(distance_matrix))
         log.v("clusters[0]:", clusters[0])
         log.v("distance_matrix[0]:", distance_matrix[0])
+
     a_same = []
     b_diff = []
-    for i, j in enumerate(clusters):
-        for k, l in enumerate(clusters):
-            if i < k:
+
+    for sentence_id_1, cluster_id_1 in enumerate(clusters):
+        for sentence_id_2, cluster_id_2 in enumerate(clusters):
+
+            # see triangular mat
+            if sentence_id_1 < sentence_id_2:
                 # log.v("i, k:", i, k)
-                if k == len(distance_matrix):
+                # get same & different classes' samples' distance from distance
+                # mat
+                if sentence_id_2 == len(distance_matrix):
                     continue  # kataoka edit
-                dist = distance_matrix[i][k]
-                if j == l:  # same cluster
+                dist = distance_matrix[sentence_id_1][sentence_id_2]
+                if cluster_id_1 == cluster_id_2:  # same cluster
                     a_same.append(dist)
                 else:  # different cluster
                     b_diff.append(dist)
+
+    # calc a & b
     a = sum(a_same) / len(a_same)
     # b = sum(b_diff) / len(b_diff)
     b = min(b_diff)
+
+    # calc silhouette coefficient
     return (b - a) / max(b, a)
 
 
