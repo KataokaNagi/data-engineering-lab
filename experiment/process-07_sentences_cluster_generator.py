@@ -61,9 +61,9 @@ MAX_NUM_OF_CLUSTER_RATE = 0.95
 DRAW_IDS = True
 
 # ** REDUCED_NUM = 959 **
-# ARTICLES_CLUSTER_ID = 741
+ARTICLES_CLUSTER_ID = 741
 # ARTICLES_CLUSTER_ID = 718
-ARTICLES_CLUSTER_ID = 100
+# ARTICLES_CLUSTER_ID = 100
 
 # ** REDUCED_NUM = 5000 **
 
@@ -648,7 +648,8 @@ def silhouette_coefficient2(clusters, distance_matrix):
 
         if same_clusters_dists[cluster_id_1] == []:
             # num of cluster member = 1
-            pass
+            # pass # (b+0)/b=1
+            continue
         else:
             a = sum(same_clusters_dists[cluster_id_1]) / \
                 len(same_clusters_dists[cluster_id_1])
@@ -664,7 +665,8 @@ def silhouette_coefficient2(clusters, distance_matrix):
             current_ave = 0
             if current_diffs_clusters_dists == []:
                 # num of cluster = 1
-                pass
+                # pass
+                continue
             else:
                 current_ave = sum(current_diffs_clusters_dists) / \
                     len(current_diffs_clusters_dists)

@@ -49,11 +49,11 @@ TITLE_SIZE = 48
 LABEL_TITLE_SIZE = 36
 LABEL_SIZE = 28
 
-REDUCED_NUM = 959
+REDUCED_NUM = 10000
 RANDOM_SEED = 2021
 
-# MAX_NUM_OF_CLUSTER_RATE = 19.0 / 20.0
-MAX_NUM_OF_CLUSTER_RATE = 1.0 / 2.0
+MAX_NUM_OF_CLUSTER_RATE = 0.95
+# MAX_NUM_OF_CLUSTER_RATE = 1.0 / 2.0
 
 log.d("METRIC:", METRIC)
 log.d("METHOD:", METHOD)
@@ -574,21 +574,77 @@ def silhouette_coefficient2(clusters, distance_matrix):
         log.v("len(distance_matrix):", len(distance_matrix))
         log.v("clusters[0]:", clusters[0])
         log.v("distance_matrix[0]:", distance_matrix[0])
-    a_same = []
-    b_diff = []
-    for i, j in enumerate(clusters):
-        for k, l in enumerate(clusters):
-            if i < k:
+
+    num_clusters = max(clusters) + 1
+    same_clusters_dists = [[] for _ in range(num_clusters)]
+    diff_clusters_dists = [[[] for two in range(num_clusters)]
+                           for one in range(num_clusters)]
+
+    for sentence_id_1, cluster_id_1 in enumerate(clusters):
+        for sentence_id_2, cluster_id_2 in enumerate(clusters):
+
+            # see triangular mat
+            if sentence_id_1 < sentence_id_2:
                 # log.v("i, k:", i, k)
-                dist = distance_matrix[i][k]
-                if j == l:  # same cluster
-                    a_same.append(dist)
+                # get same & different classes' samples' distance from distance
+                # mat
+                dist = distance_matrix[sentence_id_1][sentence_id_2]
+                if cluster_id_1 == cluster_id_2:  # same cluster
+                    same_clusters_dists[cluster_id_1].append(dist)
                 else:  # different cluster
-                    b_diff.append(dist)
-    a = sum(a_same) / len(a_same)
-    # b = sum(b_diff) / len(b_diff)
-    b = min(b_diff)
-    return (b - a) / max(b, a)
+                    diff_clusters_dists[cluster_id_1][cluster_id_2].append(
+                        dist)
+
+    # log.v("same_clusters_dists", same_clusters_dists)
+    # log.v("diff_clusters_dists", diff_clusters_dists)
+
+    silhouette_coefficients = []
+
+    # calc silhouette_coefficient about each clusters
+    for cluster_id_1 in range(num_clusters):
+        a = 0
+        b = 0
+
+        if same_clusters_dists[cluster_id_1] == []:
+            # num of cluster member = 1
+            # pass # (b+0)/b=1
+            continue
+        else:
+            a = sum(same_clusters_dists[cluster_id_1]) / \
+                len(same_clusters_dists[cluster_id_1])
+
+        aves_diffs_clusters_dists = []
+        for cluster_id_2 in range(num_clusters):
+            if cluster_id_1 == cluster_id_2:
+                continue
+
+            current_diffs_clusters_dists = diff_clusters_dists[cluster_id_1][cluster_id_2]
+            current_diffs_clusters_dists += diff_clusters_dists[cluster_id_2][cluster_id_1]
+
+            current_ave = 0
+            if current_diffs_clusters_dists == []:
+                # num of cluster = 1
+                # pass
+                continue
+            else:
+                current_ave = sum(current_diffs_clusters_dists) / \
+                    len(current_diffs_clusters_dists)
+            aves_diffs_clusters_dists.append(current_ave)
+
+        b = min(aves_diffs_clusters_dists)
+
+        # log.v("a", a)
+        # log.v("b", b)
+        # log.v("aves_diffs_clusters_dists:", aves_diffs_clusters_dists)
+
+        silhouette_coefficients.append((b - a) / max(b, a))
+
+    # calc silhouette coefficient
+    return sum(silhouette_coefficients) / len(silhouette_coefficients)
+
+
+if __name__ == "__main__":
+    main()
 
 
 if __name__ == "__main__":
