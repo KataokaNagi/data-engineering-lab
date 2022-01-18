@@ -546,12 +546,12 @@ def get_cluster_by_number(result, num_clusters):
 
     for i in range(len(result) - 1):
         node_1_idx = int(result[i][0])
-        node_2_idx = int(result[i][1])
+        node_2_id = int(result[i][1])
         # distance = result[i][2]
         current_num_clusters -= 1
         if current_num_clusters >= num_clusters:
             father_of[node_1_idx] = current_cluster_id
-            father_of[node_2_idx] = current_cluster_id
+            father_of[node_2_id] = current_cluster_id
 
         current_cluster_id += 1
 
@@ -561,12 +561,12 @@ def get_cluster_by_number(result, num_clusters):
             output_clusters.append([connect_idx])
             continue
 
-        node_2_idx = connect_idx
+        node_2_id = connect_idx
         m = False
-        while node_2_idx in father_of:
-            m = father_of[node_2_idx]
+        while node_2_id in father_of:
+            m = father_of[node_2_id]
             #print [n2, m]
-            node_2_idx = m
+            node_2_id = m
 
         if m not in cluster_dict:
             cluster_dict.update({m: []})
@@ -623,8 +623,6 @@ def silhouette_coefficient2(clusters, distance_matrix):
                 # log.v("i, k:", i, k)
                 # get same & different classes' samples' distance from distance
                 # mat
-                if sentence_id_2 == len(distance_matrix):
-                    continue  # kataoka edit
                 dist = distance_matrix[sentence_id_1][sentence_id_2]
                 if cluster_id_1 == cluster_id_2:  # same cluster
                     a_same.append(dist)
