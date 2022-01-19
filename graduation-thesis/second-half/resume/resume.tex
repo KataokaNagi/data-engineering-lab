@@ -15,6 +15,7 @@
 \usepackage{pxjahyper}
 \usepackage{here}
 \usepackage{otf}
+\usepackage{amsmath}
 
 \makeatletter
 
@@ -218,7 +219,7 @@ RoBERTaは文意や文脈を加味した自然言語処理が可能な機械学�
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{
-Sentence-BERT，コサイン類似度，Ward法を用いた
+Sentence-BERT，コサイン距離，Ward法を用いた
 出来事と主張の
 階層的クラスタリング
 % による出来事の文章と主張の文のグループ化
@@ -231,13 +232,13 @@ Sentence-BERTは文章を文意を加味した数\textcolor{red}{■}ベクト�
 \textcolor{red}{Nilsが公開している}paraphrase-MiniLM-L6-v2を使用した．
 % 省略可能
 
-文章の類似度の算出には
+文\textcolor{red}{章間の非}類似度の算出には
 % Sentence-BERTの論文で用いられていた
 \textcolor{red}{■}
-コサイン類似度を使用し，
+コサイン\textcolor{red}{距離}を使用し，
 % （Ward法について調べたこと，Ward法以外を試せたらそれについて書く）
-\textcolor{red}{階層的}
-クラスタリングにはWard法を用いた．
+\textcolor{red}{クラスタ間の非類似度の算出}
+にはWard法を用いた．
 \textcolor{red}
 {
 本研究ではより類似した出来事で異なる主張が得るために，
@@ -250,7 +251,7 @@ Sentence-BERTは文章を文意を加味した数\textcolor{red}{■}ベクト�
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \textcolor{red}{\section{実験}}
 
-\subsection{出来事の文と主張の文の分類器の調整と評価}
+\textcolor{red}{\subsection{出来事の文と主張の文の分類器の調整と評価}}
 
 分類器の学習では，IBM Debater$^{\textregistered}$ - Claims and Evidenceの8割を訓練用，2割をテスト用に分割して評価を行った．
 学習は全データを40文ごと
@@ -272,7 +273,7 @@ COVID-19 News Articlesのそれぞれの国から3つの記事の文章を抽出
 を基に計算した適合率，再現率，マシューズ相関係数（MCC）を用いた．
 適合率は主張だと判断した文のうち正しく判断できた文の割合，
 再現率は主張の文のうち正しく判断できた主張の文の割合を示す．
-MCCは分類器の精度を総合的に評価する指標で，TP，TN，FP，FNが不均衡なときにも頑健に評価できる．
+MCCは分類器の精度を総合的に評価する指標で，TP，TN，FP，FNが不均衡なときにも頑健に評価できる\cite{chicco_advantages_2020}．
 どの指標も1に近いことが望ましい．
 
 表\ref{classification_evaluation}に評価結果を示す．
@@ -280,8 +281,6 @@ MCCは分類器の精度を総合的に評価する指標で，TP，TN，FP，FN
 % COVID-19 News Articlesを始めとした一般的なデータ
 で分類精度が悪くなると判断し，少ないエポック数で評価を比較した．
 % 省略可能
-
-% \cite{chicco_advantages_2020}
 
 \begin{table}[H]
   \caption{
@@ -320,29 +319,99 @@ MCCは分類器の精度を総合的に評価する指標で，TP，TN，FP，FN
   \label{classification_evaluation}
 \end{table}
 
-/**
+\textcolor{red}{\subsection{2回の階層的クラスタリングの調整と評価}}
 
-（バッチサイズ，エポック数，不均衡データ用のウェイト）
+クラスタリングの評価指標には式(\ref{silhouette_coefficient})に示すシルエット係数を用いた．
+$a(i)$は文$s(i)$と文$s(i)$が属するクラスタの他の文との平均の非類似度であり，$a(i)$が0に近いとクラスタ内の文章がよく凝集しているといえる．
+$b(i)$は文$s(i)$と文$s(i)$の最近傍のクラスタの他の文との平均の非類似度であり，$a(i)$が1に近いと異なるクラスタの文章がよく乖離しているといえる．
+$a(i)$，$b(i)$から得た$Sil(i)$は，1に近いほどよく凝縮と乖離をしているといえる．
+実験では，分割するクラスタ数ごとに全ての文$s(i)$の$Sil(i)$を計算し，$Sil(i)$の平均$\overline{Sil(i)}$の推移を観察した．
 
-（IBMからcovidへの適用，IBMのラベルの傾向分析，独自の手付けラベル，不均衡データ用の正例の設定とMCC）
+\begin{align}
+  Sil(i) &= \frac{b(i) - a(i)}{\max ( b(i) , a(i))}
+  \label{silhouette_coefficient}
+\end{align}
+
+クラスタリングに必要なメモリ容量が32GBを超えたため，記事を959件に減らして実験を行った．
+/** 5000記事に差し替える予定 **/ 
+/** 正しいシルエット係数で描画した図に差し替える予定 **/
+図\ref{num_article_clusters_and_silhouette}，\ref{num_sentence_clusters_and_silhouette}に示すようにクラスタ数が入力文の数に近いときに$\overline{Sil(i)}$が最大値を取る．
+しかし，読者の迅速な出来事の把握のためには似た文はグループ化したいため，最適なクラスタ数として最大のクラスタ数の95\%以下の領域で$\overline{Sil(i)}$が最大値を取るようなクラスタ数を選択した．
+図\ref{num_sentence_clusters_and_silhouette}は，この選択に基づいて図\ref{num_article_clusters_and_silhouette}でクラスタ数910，$\overline{Sil(i)} \sim 0.38$となるように出来事の文章のクラスタリングを行った後，主張の文の数が多い1つのクラスタについて主張の文のクラスタリングを行った結果である．
+
+\begin{figure}[H]
+	\centering
+	% \includegraphics[keepaspectratio, width=60mm]{img/process-06_articles-cluster_num-of-clusters-dependency-on-silhouette-coefficient_reduced-data-to-5000_Trim.png}
+	\includegraphics[keepaspectratio, width=60mm]{img/process-06_articles-cluster_num-of-clusters-dependency-on-silhouette-coefficient_with-maximal-silhoette_reduced-data-to-959.png}
+	\caption{
+    出来事の文章のクラスタ数と$\overline{Sil(i)}$との関係
+  }
+	\label{num_article_clusters_and_silhouette}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	% \includegraphics[keepaspectratio, width=60mm]{img/process-07_sentences-cluster_num-of-clusters-dependency-on-silhouette-coefficient_reduced-data-to-5000_Trim.png}
+	\includegraphics[keepaspectratio, width=60mm]{img/process-07_sentences-cluster_num-of-clusters-dependency-on-silhouette-coefficient_reduced-data-to-959.png}
+	\caption{
+    主張の文のクラスタ数と$\overline{Sil(i)}$との関係
+  }
+	\label{num_sentence_clusters_and_silhouette}
+\end{figure}
+
+表\ref{classification_result_samples}に，図\ref{num_sentence_clusters_and_silhouette}でクラスタ数13，$\overline{Sil(i)} \sim 0.23$となるように主張の文のクラスタリングを行った結果の一部を示す．
+同じクラスタ内に福祉を推進する主張の文が集まり，異なるクラスタに福祉として年金に目を向けさせる主張の文が配置されていることがわかる．
+/** 定量化した主観評価を追加する？ **/
+
+\begin{table}[H]
+  \caption{
+      同じクラスタIDと異なるクラスタIDでの文の比較
+    }
+  \centering
+  {\tabcolsep=0.05cm
+    \begin{tabular}{clp{6cm}}
+    \hline
+    ID & \multicolumn{1}{c}{主張の文}
+    \\
+    1 & they should also set aside certain percentages
+    \\
+    & from their profits for their welfare.
+    \\
+    1 & the poor should be made aware of the benefits
+    \\
+    & they can enjoy under various welfare schemes.
+    \\
+    3 & pension policies also have to be created for them.
+    \\
+    \hline
+    \end{tabular}
+  }
+  \label{classification_result_samples}
+\end{table}
+
+% /**
+
+% （バッチサイズ，エポック数，不均衡データ用のウェイト）
+
+% （IBMからcovidへの適用，IBMのラベルの傾向分析，独自の手付けラベル，不均衡データ用の正例の設定とMCC）
 
 
-（クラスタリング結果の文の組の表）
+% （クラスタリング結果の文の組の表）
 
-（hとc？関連研究の相関分析？カイ二乗分布？）
+% （hとc？関連研究の相関分析？カイ二乗分布？）
 
 
-分類精度
+% 分類精度
 
-計算時間
+% 計算時間
 
-良く見える結果
+% 良く見える結果
 
-気になるエラー例
+% 気になるエラー例
 
-タイトル回収？
+% タイトル回収？
 
-**/
+% **/
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Section 考察
@@ -389,7 +458,7 @@ T5の利用の検討
 
 /**
 
-参考文献は半分程度に減らす予定
+参考文献は半分以下に減らす予定
 
 **/
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
