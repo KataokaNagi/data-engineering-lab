@@ -65,7 +65,7 @@ AL18036 片岡 凪
     - 4.700433705086863 s/記事
 - 出来事のembed
     - 20220113 10:00 - 24:00?
-    - 1939MiB
+    - GPU 1939MiB
     - 60記事で24秒
         - 78457記事で31382.8s=8.7h
     - embed_time(sec): 47.06882643699646
@@ -78,14 +78,13 @@ AL18036 片岡 凪
     - 相関係数
     - カイ二乗分布
 - 実装
-    - **主張の文の特徴量ベクトルを作成**
+    - 主張の文の特徴量ベクトルを作成
         - process_05_sentences_features_calculator.py
-        - india-articles_process-05_calced-sentences-features.txt
+        - process-05_calced-sentences-features.txt
         - #e:sent-1#c:sent-2...\n
         - S-BERTにsent-nを入れて特徴量を算出
         - article-n;[e-feature-array];[c-feature-array];[all-feature-array]#article-n;sentence-n;e;feature-x;feature-y;[feature-array];sent-1#article-n;sentence-n;c;feature-x;feature-y;[feature-array];sent-2...\n とする
             - 各文に特徴量を追加
-            - 各文に番号を追加
             - #eのfeatureは不要だが、もしかしたら使うかも
         - txt保存
     - [e-feature-array]を基に記事（行）をクラスタリング
@@ -102,7 +101,7 @@ AL18036 片岡 凪
         - クラスタごとの主張の差異を分析
     - 出来事の記事クラスタからnation-name;article-n;sentence-nで記事を特定
         - process-07_find-articles-cluster-of-selected-sentence-info.sh
-    - 指定した記事クラスタファイルの文を、cの[feature-array]でクラスタリング
+    - **指定した記事クラスタファイルの文を、cの[feature-array]でクラスタリング**
         - process-08_sentences_cluster_generator.py
         - クラスタごとに名前を付けて保存
             - process-08generated-sentences-cluster_n.txt
@@ -128,3 +127,564 @@ AL18036 片岡 凪
         - process-07_find-articles-cluster-of-selected-sentence-info.sh
         - process-08_sentences_cluster_generator.py
         - process-09_find-sentences-cluster-of-selected-sentence-info.sh
+- 相談会で聞きたい事
+    - クラスタリング手法
+        - Ward法
+            - 平均との差の二乗の和
+            - 計算量が多い
+            - よく使われる
+            - 7万記事^2*320次元で
+        - 先生の論文の手法
+            - 階層ではない
+            - ガウス混合モデル
+                - k-meansの拡張
+                - クラスタ数が必要
+                    - 手動かベイズ情報量規準
+            - アフィニティプロパゲーション
+                - メッセージの受け渡し
+                - クラスタ数は不要
+                - 減衰係数、プリファレンスが必要
+        - 改善する関連研究の手法
+            - 凝集型（階層型）クラスタリング（Agglomerative clustering）
+                - クラスタ数を事前に設定する必要がない
+                - 特徴点の非類似度に基づいてグループ化
+                - 各点をクラスタとして出発
+                - 非類似度が判定カットオフ値以下であれば，2つのクラスタを1つに統合
+                - クラスタ数が未知
+                - 決定カットオフを制御して、より小さいクラスタやより大きいクラスタを持つことができる
+                    - 有用
+                - 手順
+                    - 初期の非類似度に対して、ショートメッセージの埋め込みの類似度行列Sを計算
+                    - 1-Sを非類似度行列として与える
+                    - 2クラスタ間の非類似度の計算方法を決めるリンク基準には
+                        - 2クラスタ内の任意の2点間の**平均非類似度（average dissimilarity）**
+                            - 非類似度=距離
+                            - centroids?
+                            - 重心法かWard法
+            - ライデンコミュニティ検出（Leiden community de-tection）
+                - グラフベース
+                - グラフ内の最適なコミュニティ分割を見つける
+                - ルーヴァンアルゴリズムの収束時間をより少ない計算量で改善
+                - コミュニティのマイクロパターンに焦点
+                    - グラフのモジュール性を最大化する
+                - グラフG(N, L)
+                    - 各ショートメッセージを表すノード集合N
+                    - ノード間の類似度合いを表すリンク集合L
+                - ショートメッセージの埋め込みからグラフへの構築
+                    - ベクトル間の類似度行列を計算
+                        - -neighborhood法
+        - 酷似した関連研究の手法
+            - Embedded Topic Model (ETM) (Dieng et al., 2020)
+                - 各文書を潜在トピックとして一意に表現
+                - 各トピックは単語の意味空間への埋め込み
+                - 本研究で利用
+                - word2vec 埋め込みの代わりにtransformer-based 埋め込み
+                    - クラスタリングの品質を向上させるため
+            - シャムネットワーク（STSタスク）
+    - 評価方法
+        - 測定したい事
+            - 1回目のクラスタリング
+                - より近い出来事で集まっているか
+            - 2回目のクラスタリング
+                - 別のクラスタ間がより離れた主張で集まっているか
+            - 2回目のクラスタリングでより近い主張で集まっているか
+        - 案
+            - クラスタリングしない無作為な出来事同士、主張同士で同様に測定
+            - 実際にクラスタ内外の文章を目視で確認
+            - 階層のレベルを調節
+        - 先生の論文の手法
+            - homo-geneity と completeness
+            - 均質性と完全性
+            - [1]A. RosenbergとJ. Hirschberg, 「V-Measure: A Conditional Entropy-Based External Cluster Evaluation Measure」, p. 11.
+                - 1）クラスタリングアルゴリズムやデータセットへの依存性
+                - 2）データ点の一部のみのクラスタリングを評価する「マッチングの問題」
+                - 3）クラスタリングの二つの望ましい側面、均質性と複雑性の正確な評価と組み合わせ
+                    - 均質性が保証される条件
+                        - クラスタのすべてが単一のクラスのメンバーであるデータ点のみを含む場合
+                    - 完全性が保証される条件
+                        - 与えられたクラスのメンバーであるすべてのデータ点が同じクラスタの要素である場合
+        - 以前先生に提案された手法
+            - カイ二乗検定
+                - 前提
+                    - 独立
+                        - covidに限定しているのであやしい
+                        - 同じ記事内の主張の文同士はあやしい
+                    - 標準正規分布に従う
+                        - 人為的な単語の並びなので不可？
+                        - 7万記事で中心極限定理を適用？
+                            - 78457記事
+                            - 80093の主張
+                            - 1651026の出来事
+                                - = 1809576行 - 78457記事 - 80093主張
+                            - 石綿先生「精密さを要求しなければ30個以上で仮定してよい」
+                - 応用例
+                    - 母分散の区間推定
+                        - 出来事、主張の散らばり具合
+                        - 使えるかも
+                    - 適合度の検定
+                        - 2つの分布が同一かどうかなど
+                        - 微妙
+                    - 独立性の検定
+                        - そもそも独立でない
+                        - 独立具合を調べるのはいいかも
+                        - 意見の違いが独立と対応するか微妙
+                        - 埋め込みが独立と対応するか微妙
+        - 改善する関連研究の手法
+            - シルエット係数（Silhouette coefficient）6を使用
+                - 真実のクラスタラベルがないため
+                - -1～1の範囲
+                - 値が高いほど、クラスタ間の重複が少ない
+                    - より明確に定義されたクラスタ
+                - https://qiita.com/maskot1977/items/a35ac2fdc2c7448ee526
+                    - a を「同じクラスタに属するメンバ間の距離の平均」
+                    - b を「異なるクラスタに属するメンバ間の距離の平均」としたときに、
+                    - (b - a) / max(b, a)
+                    - シルエット係数が高いほど、よく分割できている
+                        - （クラスタ間距離に比べ、クラスタ内距離が十分に短い）
+            - 同じSBERTを使っている
+                - SBERTのモデルを沢山比較している
+                - 用いたparaphrase-MiniLM-L6-v2は中間程度の精度
+            - 主張を2回のクラスタリングで得ているため、単純には比較できない
+            - クラスター数がどれだけ絞れているかを見る？
+                - （凝集型：804、ライデン：705）がニュース記事数（959）
+                - 数が少ないから良いモデルというわけではない
+                - ニュースのデータが異なるので比較が難しい
+        - 酷似した関連研究の手法
+            - **埋め込みベクトル間のコサイン距離と、人間がラベル付けした類似度スコアのピアソン相関**
+                - 意味的に類似した文の認識には高い相関（r ≈ 0.84）
+                - 引数のファセットの認識には中程度の相関（r ≈ 0.75）
+                - https://support.minitab.com/ja-jp/minitab/18/help-and-how-to/statistics/basic-statistics/supporting-topics/correlation-and-covariance/a-comparison-of-the-pearson-and-spearman-correlation-methods/
+                    - ピアソンの積率相関
+                        - 2つの連続変数間の線形関係を評価
+                        - 一方の変数が変化したときにもう一方の変数が比例して変化する場合、関係は線形
+                    - スピアマンの順位相関
+                        - 2つの連続変数または順位変数間の単調関係を評価
+                        - 一定の割合とは限らない
+                        - 生データではなく各変数の順位値に基づく
+    - 神嶌先生のクラスタリングの資料
+        - https://www.kamishima.net/jp/kaisetsu/
+        - Ward法で特徴を掴んで手法を変える
+        - 次元の呪いに注意
+            - 特徴選択
+                - CLIQUE
+            - 次元削減
+                - ORCLUS
+                    - 固有値分解
+            - 部分空間クラスタリング
+        - カイ二乗検定はカテゴリ値の頻度の差を検定
+            - 頻度は情報薄すぎんか
+    - カイ二乗検定の追加調査
+        - [1]Ishida M., Nishio C.とTsubaki H., 「Choosing a Similarity Coefficient for Classification by Binary Variables」, Kodo Keiryogaku, vol. 38, no. 1, pp. 65–81, 2011, doi: 10.2333/jbhmk.38.65.
+            - 主効果情報の影響を強く受ける？
+            - 空間収縮をしてしまう
+            - 乗法的に交互作用を考えるGoodmanの連関モデルも
+            - 分布の同等性を扱える
+            - コレスポンデンス分析に用いる
+- 主張の文のembed
+    - HDD 1.1GB
+    - 1809576行
+    - embed_time(sec): 15.976540803909302
+    - claim_sentences_embeddings.shape (80093, 384)
+- 出来事のクラスタリング
+    - メモリー不足
+        - free -m でどんどん減っていく
+        - GPUメモリは使用していない
+            - 表現ベクトルのWard法による処理が一括化できる可能性はある
+        - 80000記事不可
+        - 40000記事不可
+        - 959記事可
+            - 関連研究と同数
+            - used 4691 free 25986
+            - 957クラスタ
+                - 意味なし
+        - 5000記事可
+            - best_num_of_cluster:  4998
+            - max_silhouette_coefficient:  0.5727388530691457
+            - 3650クラスタ付近でシルエットが極大値0.2程度
+                - 距離の閾値は0.3程度
+        - 10000記事
+            - 実行 20220116 5:30
+            - used 14249 free 16088
+                - 10:29
+        - threshold 0.85でやってみる？
+            - 主張の要約で集約するか出来事の結合文で集約するかの差が出る
+            - シルエット係数の差
+            - デンドログラムを見た感じ0.85でうまく分かれそう
+        - あるクラスタ数以下での最大値で分割
+            - if silhouette_coefficient > max_silhouette_coefficient:を
+            - if silhouette_coefficient > max_silhouette_coefficient and num_of_cluster < max_num_of_cluster:に変更
+                - max_num_of_cluster = REDUCED_NUM * MAX_NUM_OF_CLUSTER_RATE
+                - MAX_NUM_OF_CLUSTER_RATE = 19/20
+                    - 5000記事なら4750記事以下
+                    - 4990記事くらいで跳ね上がっている
+                - log.v(定数)
+                - log.v(max_num_of_cluster)
+    - 出来事では大きく絞る必要はない？
+        - 出来事は重複が少ない上に複合文なので、シルエット係数は大きくならないのは納得
+    - best_num_of_clusterが入力記事数に近すぎる
+        - 1クラスタ1データ0距離が増えるため、シルエット係数が大きくなる
+        - きれいな球状の出来事クラスがあるわけではない？
+            - やや偏りはあるはず
+        - どの記事も類似していない？
+            - 出来事が複合文だから？
+        - 入力記事数が少なくて似た出来事の記事が少ない？
+            - 入力記事を増やして傾向を見る
+                - 割合が減っていけば、入力記事がかなり多いときには上手くいっている可能性が高い
+    - 時間がかかりすぎている
+        - 距離行列を分散して計算すれば並列化可能
+- 主張のクラスタリング
+    - 一番大きいクラスタを指定
+    - 主張がゼロの場合は何もしない
+- シルエット分析の調査
+    - https://hkawabata.github.io/technical-note/note/ML/Evaluation/silhouette-analysis.html
+- process_06 with * の調整
+    - dirの変更
+        - base_dirの追加
+        - with*の追加
+    - 10000記事
+        - 2500クラスタ程度で最大？
+            - 平均4記事？
+        - *** clustering (substitute article_embeds) ***
+            - clustering time (sec): 12.915019512176514
+            - embeds_pdist[0]: 0.8404757705966031
+            - embeds_square_form[0]: [0.         0.84047577 0.87220629 ... 0.64610681 0.97105233 0.70045979]
+            - embeds_square_form[1]: [0.84047577 0.         0.84770845 ... 0.80254641 0.79485591 0.75757819]
+            - embeds_square_form[2]: [0.87220629 0.84770845 0.         ... 0.71711942 0.88024946 0.9177514 ]
+        - *** print clustering result ***
+            - result_df[0][0] (1st node      ) : 3967.0
+            - result_df[1][0] (2nd node      ) : 5713.0
+            - result_df[2][0] (nodes distance) : 0.0
+            - result_df[3][0] (cluster_id    ) : 2.0
+        - *** draw num of clusters dependency on silhouette coefficient ***
+        - *** & calc best them ***
+            - drawing num and silhouette time (sec): 101402.14495611191
+            - best_num_of_cluster:  9996
+                - 使えない
+            - max_silhouette_coefficient:  0.6114882848545684
+            - best_cluster_by_number:  [0, 1, 2, 3
+        - *** draw threshold dependency ***
+            - best_threshold: 0.0
+            - drawing threshold dependency time (sec): 0.2696495056152344
+        - *** draw dendrogram ***
+            - drawing dendrogram time (sec): 40.31605815887451
+- process_06の実行
+- process_06 with * の実行
+    - dirの修正
+    - 10000記事
+        - 最適化に101402s = 28h
+        - 前回の実行から予想
+            - 2400クラスタか9200クラスタくらいになりそう
+    - 5000記事
+        - withじゃないプログラムと並行実行
+            - 実行直後 used 16618 free 10305
+                - 実質4000程度
+            - システムモニタ
+                - 7%, 100%, 100%, 4%
+                - 18GB
+        - *** clustering (substitute article_embeds) ***
+            - clustering time (sec): 3.1819567680358887
+            - drawing num and silhouette time (sec): 13814.60782790184 = 3.8h
+            - best_num_of_cluster:  3644
+            - max_silhouette_coefficient:  0.022981146862680064
+        - *** draw threshold dependency ***
+            - best_threshold: 0.3433293241812647
+            - drawing threshold dependency time (sec): 0.22748231887817383
+        - *** draw dendrogram ***
+            - drawing dendrogram time (sec): 17.308321237564087
+        - これで概要に書く仮の主張クラスタを作成
+    - 959記事
+        - 945あたりが良さそう？
+            - 200からそこ以外はマイナス
+            - 19.0/2.0では対応できない
+            - 950.0/959.0
+            - 少なすぎて主張も少なくなる
+                - テスト用に1/2
+                    - *** print clustering result ***
+                        - result_df[0][0] (1st node      ) : 27.0
+                        - result_df[1][0] (2nd node      ) : 419.0
+                        - result_df[2][0] (nodes distance) : 2.220446049250313e-16
+                        - result_df[3][0] (cluster_id    ) : 2.0
+                    - *** & calc best them ***
+                        - drawing num and silhouette time (sec): 156.79514384269714
+                        - best_num_of_cluster:  114
+                        - max_silhouette_coefficient:  0.005563093119489484
+                        - best_cluster_by_number:  [0, 1, 2, 3
+                    - *** draw threshold dependency ***
+                        - best_threshold: 0.991082160038989
+                        - drawing threshold dependency time (sec): 0.20092511177062988
+                    - *** draw dendrogram ***
+                        - drawing dendrogram time (sec): 3.227905750274658
+        - これで主張をテスト
+- process_07の実行
+    - not reducedとreducedで並行実行？
+        - process_06のmax num_of_cluster次第
+    - 959記事
+        - CLUSTER_ID = 23 が553.1KBで最大
+            - 23記事
+            - 64文の主張
+        - num-of-cluster-rate-19-20
+            - *** print clustering result ***
+                - result_df[0][0] (1st node      ) : 9.0
+                - result_df[1][0] (2nd node      ) : 10.0
+                - result_df[2][0] (nodes distance) : 0.1623769492391508
+                - result_df[3][0] (cluster_id    ) : 2.0
+            - *** draw num of clusters dependency on silhouette coefficient ***
+            - *** & calc best them ***
+                - drawing num and silhouette time (sec): 0.567575216293335
+                - best_num_of_cluster:  59
+                - max_silhouette_coefficient:  0.334796328369701
+                - best_cluster_by_number:  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 10, 11, 12, 13, 13, 14, 15, 10, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 33, 34, 35, 36, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58]
+            - *** draw threshold dependency ***
+                - best_threshold: 0.3430626219183065
+                - drawing threshold dependency time (sec): 0.20121097564697266
+            - *** draw dendrogram ***
+                - drawing dendrogram time (sec): 0.4615135192871094
+            - 同じクラスタになった文
+                - CLUSTER_ID = 9
+                    - provide information to kids that is honest and accurate.
+                        - 子供たちに誠実で正確な情報を提供する。
+                        - IN;31243;14;
+                    - give kids information that is truthful and appropriate for the age and developmental level of the child.
+                        - 真実で、子供の年齢と発達のレベルに合った情報を子供に与える。
+                        - IN;31243;15;
+                - CLUSTER_ID = 10
+                    - teach kids everyday actions to reduce the spread of germs.
+                        - 細菌が広がるのを防ぐための日常的な行動を子供たちに教えています。
+                        - IN;31243;17;
+                    - this will help keep germs out of your body.
+                        - そうすることで、雑菌を体内に入れないようにすることができます。
+                        - IN;31243;40;
+                - CLUSTER_ID = 13
+                    - avoid crowded places.
+                        - 人混みを避ける。
+                        - IN;31243;25;
+                    - avoid touching surfaces in public places  play areas unnecessarily.
+                        - 公共の場所や遊び場では、むやみに表面に触れないようにしましょう。
+                        - IN;31243;26;
+                - CLUSTER_ID = 33
+                    - our sport must do better.
+                        - 私たちのスポーツは、もっと良くならなければなりません。
+                        - JP;4957;54;
+                    - our country must do better.
+                        - 我が国はもっと頑張らなければなりません。
+                        - JP;4957;55;
+                - CLUSTER_ID = 36
+                    - tumbling oil prices are another factor dimming the outlook for plastic recycling as a whole.
+                        - また、原油価格の高騰もプラスチックリサイクルの見通しを悪くしている要因の一つです。
+                        - KR;4571;14;
+                    - lower oil prices bring down manufacturing costs for new unrecycled pet plastic making recycling less economically viable.
+                        - 石油価格の低下により、リサイクルされていない新しいペット用プラスチックの製造コストが下がり、リサイクルの経済性が低下しています。
+                        - KR;4571;15;
+                - 同じ出来事の記事が集まっていない
+                - 同じ記事の文しかクラスタにまとまっていない
+                - 同じ記事の文が1つのクラスタに入っている
+                    - 精度に期待できる
+            - 隣接したクラスタ
+                - resltのcsvから、類似度の高い順に異なる記事の文が繋がっているものを選択
+                    - 自動化可能
+                    - 0始まりで21thと51th
+                        - 距離は0.42
+                        - these treatments provide limited benefit and are typically used in very sick hospitalized patients.
+                            - これらの治療法の効果は限定的で、通常、非常に重症の入院患者に使用されます。
+                            - JP;14692;13
+                        - the waivers also may be good only for care sought within an insurers network of doctors and hospitals.
+                            - また、保険会社の医師や病院のネットワーク内で受けられる医療にのみ適用される場合もあります。
+                            - JP;20096;32
+                        - 医療の話
+                        - 使用と適用
+                    - 26thと48th
+                        - 距離は0.45
+                            - drinking water cannot prevent coronavirus infection.
+                                - コロナウイルスの感染は、飲料水では防げません。
+                                - IN;23153;10
+                            - there is no way that we can avoid the coronavirus storm.
+                                - コロナウイルスの嵐を回避することはできないのです。
+                                - IN;11485;63
+                        - 感染の話
+                        - 回避できない話
+                    - 16thと59th
+                        - 距離は0.52
+                        - it is a new virus.
+                            - 新種のウイルスです。
+                            - IN;31243;31
+                        - there is no proof yet that the virus causes the syndrome.
+                            - このウイルスが本症を引き起こすという確証はまだ得られていません。
+                            - JP;6789;15
+                        - 別の国で繋がった
+                        - ウイルス繋がり
+                        - 「新しい」と「未知感」
+                - メンバ数が増えているもの
+                    - 同じ記事でしかクラスタがまとまっていないので、959記事では無意味
+        - 関連研究ではそれぞれの記事に関連したツイートを集めているため、シルエット係数が大きいのは当然
+            - 959のニュース元記事に関連する28,818のツイート
+            - ツイートをクラスタリングしている
+        - 関連研究で用いられたCOIVID-MMの特徴
+            - MM-COVID: A Multilingual and Multimodal Data Repository for Combating COVID-19 Disinformation
+            - https://arxiv.org/abs/2011.04088
+            - 多言語フェイクニュースと関連する社会的文脈を提供
+            - 英語，スペイン語，ポルトガル語，ヒンディー語，フランス語，イタリア語
+            - フェイクニュースのコンテンツ3981個
+            - 信頼できる情報7192個
+    - 5000記事
+        - CLUSTER_ID = 151 が259.8KBで最大
+            - 主張が7つ
+                - サイズが大きくても主張の文が多いとは限らない
+            - *** clustering (substitute claim_embeds) ***
+                - clustering time (sec): 0.0003287792205810547
+                - embeds_pdist[0]: 0.849532699757027
+                - embeds_square_form[0]: [0.         0.8495327  0.86719855 1.01508097 0.96430934 0.87620045
+                -  0.83258852]
+                - embeds_square_form[1]: [0.8495327  0.         0.72029176 0.62644213 0.58683042 0.68795876
+                -  0.68605934]
+                - embeds_square_form[2]: [0.86719855 0.72029176 0.         0.90248054 0.81978743 0.81829581
+                -  0.71046649]
+            - *** print clustering result ***
+                - result_df[0][0] (1st node      ) : 1.0
+                - result_df[1][0] (2nd node      ) : 4.0
+                - result_df[2][0] (nodes distance) : 0.5868304157977923
+                - result_df[3][0] (cluster size  ) : 2.0
+            - *** draw num of clusters dependency on silhouette coefficient ***
+            - *** & calc best them ***
+                - drawing num and silhouette time (sec): 0.2211596965789795
+                - best_num_of_cluster:  4
+                - max_silhouette_coefficient:  0.21367367205387755
+                - best_cluster_by_number:  [0, 1, 2, 3, 1, 3, 2]
+            - *** draw threshold dependency ***
+                - best_threshold: 0.6558792980373892
+                - drawing threshold dependency time (sec): 0.21051239967346191
+            - *** draw dendrogram ***
+                - drawing dendrogram time (sec): 0.2604391574859619
+            - 4クラスタのはずが、デンドログラムは2クラスタになっている
+                - 閾値がシビア？
+            - クラスタごとに抽出
+                - cluster_id 0
+                    - 
+                - cluster_id 1
+                - cluster_id 2
+                - cluster_id 3
+    - 10000記事
+        - CLUSTER_ID =  がKBで最大
+- 概要書
+    - バッチなのかミニバッチなのか
+        - BERTはミニバッチ（単語）っぽい？
+            - https://www.ai-shift.co.jp/techblog/2138
+        - SimpletransformerのRobertaモデルのソースコード
+            - https://github.com/ThilinaRajapakse/simpletransformers/blob/master/simpletransformers/classification/transformer_models/roberta_model.py
+            - input_ids = torch.tensor(tokenizer.encode("Hello, my dog is cute")).unsqueeze(0)  # Batch size 1
+            - ソフトマックス関数
+    - バッチサイズのメリット
+    - シルエット係数のノルム
+        - 各要素の差を二乗の和をルート
+            - ユークリッド距離（L2ノルム）
+        - 濃度-1で割っている？
+            - https://hkawabata.github.io/technical-note/note/ML/Evaluation/silhouette-analysis.html
+            - 実際のコードでは濃度で割っている
+            - 不偏分散の考え方？
+    - シルエット係数の実装が間違っていた？
+        - 乖離度は平均でなく最小値？
+            - 論文情報
+            - 記事情報
+            - 重なりを許容したくないので最小値は納得
+        - 距離行列の実装がcosine用のpdistに対応していなかった
+            - めちゃくちゃな距離を計算していた
+            - 関数を使わず、pdistをそのまま用いた
+            - 係数が途中まで単調増加する良い図になった
+            - 係数も悪くない
+        - 300次元全てが重ならない
+    - pdistの実装
+    -   https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.pdist.html
+    -   コサイン距離
+    -   1 - コサイン類似度
+- 出来事のクラスタリング（係数修正版）
+    - 959記事
+        - 
+    - 5000記事
+        - 
+    - 10000記事
+- 主張のクラスタリング（係数修正版）
+    - 959記事
+        - cluster id = 718
+            - 16 claims
+            - 1記事だけだった
+            - シルエット係数の極大値 = 0.15
+        - cluster id = 741
+            - 16 claims
+            - 1記事だけだった
+            - シルエット係数の極大値 = 0.23
+            - if they want to go home then their train and bus tickets should be paid for to ensure they return safely.
+                - もし家に帰りたいのであれば、電車やバスのチケット代を負担して、安全に帰れるようにすべきです。
+                - IN;33060;54
+            - guaranteed social security good income and boarding and lodging arrangements will perhaps persuade them to come back.
+                - 社会保障の充実と寮や宿泊の手配があれば、きっと戻ってこられるでしょう。
+                - IN;33060;51
+            - giving them advance payment or a loan or gift to go back home or survive in this lean period can also help.
+                - また、この不況下で生き残るために、前払いやローン、贈答品を贈ることも有効です。
+                - IN;33060;26
+            - they should also set aside certain percentages from their profits for their welfare.
+                - また、利益から一定割合を福祉に充てるべきである。
+                - IN;33060;37
+            - the poor should be made aware of the benefits they can enjoy under various welfare schemes.
+                - 貧困層は、様々な福祉制度のもとで享受できる恩恵について認識されるべきです。
+                - IN;33060;12
+            - pension policies also have to be created for them.
+                - また、そのための年金制度も作らなければならない。
+                - IN;33060;44
+        - cluster id = 100
+            - 15 claims
+            - 1記事だけだった
+            - シルエット係数の極大値 = 0.36
+    - 5000記事
+        - cluster id = 
+            -  claims
+            - シルエット係数の最大値 = 
+        - cluster id = 
+            -  claims
+            - シルエット係数の最大値 = 
+        - cluster id = 
+            -  claims
+            - シルエット係数の最大値 = 
+    - 10000記事
+        - cluster id = 
+            -  claims
+            - シルエット係数の最大値 = 
+        - cluster id = 
+            -  claims
+            - シルエット係数の最大値 = 
+        - cluster id = 
+            -  claims
+            - シルエット係数の最大値 = 
+- シルエット係数の修正
+    - minの考慮
+    - 近傍クラスタからbを算出
+        - 単調増加して1になる
+            - rate = 0.95で本当によいのか
+            - 距離の割合で湧けた方が良いのでは
+            - 関連研究に合わせて0.85とか
+    - aを0とするとb/b=1となり、係数が無駄に上がってしまう
+        - skip
+    - 最後に急増するのはなぜか
+        - 記事数が足りず、同じ出来事が少ないため
+        - かなり近いサンプル同士のクラスタが残っていくため
+            - 同じ記事の主張？
+- dendrogramを作らずに8万記事をクラスタリング
+    - メモリ不足
+- 実行し直し
+    - 5000記事が10時間後でも終わらず
+    - 5000と10000でused 15309, free 12443
+- 主観評価の定量化
+    - ~~文ごとにキーワードを最大3つ設定し、重複度を計算~~
+    - 文ごとに出来事と主張のキーワードを設定し、重複度を計算
+        - 全ての文で以下を実施し、平均を取る
+            - 同じクラスタ内で同じ出来事、同じ主張になっている割合
+            - 違うクラスタ同士で同じ出来事、異なる主張になっている割合
+        - 可能であれば極力多くの出来事のクラスタで確認
+- 高速化
+    - Ward法以外の利用
+    - num of clusterの両端を計算しない
+    - 割と連続するのでskipして計算
+- メモリ
+    - 分散
+- 手動のラベル付けにエラー
+    - 日本語訳した際に指示語が取れている
+        - FNが減りそう
+        - まじで主張の文が少なくなってしまう
