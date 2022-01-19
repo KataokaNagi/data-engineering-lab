@@ -70,12 +70,20 @@ RSF(Reporters Sans Frontières)は，政治や文化などの要因によって�
 
 Yangらは，ニュース読者が出来事を正確かつ迅速に把握できるように，
 階層的クラスタリングを用いて記事に対するツイートの主張をグループ化する手法を提案した\cite{yang_scalable_2021}．
-この研究ではCOVID-19の話題に限定した主張の文をグループ化しているが，この手法をWeb上の無数の話題の記事に適用した場合，無数の話題の主張のグループが生成されることになる．
+この研究ではCOVID-19の話題に限定した主張の文をグループ化しているが，この手法をWeb上の\textcolor{red}{多く}の話題の記事に適用した場合，\textcolor{red}{多く}の話題の主張のグループが生成されることになる．
 % 1度のクラスタリングで
 % 無数の主張のグループが生成されることになる．
-これでは，COVID-19のワクチンに対する主張と脳炎のワクチンに対する主張が近くにグループ化されるといった事が起き得るため，同じ出来事の異なる主張の収集に時間を要してしまう．
+これでは，COVID-19の
+\textcolor{red}{飲み薬やワクチンといった異なる話題から安全性に関する共通した}
+% ワクチンに対する主張と脳炎のワクチンに対する
+主張が\textcolor{red}{■}
+% 近くに
+グループ化される\textcolor{red}{ような}事が起き得るため，同じ出来事の異なる主張の収集に時間を要してしまう．
 % これにより，ニュース読者の正確かつ迅速な出来事の把握の支援を目指す．
 % 異なる話題の似た主張をグループ化するエラーに繋がりやすいと考えられる．
+
+% ワクチン　感染　病床　旅行　政治　制作　感染者数　症状　副反応
+% 安全性　危険性　予防　
 
 % 近いグループに正確さ
 % カテゴリをCOVID-19に限定させたニュースだけでも
@@ -131,13 +139,13 @@ Yangらは，ニュース読者が出来事を正確かつ迅速に把握でき�
 \section{提案手法}
 図\ref{system_abstract}に提案手法の概要を示す．
 まず
-$\rm(\hspace{.18em}i\hspace{.18em})$
+\textcolor{red}{(\ajroman{1})}
 記事の文章を出来事の文と主張の文に分類し，
 次に
-$\rm(\hspace{.08em}ii\hspace{.08em})$
+\textcolor{red}{(\ajroman{2})}
 出来事の文章の類似度で記事をクラスタリングし，
 その後
-$\rm(i\hspace{-.08em}i\hspace{-.08em}i)$
+\textcolor{red}{(\ajroman{3})}
 主張の文の類似度で主張の文をクラスタリングする．
 
 \begin{figure}[H]
@@ -156,7 +164,9 @@ COVID-19はフェイクニュースが多い話題であり，またインド，
 約8万件
 % 47342+21039+10076=78457
 の英記事が含まれるため，政治や文化の違いに由来する多くの異なる主張が分析できると考えた．
-また，11カ月間という短い期間で収集されているため，より類似した出来事に関する記事が得られると考えた．
+また，11カ月間という短い期間で収集されているため，より類似した出来事に関する記事が得られると
+\textcolor{red}{期待できる．}
+% 考えた．
 % 省略可能？
 Yangらの研究と同様に話題がCOVID-19に限定されてしまっているが，限定された話題でも同じ出来事の異なる主張がグループ化される様子は観測できると考えた．
 % @see weekly-report_20210930.md
@@ -167,8 +177,14 @@ Yangらの研究と同様に話題がCOVID-19に限定されてしまってい�
 本研究では，記事の文章が出来事を述べる文と主張を述べる文に二分できると仮定する．
 % そして，出来事の文のみ，主張の文のみで2回に分けてクラスタリングすることで，より近い出来事に関する異なる主張の文の推薦を目指す．
 出来事と主張の文の分類には，RoBERTaを転移学習した分類器を用いる．
-RoBERTaは文意や文脈を加味した自然言語処理が可能な機械学習モデルで，GLUE，SQuAD，RACEといったベンチマークで2019年の最先端のスコアを有している\cite{liu_roberta_2019}．
-ニュース記事を含む約160GBの文章データで事前に学習されたRoBERTa BASEモデルを利用し，これが出来事と主張の分類に適用できるよう，出来事か主張かでラベル付けした文で追加の学習を行った．
+RoBERTaは文意や文脈を加味した自然言語処理が可能な機械学習モデルで\textcolor{red}{ある}
+% ，GLUE，SQuAD，RACEといったベンチマークで2019年の最先端のスコアを有している
+\cite{liu_roberta_2019}．
+\textcolor{red}{事前学習モデルには，}ニュース記事を含む約160GBの文章データ
+% で事前に学習された
+\textcolor{red}{を学習した}
+RoBERTa BASEモデルを利用し\textcolor{red}{た．}
+% ，これが出来事と主張の分類に適用できるよう，出来事か主張かでラベル付けした文で追加の学習を行った．
 % 学習の活性化関数には？？？を，損失関数には交差エントロピーを用いた．
 % で，Dense層を加えたモデルのエンコード部分を用いることで分類タスクに応用できる．
 % 入力部分にDense層を付加
@@ -177,67 +193,80 @@ RoBERTaは文意や文脈を加味した自然言語処理が可能な機械学�
 2294個のClaimは「トピックを直接サポートする一般的で簡潔な文」，
 4692組のEvidenceは「トピックの文脈の中でClaimを直接サポートする文章」
 と定義されており，本研究では主張とClaim，出来事とEvidenceを同じ定義で扱う．
-表\ref{claim_evidence_example}にClaimとEvidenceの例を示す．
+\textcolor{red}{■■}
 
-データの数が不均衡であるため，Evidenceの学習の重みに$\frac{2294}{4692}$を乗算し，Evidenceを学習しにくくした．
-学習の損失関数には交差エントロピーを使用した．
+% 表\ref{claim_evidence_example}にClaimとEvidenceの例を示す．
 
-\begin{table}[H]
-  \caption{IBM Debater$^{\textregistered}$ - Claims and Evidencでラベル付けされたClaimの文(C)とEvidenceの文(E)の例}
-  \centering
-  \begin{tabular}{llp{6cm}}
-    \hline
-    C & global carbon emissions are caused by de-
-    \\
-    & forestation
-    % コンマがないのはデフォルト
-    \\
-    E & From 1990 to 2010 Nigeria nearly halved
-    \\
-    & their amount of Forest Cover, moving from
-    \\
-    & 17,234 to 9041 hectares.
-    \\
-    \hline
-  \end{tabular}
-  \label{claim_evidence_example}
-\end{table}
+% データの数が不均衡であるため，Evidenceの学習の重みに$\frac{2294}{4692}$を乗算し，Evidenceを学習しにくくした．
+% 学習の損失関数には交差エントロピーを使用した．
 
-システム全体の精度向上のため，2つのデータセットの前処理として
-% 正規表現を用いた
-小文字化やURLの除去などを行った．
-また，文章中の文の区切り位置を同定するため，機械学習ライブラリStanzaによるテキスト解析を行った\cite{qi_stanza_2020}．
-本システムにおいてStanzaはルールベースのspaCyよりも高速で，句点と句点以外のピリオドを精度良く区別できることを確認した．
-% 省略可能
-% StanzaはルールベースのspaCyに比べ，コンマに強い
+% \begin{table}[H]
+%   \caption{IBM Debater$^{\textregistered}$ - Claims and Evidencでラベル付けされたClaimの文(C)とEvidenceの文(E)の例}
+%   \centering
+%   \begin{tabular}{llp{6cm}}
+%     \hline
+%     C & global carbon emissions are caused by de-
+%     \\
+%     & forestation
+%     % コンマがないのはデフォルト
+%     \\
+%     E & From 1990 to 2010 Nigeria nearly halved
+%     \\
+%     & their amount of Forest Cover, moving from
+%     \\
+%     & 17,234 to 9041 hectares.
+%     \\
+%     \hline
+%   \end{tabular}
+%   \label{claim_evidence_example}
+% \end{table}
+
+% システム全体の精度向上のため，2つのデータセットの前処理として
+% % 正規表現を用いた
+% 小文字化やURLの除去などを行った．
+% また，文章中の文の区切り位置を同定するため，機械学習ライブラリStanzaによるテキスト解析を行った\cite{qi_stanza_2020}．
+% 本システムにおいてStanzaはルールベースのspaCyよりも高速で，句点と句点以外のピリオドを精度良く区別できることを確認した．
+% % 省略可能
+% % StanzaはルールベースのspaCyに比べ，コンマに強い
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{
-Sentence-BERT，コサイン距離，Ward法を用いた
+Sentence-BERT，コサイン\textcolor{red}{値}，Ward法を用いた
 出来事と主張の
 階層的クラスタリング
 % による出来事の文章と主張の文のグループ化
 }
 
-「出来事と分類した文を記事ごとに結合した文章」と「主張と分類した文」のそれぞれを，Sentence-BERTを用いて機械が解釈しやすい数ベクトルに変換した．
-Sentence-BERTは文章を文意を加味した数ベクトルに変換できる機械学習モデルで，RoBERTaで65時間かかっていた文の類似度算出を約5秒に短縮し，STSタスク（Semantic Textual Similarity tasks）で2019年の最先端のスコアを有している\cite{reimers_sentence-bert_2019}．
+「出来事と分類した文を記事ごとに結合した文章」と「主張と分類した文」のそれぞれを，Sentence-BERTを用いて\textcolor{red}{■}
+% 機械が解釈しやすい数
+ベクトルに変換した．
+Sentence-BERTは文章を文意を加味した\textcolor{red}{■}
+% 数
+ベクトルに変換できる機械学習モデルで\textcolor{red}{ある．}
+% ，RoBERTaで65時間かかっていた文の類似度算出を約5秒に短縮し，STSタスク（Semantic Textual Similarity tasks）で2019年の最先端のスコアを有している\cite{reimers_sentence-bert_2019}．
 事前に学習されたSentence-BERTのモデルには
 % ，ライブラリにデフォルトで提供されている
-Nilsが公開しているparaphrase-MiniLM-L6-v2を使用した．
+Nils\textcolor{red}{ら}が公開しているparaphrase-MiniLM-L6-v2を使用した．
 % 省略可能
 
-文章間の非類似度の算出には
+文章間の
+% 非類似度
+\textcolor{red}{距離}の算出には
 % Sentence-BERTの論文で用いられていた
-
-コサイン距離を使用し，
+\textcolor{red}{ベクトル間の}コサイン\textcolor{red}{値}
+% 距離
+を使用し，
 % （Ward法について調べたこと，Ward法以外を試せたらそれについて書く）
-クラスタ間の非類似度の算出
-にはWard法を用いた．
-本研究ではより類似した出来事で異なる主張が得るために，
+クラスタ間の
+% 非類似度
+\textcolor{red}{距離}の算出にはWard法を用いた．
+本研究ではより類似した出来事で異なる主張\textcolor{red}{を}得るために，
 具体的で有限個存在する出来事の文章を先にクラスタリングし，
-その後一般的で無数の出来事と対応する主張の文をクラスタリングした．
+その後一般的で
+% 無数
+\textcolor{red}{複数}の出来事と対応する主張の文をクラスタリングした．
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -247,115 +276,187 @@ Nilsが公開しているparaphrase-MiniLM-L6-v2を使用した．
 
 \subsection{出来事の文と主張の文の分類器の調整と評価}
 
-分類器の学習では，IBM Debater$^{\textregistered}$ - Claims and Evidenceの8割を訓練用，2割をテスト用に分割して評価を行った．
-学習は全データを40文ごと
+% 分類器の学習では，IBM Debater$^{\textregistered}$ - Claims and Evidenceの8割を訓練用，2割をテスト用に分割して評価を行った．
+% 学習は全データを40文ごと\textcolor{red}{のバッチ}
 % GPUが許す限り大きくした
 % RoBERTaの論文にバッチサイズは大きいほど良いとの記載
 % 一般の学習ではバッチサイズが大きすぎると収束しにくい
 % イテレーション数 128回
 % バッチサイズはそれぞれ40文, 10文
-に分割して行い，評価は全データの学習回数（エポック数）ごとに行った．
-また，COVID-19 News Articlesでの分類精度を確認するため，
+% に分割して行い，評価は全データの学習回数（エポック数）ごとに行った．
+% また，
+\textcolor{red}{■分類器の}
+COVID-19 News Articlesでの分類精度を確認するため，
 % IBM Debater$^{\textregistered}$ - Claims and Evidenceのラベル付けの傾向を
-COVID-19 News Articlesのそれぞれの国から3つの記事の文章を抽出し，手動で主張の文と出来事の文にラベル付けし，分類器で付与したラベルとの比較評価を行った．
-
+COVID-19 News Articlesの\textcolor{red}{各}国から3\textcolor{red}{件}の記事\textcolor{red}{■}を抽出し，\textcolor{red}{計163個の文を出来事か主張かで手動で}ラベル付けし，分類器で付与したラベルとの比較評価を行った．
 評価指標には，
-正しく主張の文と判断した数（TP），
-正しく出来事の文と判断した数（TN），
-誤って主張の文と判断した数（FP），
-誤って出来事の文と判断した数（FN）
-を基に計算した適合率，再現率，マシューズ相関係数（MCC）を用いた．
+\textcolor{red}{分類数が少なかった主張の文に着目して■}
+% 正しく主張の文と判断した数（TP），
+% 正しく出来事の文と判断した数（TN），
+% 誤って主張の文と判断した数（FP），
+% 誤って出来事の文と判断した数（FN）
+% を基に計算した
+適合率\textcolor{red}{と}再現率\textcolor{red}{■}
+% ，マシューズ相関係数（MCC）
+を用いた．
 適合率は主張だと判断した文のうち正しく判断できた文の割合，
 再現率は主張の文のうち正しく判断できた主張の文の割合を示す．
-MCCは分類器の精度を総合的に評価する指標で，TP，TN，FP，FNが不均衡なときにも頑健に評価できる\cite{chicco_advantages_2020}．
-どの指標も1に近いことが望ましい．
+% MCCは分類器の精度を総合的に評価する指標で，TP，TN，FP，FNが不均衡なときにも頑健に評価できる\cite{chicco_advantages_2020}．
+\textcolor{red}{■}
+ど\textcolor{red}{ちら}の指標も1に近いことが望ましい．
 
+\textcolor{red}{
+  文のラベル付けと分類結果との比較は表\ref{classification_example}のように行った．
+  3つ目の文は，一般の大衆にいえる筆者の主張が述べられているが，出来事に誤分類されている．
+}
 表\ref{classification_evaluation}に評価結果を示す．
-損失関数の出力が単調増加していたため，エポック数が大きいと訓練データ以外のデータ
+\textcolor{red}{
+適合率と再現率が共に最大となる3エポック時の分類器が最適であるといえる．
+また，適合率が1であり，主張の文だと判断したときは全て正しく判断できていることがわかる．
+■
+}
+% \textcolor{red}{学習ごとに}損失関数の出力が単調増加していたため，エポック数が大きいと訓練データ以外のデータ
 % COVID-19 News Articlesを始めとした一般的なデータ
-で分類精度が悪くなると判断し，少ないエポック数で評価を比較した．
+% で分類精度が悪くなると判断し，少ないエポック数で評価を比較した．
 % 省略可能
 
 \begin{table}[H]
+  \caption{\textcolor{red}{分類器の主張の文 ($C$)と出来事の文($E$)の分類例}}
+  \centering
+  {\tabcolsep=0.1cm
+  \begin{tabular}{cp{6.5cm}}
+      \hline
+      分類 & \multicolumn{1}{c}{入力文}
+      \\
+      \hline
+      $C$(正) & the goal was to bolster international competitiveness.
+      % 
+      % JP69
+      % $C$(正) & proponents see the pandemic as a chance to break with the modern calendar.
+      % パンデミックは現代のカレンダーと決別するチャンスだと考えています
+      % JP42
+      \\
+      $E$(正) & the government is reportedly aiming to announce guidance early next month.
+      % JP81
+      % 政府は来月初めにガイダンスを発表することを目指していると言われています
+      % $E$(正) & over 20000 people have signed an online petition calling for a shift to september school starts.
+      % 9月入学への移行を求めるオンライン署名に2000人以上が参加しました．
+      % JP54
+      \\
+      $E$(誤) & for now there is little that families and educators can do but wait to see what the abe administration has in mind.
+      % 今のところ，家族や教育者ができることは，ABE政権が何を考えているかを待つことだけです
+      % JP80
+      % $E$(誤) & i dont think online classes can completely replace them
+      % オンライン授業が完全に代替できるとは思えません．
+      % JP60
+      \\
+      \hline
+    \end{tabular}
+    \label{classification_example}
+    }
+\end{table}
+
+\begin{table}[H]
   \caption{
+    \textcolor{red}{COVID-19 News Articlesの163文の分類の評価}
     % 使用データとエポック数ごとの
-    分類器の評価
-    （IBM：IBM Debater$^{\textregistered}$ - Claims and Evidence，News：COVID-19 News Articles）
+    % 分類器の評価
+    % （IBM：IBM Debater$^{\textregistered}$ - Claims and Evidence，News：COVID-19 News Articles）
     }
   \centering
   {\tabcolsep=0.15cm
-    \begin{tabular}{cccccp{6cm}}
+    \begin{tabular}{ccccp{6cm}}
     \hline
-    データ & 評価指標 & $2$ epochs & $\mathbf{3}$ \textbf{epochs} & $4$ epochs
+    % データ & 評価指標 & $2$ epochs & $\mathbf{3}$ \textbf{epochs} & $4$ epochs
+    \textcolor{red}{■~~}評価指標 & $2$ epochs & $\mathbf{3}$ \textbf{epochs} & $4$ epochs
     \\
     \hline
-    IBM & Loss & $\mathbf{0.21}$ & $0.24$ & $0.30$
+    % IBM & Loss & $\mathbf{0.21}$ & $0.24$ & $0.30$
+    % \\
+    % IBM & MCC & $0.82$ & $\mathbf{0.83}$ & $0.82$
+    % \\
+    % News & TP & $4$ & $\mathbf{6}$ & $5$
+    % \\
+    % News & TN & $\mathbf{148}$ & $\mathbf{148}$ & $147$
+    % \\
+    % News & FP & $\mathbf{0}$ & $\mathbf{0}$ & $1$
+    % \\
+    % News & FN & $11$ & $\mathbf{9}$ & $10$
+    % \\
+    % News & 適合率 & $\mathbf{1.00}$ & $\mathbf{1.00}$ & $0.83$
+    \textcolor{red}{■~~}適合率 & $\mathbf{1.00}$ & $\mathbf{1.00}$ & $0.83$
     \\
-    IBM & MCC & $0.82$ & $\mathbf{0.83}$ & $0.82$
+    % News & 再現率 & $0.27$ & $\mathbf{0.40}$ & $0.33$
+    \textcolor{red}{■~~}再現率 & $0.27$ & $\mathbf{0.40}$ & $0.33$
     \\
-    News & TP & $4$ & $\mathbf{6}$ & $5$
-    \\
-    News & TN & $\mathbf{148}$ & $\mathbf{148}$ & $147$
-    \\
-    News & FP & $\mathbf{0}$ & $\mathbf{0}$ & $1$
-    \\
-    News & FN & $11$ & $\mathbf{9}$ & $10$
-    \\
-    News & 適合率 & $\mathbf{1.00}$ & $\mathbf{1.00}$ & $0.83$
-    \\
-    News & 再現率 & $0.27$ & $\mathbf{0.40}$ & $0.33$
-    \\
-    News & MCC & $0.50$ & $\mathbf{0.61}$ & $0.50$
-    \\
+    % News & MCC & $0.50$ & $\mathbf{0.61}$ & $0.50$
+    % \\
     \hline
     \end{tabular}
   }
   \label{classification_evaluation}
 \end{table}
 
-\subsection{2回の階層的クラスタリングの調整と評価}
 
-クラスタリングの評価指標には式(\ref{silhouette_coefficient})に示すシルエット係数を用いた．
-$a(i)$は文$s(i)$と文$s(i)$が属するクラスタの他の文との平均の非類似度であり，$a(i)$が0に近いとクラスタ内の文章がよく凝集しているといえる．
-$b(i)$は文$s(i)$と文$s(i)$の最近傍のクラスタの他の文との平均の非類似度であり，$a(i)$が1に近いと異なるクラスタの文章がよく乖離しているといえる．
-$a(i)$，$b(i)$から得た$Sil(i)$は，1に近いほどよく凝縮と乖離をしているといえる．
-実験では，分割するクラスタ数ごとに全ての文$s(i)$の$Sil(i)$を計算し，$Sil(i)$の平均$\overline{Sil(i)}$の推移を観察した．
+\textcolor{red}{\subsection{2回の階層的クラスタリングの調整と評価}}
+クラスタリングの実行時にメモリが不足したため，入力記事は959件に減らした．
+図\ref{claim_sentences_dendrogram}に主張の階層的クラスタリングの結果を示す．
+クラスタを結合するそれぞれのクラスタ間の距離が一様に分布しており，主張の文意が階層構造を持つことがわかる．
+主張の文の推薦に用いる階層のレベルには
+% 式(\ref{silhouette_coefficient})に示す
+シルエット係数が大きいものを選択した．
+この係数が大きいほど同一クラスタ内の文が類似し，異なるクラスタ間の文が類似しないといえる．
+% $a(i)$は文$s(i)$と文$s(i)$が属するクラスタの他の文との平均の非類似度であり，$a(i)$が0に近いとクラスタ内の文章がよく凝集しているといえる．
+% $b(i)$は文$s(i)$と文$s(i)$の最近傍のクラスタの他の文との平均の非類似度であり，$a(i)$が1に近いと異なるクラスタの文章がよく乖離しているといえる．
+% $a(i)$，$b(i)$から得た$Sil(i)$は，1に近いほどよく凝縮と乖離をしているといえる．
+% 実験では，分割するクラスタ数ごとに全ての文$s(i)$の$Sil(i)$を計算し，$Sil(i)$の平均$\overline{Sil(i)}$の推移を観察した．
+% 必要なメモリ容量が32GBを超えた
+% \begin{align}
+%   Sil(i) &= \frac{b(i) - a(i)}{\max ( b(i) , a(i))}
+%   \label{silhouette_coefficient}
+% \end{align}
+シルエット係数に基づき，出来事の文章を910個のクラスタに分割し，そのうち主張の文を16個持つクラスタを更に13個のクラスタに分割した．その後，クラスタ内外の文同士の類似性を目視で観察した．
+% 図\ref{num_article_clusters_and_silhouette}，\ref{num_sentence_clusters_and_silhouette}に示すようにクラスタ数が入力文の数に近いときに$\overline{Sil(i)}$が最大値を取る．
 
-\begin{align}
-  Sil(i) &= \frac{b(i) - a(i)}{\max ( b(i) , a(i))}
-  \label{silhouette_coefficient}
-\end{align}
 
-クラスタリングに必要なメモリ容量が32GBを超えたため，記事を959件に減らして実験を行った．
-/** 5000記事に差し替える予定 **/ 
-/** 正しいシルエット係数で描画した図に差し替える予定 **/
-図\ref{num_article_clusters_and_silhouette}，\ref{num_sentence_clusters_and_silhouette}に示すようにクラスタ数が入力文の数に近いときに$\overline{Sil(i)}$が最大値を取る．
-しかし，読者の迅速な出来事の把握のためには似た文はグループ化したいため，最適なクラスタ数として最大のクラスタ数の95\%以下の領域で$\overline{Sil(i)}$が最大値を取るようなクラスタ数を選択した．
-図\ref{num_sentence_clusters_and_silhouette}は，この選択に基づいて図\ref{num_article_clusters_and_silhouette}でクラスタ数910，$\overline{Sil(i)} \sim 0.38$となるように出来事の文章のクラスタリングを行った後，主張の文の数が多い1つのクラスタについて主張の文のクラスタリングを行った結果である．
-
-\begin{figure}[H]
-	\centering
-	% \includegraphics[keepaspectratio, width=60mm]{img/process-06_articles-cluster_num-of-clusters-dependency-on-silhouette-coefficient_reduced-data-to-5000_Trim.png}
-	\includegraphics[keepaspectratio, width=60mm]{img/process-06_articles-cluster_num-of-clusters-dependency-on-silhouette-coefficient_with-maximal-silhoette_reduced-data-to-959.png}
-	\caption{
-    出来事の文章のクラスタ数と$\overline{Sil(i)}$との関係
-  }
-	\label{num_article_clusters_and_silhouette}
-\end{figure}
+% しかし，読者の迅速な出来事の把握のためには似た文はグループ化したいため，最適なクラスタ数として最大のクラスタ数の95\%以下の領域で$\overline{Sil(i)}$が最大値を取るようなクラスタ数を選択した．
+% 図\ref{num_sentence_clusters_and_silhouette}は，この選択に基づいて図\ref{num_article_clusters_and_silhouette}でクラスタ数910，$\overline{Sil(i)} \sim 0.38$となるように出来事の文章のクラスタリングを行った後，主張の文の数が多い1つのクラスタについて主張の文のクラスタリングを行った結果である．
 
 \begin{figure}[H]
 	\centering
-	% \includegraphics[keepaspectratio, width=60mm]{img/process-07_sentences-cluster_num-of-clusters-dependency-on-silhouette-coefficient_reduced-data-to-5000_Trim.png}
-	\includegraphics[keepaspectratio, width=60mm]{img/process-07_sentences-cluster_num-of-clusters-dependency-on-silhouette-coefficient_reduced-data-to-959.png}
+	% \includegraphics[keepaspectratio, width=60mm]{img/process-07_sentences-cluster_color_dendrogram_reduced-data-to-959_Trim.png}
+	\includegraphics[keepaspectratio, width=60mm]{img/process-07_sentences-cluster_dendrogram_reduced-data-to-959_Trim.png}
 	\caption{
-    主張の文のクラスタ数と$\overline{Sil(i)}$との関係
+    \textcolor{red}{主張の文のクラスタリング結果の可視化}
   }
-	\label{num_sentence_clusters_and_silhouette}
+	\label{claim_sentences_dendrogram}
 \end{figure}
 
-表\ref{classification_result_samples}に，図\ref{num_sentence_clusters_and_silhouette}でクラスタ数13，$\overline{Sil(i)} \sim 0.23$となるように主張の文のクラスタリングを行った結果の一部を示す．
+% \begin{figure}[H]
+% 	\centering
+% 	% \includegraphics[keepaspectratio, width=60mm]{img/process-06_articles-cluster_num-of-clusters-dependency-on-silhouette-coefficient_reduced-data-to-5000_Trim.png}
+% 	\includegraphics[keepaspectratio, width=60mm]{img/process-06_articles-cluster_num-of-clusters-dependency-on-silhouette-coefficient_with-maximal-silhoette_reduced-data-to-959.png}
+% 	\caption{
+%     出来事の文章のクラスタ数と$\overline{Sil(i)}$との関係
+%   }
+% 	\label{num_article_clusters_and_silhouette}
+% \end{figure}
+
+% \begin{figure}[H]
+% 	\centering
+% 	% \includegraphics[keepaspectratio, width=60mm]{img/process-07_sentences-cluster_num-of-clusters-dependency-on-silhouette-coefficient_reduced-data-to-5000_Trim.png}
+% 	\includegraphics[keepaspectratio, width=60mm]{img/process-07_sentences-cluster_num-of-clusters-dependency-on-silhouette-coefficient_reduced-data-to-959.png}
+% 	\caption{
+%     主張の文のクラスタ数と$\overline{Sil(i)}$との関係
+%   }
+% 	\label{num_sentence_clusters_and_silhouette}
+% \end{figure}
+
+表\ref{classification_result_samples}に
+% 図\ref{num_sentence_clusters_and_silhouette}でクラスタ数13，$\overline{Sil(i)} \sim 0.23$となるように主張の文のクラスタリングを行った結果の一部を示す．
+クラスタ内外の主張の文の例を示す．
 同じクラスタ内に福祉を推進する主張の文が集まり，異なるクラスタに福祉として年金に目を向けさせる主張の文が配置されていることがわかる．
-/** 定量化した主観評価を追加する？ **/
+% /** 定量化した主観評価を追加する？ **/
 
 \begin{table}[H]
   \caption{
@@ -367,15 +468,16 @@ $a(i)$，$b(i)$から得た$Sil(i)$は，1に近いほどよく凝縮と乖離�
     \hline
     ID & \multicolumn{1}{c}{主張の文}
     \\
-    1 & they should also set aside certain percentages
+    \hline
+    0 & they should also set aside certain percentages
     \\
     & from their profits for their welfare.
     \\
-    1 & the poor should be made aware of the benefits
+    0 & the poor should be made aware of the benefits
     \\
     & they can enjoy under various welfare schemes.
     \\
-    3 & pension policies also have to be created for them.
+    2 & pension policies also have to be created for them.
     \\
     \hline
     \end{tabular}
