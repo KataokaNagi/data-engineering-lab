@@ -159,7 +159,9 @@ Yangらは，ニュース読者が出来事を正確かつ迅速に把握でき�
 
 % \subsection{データセットの選定と前処理}
 \subsection{RoBERTaによる出来事の文と主張の文の分類}
-入力する記事には，Piyushらが収集したCOVID-19 News Articlesを選定した\cite{ghasiya_investigating_2021}．
+入力する記事には，Piyushらが収集したCOVID-19 News Articlesを選定した
+% \cite{ghasiya_investigating_2021}
+．
 COVID-19はフェイクニュースが多い話題であり，またインド，日本，韓国の
 約8万件
 % 47342+21039+10076=78457
@@ -179,7 +181,8 @@ Yangらの研究と同様に話題がCOVID-19に限定されてしまってい�
 出来事と主張の文の分類には，RoBERTaを転移学習した分類器を用いる．
 RoBERTaは文意や文脈を加味した自然言語処理が可能な機械学習モデルで\textcolor{red}{ある}
 % ，GLUE，SQuAD，RACEといったベンチマークで2019年の最先端のスコアを有している
-\cite{liu_roberta_2019}．
+% \cite{liu_roberta_2019}
+．
 \textcolor{red}{事前学習モデルには，}ニュース記事を含む約160GBの文章データ
 % で事前に学習された
 \textcolor{red}{を学習した}
@@ -189,7 +192,9 @@ RoBERTa BASEモデルを利用し\textcolor{red}{た．}
 % で，Dense層を加えたモデルのエンコード部分を用いることで分類タスクに応用できる．
 % 入力部分にDense層を付加
 
-追加学習には，Wikipediaの英文をClaimを述べるかEvidenceを述べるかでラベル付けしたRutyらのIBM Debater$^{\textregistered}$ - Claims and Evidenceを利用した\cite{rinott_show_2015}．
+追加学習には，Wikipediaの英文をClaimを述べるかEvidenceを述べるかでラベル付けしたRutyらのIBM Debater$^{\textregistered}$ - Claims and Evidenceを利用した
+% \cite{rinott_show_2015}
+．
 2294個のClaimは「トピックを直接サポートする一般的で簡潔な文」，
 4692組のEvidenceは「トピックの文脈の中でClaimを直接サポートする文章」
 と定義されており，本研究では主張とClaim，出来事とEvidenceを同じ定義で扱う．
