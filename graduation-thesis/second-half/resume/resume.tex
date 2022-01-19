@@ -263,10 +263,10 @@ Nils\textcolor{red}{ら}が公開しているparaphrase-MiniLM-L6-v2を使用し
 % 非類似度
 \textcolor{red}{距離}の算出にはWard法を用いた．
 本研究ではより類似した出来事で異なる主張\textcolor{red}{を}得るために，
-具体的で有限個存在する出来事の文章を先にクラスタリングし，
-その後一般的で
+具体的で有限個存在する出来事の文章\textcolor{red}{に基づいて記事}を先にクラスタリングし，
+\textcolor{red}{得られた各クラスタについて}一般的で
 % 無数
-\textcolor{red}{複数}の出来事と対応する主張の文をクラスタリングした．
+\textcolor{red}{複数}の出来事と対応する主張の文を\textcolor{red}{抽出して}クラスタリングした．
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -312,7 +312,7 @@ COVID-19 News Articlesの\textcolor{red}{各}国から3\textcolor{red}{件}の�
 表\ref{classification_evaluation}に評価結果を示す．
 \textcolor{red}{
 適合率と再現率が共に最大となる3エポック時の分類器が最適であるといえる．
-また，適合率が1であり，主張の文だと判断したときは全て正しく判断できていることがわかる．
+% また，適合率が1であり，主張の文だと判断したときは全て正しく判断できていることがわかる．
 ■
 }
 % \textcolor{red}{学習ごとに}損失関数の出力が単調増加していたため，エポック数が大きいと訓練データ以外のデータ
@@ -415,7 +415,7 @@ COVID-19 News Articlesの\textcolor{red}{各}国から3\textcolor{red}{件}の�
 %   Sil(i) &= \frac{b(i) - a(i)}{\max ( b(i) , a(i))}
 %   \label{silhouette_coefficient}
 % \end{align}
-シルエット係数に基づき，出来事の文章を910個のクラスタに分割し，そのうち主張の文を16個持つクラスタを更に13個のクラスタに分割した．その後，クラスタ内外の文同士の類似性を目視で観察した．
+シルエット係数に基づき，記事を910個のクラスタに分割し，そのうち主張の文を11個持つクラスタの主張の文を9個のクラスタに分割した．
 % 図\ref{num_article_clusters_and_silhouette}，\ref{num_sentence_clusters_and_silhouette}に示すようにクラスタ数が入力文の数に近いときに$\overline{Sil(i)}$が最大値を取る．
 
 
@@ -452,10 +452,11 @@ COVID-19 News Articlesの\textcolor{red}{各}国から3\textcolor{red}{件}の�
 % 	\label{num_sentence_clusters_and_silhouette}
 % \end{figure}
 
-表\ref{classification_result_samples}に
+選択した記事のクラスタには2つの記事が含まれており，どちらもCOVID-19の感染力を話題としていた．
+表\ref{clustering_result_samples}に
 % 図\ref{num_sentence_clusters_and_silhouette}でクラスタ数13，$\overline{Sil(i)} \sim 0.23$となるように主張の文のクラスタリングを行った結果の一部を示す．
 クラスタ内外の主張の文の例を示す．
-同じクラスタ内に福祉を推進する主張の文が集まり，異なるクラスタに福祉として年金に目を向けさせる主張の文が配置されていることがわかる．
+同じクラスタ$c_1$内には感染力に関する簡潔な主張の文が集まり，それとは別のクラスタ$c_2$には感染力から派生した他の主張の文が配置されていることがわかる．$c_1, c_2$以外のクラスタの8個の文のうち，$c_1$の文と類似してしまった文は2個，$c_1$の文から派生した異なる主張の文は3個，$c_1$の文と関連しない文は3個存在した．$c_1$の文と関連しない文は全て，$c_1$とのクラスタ間距離が大きいクラスタに属していた．
 % /** 定量化した主観評価を追加する？ **/
 
 \begin{table}[H]
@@ -464,25 +465,21 @@ COVID-19 News Articlesの\textcolor{red}{各}国から3\textcolor{red}{件}の�
     }
   \centering
   {\tabcolsep=0.05cm
-    \begin{tabular}{clp{6cm}}
+    \begin{tabular}{cp{7.5cm}}
     \hline
     ID & \multicolumn{1}{c}{主張の文}
     \\
     \hline
-    0 & they should also set aside certain percentages
+    $c_1$ & it spreads rapidly all over the world and overtakes the people attacking their immune system.
     \\
-    & from their profits for their welfare.
+    $c_1$ & the patient then spreads the disease to others clandestinely.
     \\
-    0 & the poor should be made aware of the benefits
-    \\
-    & they can enjoy under various welfare schemes.
-    \\
-    2 & pension policies also have to be created for them.
+    $c_2$ & the chances of similar outbreaks are lower if the virus infects humans and then evolve its highly pathogenic properties.
     \\
     \hline
     \end{tabular}
   }
-  \label{classification_result_samples}
+  \label{clustering_result_samples}
 \end{table}
 
 % /**
@@ -513,50 +510,61 @@ COVID-19 News Articlesの\textcolor{red}{各}国から3\textcolor{red}{件}の�
 %% Section 考察
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{考察}
+表\ref{classification_evaluation}に示すように適合率が極めて大きいため，殆ど正しい主張のみでクラスタリングと推薦を行うことができる．
+一方で再現率は低く，本来主張である文をクラスタリングに組み込めない可能性が高い．
+しかし，入力記事を増やすことで多くの主張の文を組み込むことができるため，再現率の低さは大きな問題ではない．
+入力記事は分散処理によって増やすことが可能である．
+なお，主張の文は163文のうち6文しかなかったため，より信頼できる適合率と再現率の算出のためにより多くの文での評価が必要である．
 
-/**
+2回のクラスタリングで得られた$c_1$と$c_2$内の記事は互いに異なる記事から構成されており，別の記事から類似した出来事の異なる主張を得ることができたといえる．
+その精度は$\frac{4}{9}\sim0.44$であり，クラスタ間距離から絞り込むことで更なる精度の向上が期待できる．
+% /**
 
-手動ラベルの
+% 主観評価を被験者を増やして行う
 
-バッチサイズの改善
+% バッチサイズの改善
 
-T5の利用の検討
+% T5の利用の検討
 
-良く見える結果->妥当性
+% 良く見える結果->妥当性
 
-エラーの原因と対策
+% エラーの原因と対策
 
-タイトル回収？
+% タイトル回収？
 
-手付けラベルをバイアスのない複数人の被験者で試す
+% 手付けラベルをバイアスのない複数人の被験者で試す
 
-**/
+% **/
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Section まとめ
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{まとめ}
+本研究では出来事の文と主張の文のクラスタを用いた多様な主張を提示するニュース推薦手法の提案を行った．
+提案手法ではより類似した出来事の異なる主張を推薦するため，記事の文を出来事の文か主張の文かで分類し，それぞれの文に基づいて2回の階層的クラスタリングを行った．
+その結果，高い適合率で分類を行い，44\%の精度で類似した出来事の異なる主張を推薦できた．
+今後の課題として，クラスタ間距離から推薦の精度を向上する必要がある．
+% /**
 
-/**
+% 手法の目的を１文で説明
 
-手法の目的を１文で説明
+% 主にタイトル
 
-主にタイトル
+% 何をしたか
 
-何をしたか
+% 結果何ができたか
 
-結果何ができたか
+% 課題
 
-課題
+% **/
 
-**/
+% /**
 
-/**
+% 参考文献は半分以下に減らす予定
 
-参考文献は半分以下に減らす予定
+% **/
 
-**/
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Section 研究状況
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
