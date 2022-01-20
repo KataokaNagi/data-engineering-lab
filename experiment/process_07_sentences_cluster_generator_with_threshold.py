@@ -474,8 +474,8 @@ def main():
     size_of_clusters = [0] * num_of_cluster
 
     # [["(claim line 1 of cluster 1 including \n)(claim line 2 of cluster 1 including \n)..."], ...]
-    clusters_claims = [''] * best_num_of_cluster
-    for claim_idx, cluster_id in enumerate(best_cluster_by_number):
+    clusters_claims = [''] * num_of_cluster
+    for claim_idx, cluster_id in enumerate(cluster_by_threshold):
         claim_line = claim_lines[claim_idx]
         clusters_claims[cluster_id] += claim_line
         size_of_clusters[cluster_id] += 1
@@ -484,7 +484,7 @@ def main():
     log.v("ave_size_of_cluster:", ave_size_of_cluster)
 
     # write
-    for _, cluster_id in enumerate(best_cluster_by_number):
+    for _, cluster_id in enumerate(cluster_by_threshold):
         dest_dir_each_cluster_id = re.sub(
             "\\.txt", "_" + str(cluster_id) + ".txt", dest_dir)
         with open(dest_dir_each_cluster_id, "w+", encoding="utf_8") as f:
