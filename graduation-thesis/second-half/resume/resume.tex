@@ -322,6 +322,7 @@ COVID-19 News Articlesの各国から3件の記事を抽出し，計163個の文
 
 \begin{table}[H]
   \caption{分類器の主張の文 ($C$)と出来事の文($E$)の分類例}
+  \vspace{-1.5mm}
   \centering
   {\tabcolsep=0.1cm
   \begin{tabular}{cp{6.5cm}}
@@ -329,27 +330,27 @@ COVID-19 News Articlesの各国から3件の記事を抽出し，計163個の文
       分類 & \multicolumn{1}{c}{\textcolor{red}{COVID-19 News Articlesの文}}
       \\
       \hline
-      $C$(正) & the goal was to bolster international competitiveness.
+      $C$(正) & \baselineskip=12pt the goal was to bolster international competitiveness.
       % 
       % JP69
       % $C$(正) & proponents see the pandemic as a chance to break with the modern calendar.
       % パンデミックは現代のカレンダーと決別するチャンスだと考えています
       % JP42
-      \\
-      $E$(正) & the government is reportedly aiming to announce guidance early next month.
+      \\[1mm]
+      $E$(正) & \baselineskip=12pt the government is reportedly aiming to announce guidance early next month.
       % JP81
       % 政府は来月初めにガイダンスを発表することを目指していると言われています
       % $E$(正) & over 20000 people have signed an online petition calling for a shift to september school starts.
       % 9月入学への移行を求めるオンライン署名に2000人以上が参加しました．
       % JP54
-      \\
-      $E$(誤) & for now there is little that families and educators can do but wait to see what the abe administration has in mind.
+      \\[1mm]
+      $E$(誤) & \baselineskip=12pt for now there is little that families and educators can do but wait to see what the abe administration has in mind.
       % 今のところ，家族や教育者ができることは，ABE政権が何を考えているかを待つことだけです
       % JP80
       % $E$(誤) & i dont think online classes can completely replace them
       % オンライン授業が完全に代替できるとは思えません．
       % JP60
-      \\
+      \\[0.5mm]
       \hline
     \end{tabular}
     \label{classification_example}
@@ -471,10 +472,15 @@ COVID-19 News Articlesの各国から3件の記事を抽出し，計163個の文
 $c_1$以外のクラスタに属する感染対策に関する7文のうち，7文全てが飲食店以外の感染対策に関する主張であった．
 }
 
+% 行間の調整
+% @see [ＴｅＸで行間を調整する方法をお教えください．](https://okwave.jp/qa/q7280528.html)
+% @see [Re: tabular環境でのカラム内折り返し時の行間の調整法について](https://oku.edu.mie-u.ac.jp/~okumura/texfaq/qa/55965.html)
+
 \begin{table}[H]
   \caption{
-      同じクラスタIDと異なるクラスタIDでの文の比較
+    同じクラスタIDと異なるクラスタIDでの文の比較
     }
+    \vspace{-1.0mm}
   \centering
   {\tabcolsep=0.05cm
     \begin{tabular}{cp{7.5cm}}
@@ -483,13 +489,13 @@ $c_1$以外のクラスタに属する感染対策に関する7文のうち，7�
     \\
     \hline
     $c_1$ & try not to eat in restaurants as much as possible.
-    \\
-    $c_1$ & franchise cafes and dessert shops were obligated to offer only takeout around the clock.
-    \\
-    $c_2$ & sports event are also obligated to keep the ceiling of 30 percent at stadiums.
-    \\
-    $c_2$ & outdoor exercise will be banned and wearing masks will be mandatory.
-    \\
+    \\[1mm]
+    $c_1$ & \baselineskip=12pt franchise cafes and dessert shops were obligated to offer only takeout around the clock.
+    \\[1mm]
+    $c_2$ & \baselineskip=12pt sports event are also obligated to keep the ceiling of 30 percent at stadiums.
+    \\[1mm]
+    $c_2$ & \baselineskip=12pt outdoor exercise will be banned and wearing masks will be mandatory.
+    \\[0.5mm]
     \hline
     \end{tabular}
   }
@@ -523,6 +529,7 @@ $c_1$以外のクラスタに属する感染対策に関する7文のうち，7�
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Section 考察
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{-3.0mm}
 \section{考察}
 \textcolor{red}{分類の}適合率が極めて大きいため，殆ど正しい主張のみでクラスタリングと推薦を行うことができ\textcolor{red}{た}．
 一方で再現率は低く，本来主張である文\textcolor{red}{の}クラスタリング\textcolor{red}{手法への適用が難しい}可能性が\textcolor{red}{ある．}
@@ -567,6 +574,7 @@ $c_1$以外のクラスタに属する感染対策に関する7文のうち，7�
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Section まとめ
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{-4.0mm}
 \section{まとめ}
 本研究では出来事の文と主張の文のクラスタを用いた多様な主張を提示するニュース推薦手法\textcolor{red}{を}提案\textcolor{red}{した}．
 提案手法ではより類似した出来事の異なる主張を推薦するため，記事の文を出来事の文か主張の文かで分類し，それぞれの文に基づいて2回の階層的クラスタリングを行った．
@@ -638,6 +646,7 @@ $c_1$以外のクラスタに属する感染対策に関する7文のうち，7�
 % を用いた → で
 % （事象と主張以外の集合が存在する可能性）
 
+\vspace{-4.0mm}
 \bibliographystyle{junsrt}
 {\footnotesize \bibliography{ref.bib}}
 
