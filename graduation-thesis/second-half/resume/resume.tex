@@ -70,15 +70,15 @@ RSF(Reporters Sans Frontières)は，政治や文化などの要因によって�
 
 Yangらは，ニュース読者が出来事を正確かつ迅速に把握できるように，
 階層的クラスタリングを用いて記事に対するツイートの主張をグループ化する手法を提案した\cite{yang_scalable_2021}．
-この研究ではCOVID-19の話題に限定した主張の文をグループ化しているが，この手法をWeb上の\textcolor{red}{多く}の話題の記事に適用した場合，\textcolor{red}{多く}の話題の主張のグループが生成されることになる．
+この研究ではCOVID-19の話題に限定した主張の文をグループ化しているが，この手法をWeb上の多くの話題の記事に適用した場合，多くの話題の主張のグループが生成されることになる．
 % 1度のクラスタリングで
 % 無数の主張のグループが生成されることになる．
 これでは，COVID-19の
-\textcolor{red}{飲み薬やワクチンといった異なる話題から安全性に関する共通した}
+飲み薬やワクチンといった異なる話題から安全性に関する共通した
 % ワクチンに対する主張と脳炎のワクチンに対する
-主張が\textcolor{red}{■}
+主張が
 % 近くに
-グループ化される\textcolor{red}{ような}事が起き得るため，同じ出来事の異なる主張の収集に時間を要してしまう．
+グループ化されるような事が起き得るため，同じ出来事の異なる主張の収集に時間を要してしまう．
 % これにより，ニュース読者の正確かつ迅速な出来事の把握の支援を目指す．
 % 異なる話題の似た主張をグループ化するエラーに繋がりやすいと考えられる．
 
@@ -139,13 +139,13 @@ Yangらは，ニュース読者が出来事を正確かつ迅速に把握でき�
 \section{提案手法}
 図\ref{system_abstract}に提案手法の概要を示す．
 まず
-\textcolor{red}{(\ajroman{1})}
+(\ajroman{1})
 記事の文章を出来事の文と主張の文に分類し，
 次に
-\textcolor{red}{(\ajroman{2})}
+(\ajroman{2})
 出来事の文章の類似度で記事をクラスタリングし，
 その後
-\textcolor{red}{(\ajroman{3})}
+(\ajroman{3})
 主張の文の類似度で主張の文をクラスタリングする．
 
 \begin{figure}[H]
@@ -167,7 +167,7 @@ COVID-19はフェイクニュースが多い話題であり，またインド，
 % 47342+21039+10076=78457
 の英記事が含まれるため，政治や文化の違いに由来する多くの異なる主張が分析できると考えた．
 また，11カ月間という短い期間で収集されているため，より類似した出来事に関する記事が得られると
-\textcolor{red}{期待できる．}
+期待できる．
 % 考えた．
 % 省略可能？
 Yangらの研究と同様に話題がCOVID-19に限定されてしまっているが，限定された話題でも同じ出来事の異なる主張がグループ化される様子は観測できると考えた．
@@ -179,14 +179,14 @@ Yangらの研究と同様に話題がCOVID-19に限定されてしまってい�
 本研究では，記事の文章が出来事を述べる文と主張を述べる文に二分できると仮定する．
 % そして，出来事の文のみ，主張の文のみで2回に分けてクラスタリングすることで，より近い出来事に関する異なる主張の文の推薦を目指す．
 出来事と主張の文の分類には，RoBERTaを転移学習した分類器を用いる．
-RoBERTaは文意や文脈を加味した自然言語処理が可能な機械学習モデルで\textcolor{red}{ある}
+RoBERTaは文意や文脈を加味した自然言語処理が可能な機械学習モデルである
 % ，GLUE，SQuAD，RACEといったベンチマークで2019年の最先端のスコアを有している
 % \cite{liu_roberta_2019}
 ．
-\textcolor{red}{事前学習モデルには，}ニュース記事を含む約160GBの文章データ
+事前学習モデルには，ニュース記事を含む約160GBの文章データ
 % で事前に学習された
-\textcolor{red}{を学習した}
-RoBERTa BASEモデルを利用し\textcolor{red}{た．}
+を学習した
+RoBERTa BASEモデルを利用した．
 % ，これが出来事と主張の分類に適用できるよう，出来事か主張かでラベル付けした文で追加の学習を行った．
 % 学習の活性化関数には？？？を，損失関数には交差エントロピーを用いた．
 % で，Dense層を加えたモデルのエンコード部分を用いることで分類タスクに応用できる．
@@ -198,7 +198,6 @@ RoBERTa BASEモデルを利用し\textcolor{red}{た．}
 2294個のClaimは「トピックを直接サポートする一般的で簡潔な文」，
 4692組のEvidenceは「トピックの文脈の中でClaimを直接サポートする文章」
 と定義されており，本研究では主張とClaim，出来事とEvidenceを同じ定義で扱う．
-\textcolor{red}{■■}
 
 % 表\ref{claim_evidence_example}にClaimとEvidenceの例を示す．
 
@@ -238,40 +237,40 @@ RoBERTa BASEモデルを利用し\textcolor{red}{た．}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{
-Sentence-BERT，コサイン\textcolor{red}{値}，Ward法を用いた
+Sentence-BERT，コサイン値，Ward法を用いた
 出来事と主張の
 階層的クラスタリング
 % による出来事の文章と主張の文のグループ化
 }
 
-「出来事と分類した文を記事ごとに結合した文章」と「主張と分類した文」のそれぞれを，Sentence-BERTを用いて\textcolor{red}{■}
+「出来事と分類した文を記事ごとに結合した文章」と「主張と分類した文」のそれぞれを，Sentence-BERTを用いて
 % 機械が解釈しやすい数
 ベクトルに変換した．
-Sentence-BERTは文章を文意を加味した\textcolor{red}{■}
+Sentence-BERTは文章を文意を加味した
 % 数
-ベクトルに変換できる機械学習モデルで\textcolor{red}{ある．}
+ベクトルに変換できる機械学習モデルである．
 % ，RoBERTaで65時間かかっていた文の類似度算出を約5秒に短縮し，STSタスク（Semantic Textual Similarity tasks）で2019年の最先端のスコアを有している\cite{reimers_sentence-bert_2019}．
 事前に学習されたSentence-BERTのモデルには
 % ，ライブラリにデフォルトで提供されている
-Nils\textcolor{red}{ら}が公開しているparaphrase-MiniLM-L6-v2を使用した．
+Nilsらが公開しているparaphrase-MiniLM-L6-v2を使用した．
 % 省略可能
 
 文章間の
 % 非類似度
-\textcolor{red}{距離}の算出には
+距離の算出には
 % Sentence-BERTの論文で用いられていた
-\textcolor{red}{ベクトル間の}コサイン\textcolor{red}{値}
+ベクトル間のコサイン値
 % 距離
 を使用し，
 % （Ward法について調べたこと，Ward法以外を試せたらそれについて書く）
 クラスタ間の
 % 非類似度
-\textcolor{red}{距離}の算出にはWard法を用いた．
-本研究ではより類似した出来事で異なる主張\textcolor{red}{を}得るために，
-具体的で有限個存在する出来事の文章\textcolor{red}{に基づいて記事}を先にクラスタリングし，
-\textcolor{red}{得られた各クラスタについて}一般的で
+距離の算出にはWard法を用いた．
+本研究ではより類似した出来事で異なる主張を得るために，
+具体的で有限個存在する出来事の文章に基づいて記事を先にクラスタリングし，
+得られた各クラスタについて一般的で
 % 無数
-\textcolor{red}{複数}の出来事と対応する主張の文を\textcolor{red}{抽出して}クラスタリングした．
+複数の出来事と対応する主張の文を抽出してクラスタリングした．
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -282,7 +281,7 @@ Nils\textcolor{red}{ら}が公開しているparaphrase-MiniLM-L6-v2を使用し
 \subsection{出来事の文と主張の文の分類器の調整と評価}
 
 % 分類器の学習では，IBM Debater$^{\textregistered}$ - Claims and Evidenceの8割を訓練用，2割をテスト用に分割して評価を行った．
-% 学習は全データを40文ごと\textcolor{red}{のバッチ}
+% 学習は全データを40文ごとのバッチ
 % GPUが許す限り大きくした
 % RoBERTaの論文にバッチサイズは大きいほど良いとの記載
 % 一般の学習ではバッチサイズが大きすぎると収束しにくい
@@ -290,43 +289,37 @@ Nils\textcolor{red}{ら}が公開しているparaphrase-MiniLM-L6-v2を使用し
 % バッチサイズはそれぞれ40文, 10文
 % に分割して行い，評価は全データの学習回数（エポック数）ごとに行った．
 % また，
-\textcolor{red}{■分類器の}
+分類器の
 COVID-19 News Articlesでの分類精度を確認するため，
 % IBM Debater$^{\textregistered}$ - Claims and Evidenceのラベル付けの傾向を
-COVID-19 News Articlesの\textcolor{red}{各}国から3\textcolor{red}{件}の記事\textcolor{red}{■}を抽出し，\textcolor{red}{計163個の文を出来事か主張かで手動で}ラベル付けし，分類器で付与したラベルとの比較評価を行った．
+COVID-19 News Articlesの各国から3件の記事を抽出し，計163個の文を出来事か主張かで手動でラベル付けし，分類器で付与したラベルとの比較評価を行った．
 評価指標には，
-\textcolor{red}{分類数が少なかった主張の文に着目して■}
+分類数が少なかった主張の文に着目して
 % 正しく主張の文と判断した数（TP），
 % 正しく出来事の文と判断した数（TN），
 % 誤って主張の文と判断した数（FP），
 % 誤って出来事の文と判断した数（FN）
 % を基に計算した
-適合率\textcolor{red}{と}再現率\textcolor{red}{■}
+適合率と再現率
 % ，マシューズ相関係数（MCC）
 を用いた．
 適合率は主張だと判断した文のうち正しく判断できた文の割合，
 再現率は主張の文のうち正しく判断できた主張の文の割合を示す．
 % MCCは分類器の精度を総合的に評価する指標で，TP，TN，FP，FNが不均衡なときにも頑健に評価できる\cite{chicco_advantages_2020}．
-\textcolor{red}{■}
-ど\textcolor{red}{ちら}の指標も1に近いことが望ましい．
+どちらの指標も1に近いことが望ましい．
 
-\textcolor{red}{
-  文のラベル付けと分類結果との比較は表\ref{classification_example}のように行った．
-  3つ目の文は，一般の大衆にいえる筆者の主張が述べられているが，出来事に誤分類されている．
-}
+文のラベル付けと分類結果との比較は表\ref{classification_example}のように行った．
+3つ目の文は，一般の大衆にいえる筆者の主張が述べられているが，出来事に誤分類されている．
 表\ref{classification_evaluation}に評価結果を示す．
-\textcolor{red}{
 適合率と再現率が共に最大となる3エポック時の分類器が最適であるといえる．
 % また，適合率が1であり，主張の文だと判断したときは全て正しく判断できていることがわかる．
-■
-}
 % \textcolor{red}{学習ごとに}損失関数の出力が単調増加していたため，エポック数が大きいと訓練データ以外のデータ
 % COVID-19 News Articlesを始めとした一般的なデータ
 % で分類精度が悪くなると判断し，少ないエポック数で評価を比較した．
 % 省略可能
 
 \begin{table}[H]
-  \caption{\textcolor{red}{分類器の主張の文 ($C$)と出来事の文($E$)の分類例}}
+  \caption{分類器の主張の文 ($C$)と出来事の文($E$)の分類例}
   \centering
   {\tabcolsep=0.1cm
   \begin{tabular}{cp{6.5cm}}
@@ -363,7 +356,7 @@ COVID-19 News Articlesの\textcolor{red}{各}国から3\textcolor{red}{件}の�
 
 \begin{table}[H]
   \caption{
-    \textcolor{red}{COVID-19 News Articlesの163文の分類の評価}
+    COVID-19 News Articlesの163文の分類の評価
     % 使用データとエポック数ごとの
     % 分類器の評価
     % （IBM：IBM Debater$^{\textregistered}$ - Claims and Evidence，News：COVID-19 News Articles）
@@ -373,7 +366,7 @@ COVID-19 News Articlesの\textcolor{red}{各}国から3\textcolor{red}{件}の�
     \begin{tabular}{ccccp{6cm}}
     \hline
     % データ & 評価指標 & $2$ epochs & $\mathbf{3}$ \textbf{epochs} & $4$ epochs
-    \textcolor{red}{■~~}評価指標 & $2$ epochs & $\mathbf{3}$ \textbf{epochs} & $4$ epochs
+    評価指標 & $2$ epochs & $\mathbf{3}$ \textbf{epochs} & $4$ epochs
     \\
     \hline
     % IBM & Loss & $\mathbf{0.21}$ & $0.24$ & $0.30$
@@ -389,10 +382,10 @@ COVID-19 News Articlesの\textcolor{red}{各}国から3\textcolor{red}{件}の�
     % News & FN & $11$ & $\mathbf{9}$ & $10$
     % \\
     % News & 適合率 & $\mathbf{1.00}$ & $\mathbf{1.00}$ & $0.83$
-    \textcolor{red}{■~~}適合率 & $\mathbf{1.00}$ & $\mathbf{1.00}$ & $0.83$
+    適合率 & $\mathbf{1.00}$ & $\mathbf{1.00}$ & $0.83$
     \\
     % News & 再現率 & $0.27$ & $\mathbf{0.40}$ & $0.33$
-    \textcolor{red}{■~~}再現率 & $0.27$ & $\mathbf{0.40}$ & $0.33$
+    再現率 & $0.27$ & $\mathbf{0.40}$ & $0.33$
     \\
     % News & MCC & $0.50$ & $\mathbf{0.61}$ & $0.50$
     % \\
@@ -403,7 +396,7 @@ COVID-19 News Articlesの\textcolor{red}{各}国から3\textcolor{red}{件}の�
 \end{table}
 
 
-\textcolor{red}{\subsection{2回の階層的クラスタリングの調整と評価}}
+\subsection{2回の階層的クラスタリングの調整と評価}
 クラスタリングの実行時にメモリが不足したため，入力記事は959件に減らした．
 図\ref{claim_sentences_dendrogram}に主張の階層的クラスタリングの結果を示す．
 クラスタを結合するそれぞれのクラスタ間の距離が一様に分布しており，主張の文意が階層構造を持つことがわかる．
@@ -432,7 +425,7 @@ COVID-19 News Articlesの\textcolor{red}{各}国から3\textcolor{red}{件}の�
 	% \includegraphics[keepaspectratio, width=60mm]{img/process-07_sentences-cluster_color_dendrogram_reduced-data-to-959_Trim.png}
 	\includegraphics[keepaspectratio, width=60mm]{img/process-07_sentences-cluster_dendrogram_reduced-data-to-959_Trim.png}
 	\caption{
-    \textcolor{red}{主張の文のクラスタリング結果の可視化}
+    主張の文のクラスタリング結果の可視化
   }
 	\label{claim_sentences_dendrogram}
 \end{figure}
