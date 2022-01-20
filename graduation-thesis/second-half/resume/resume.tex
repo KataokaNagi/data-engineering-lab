@@ -70,15 +70,15 @@ RSF(Reporters Sans Frontières)は，政治や文化などの要因によって�
 
 Yangらは，ニュース読者が出来事を正確かつ迅速に把握できるように，
 階層的クラスタリングを用いて記事に対するツイートの主張をグループ化する手法を提案した\cite{yang_scalable_2021}．
-この研究ではCOVID-19の話題に限定した主張の文をグループ化しているが，この手法をWeb上の多くの話題の記事に適用した場合，多くの話題の主張のグループが生成されることになる．
+この研究ではCOVID-19の話題に限定した主張の文をグループ化しているが，この手法を\textcolor{red}{Web上の記事}に適用した場合，多くの話題\textcolor{red}{について}主張の\textcolor{red}{まとまり}が生成されることになる．
 % 1度のクラスタリングで
 % 無数の主張のグループが生成されることになる．
 これでは，COVID-19の
-飲み薬やワクチンといった異なる話題から安全性に関する共通した
+飲み薬やワクチン\textcolor{red}{などの}異なる話題から安全性に関する共通した
 % ワクチンに対する主張と脳炎のワクチンに対する
 主張が
 % 近くに
-グループ化されるような事が起き得るため，同じ出来事の異なる主張の収集に時間を要してしまう．
+グループ化され\textcolor{red}{る}ため，同じ出来事の異なる主張の収集に時間を要してしまう．
 % これにより，ニュース読者の正確かつ迅速な出来事の把握の支援を目指す．
 % 異なる話題の似た主張をグループ化するエラーに繋がりやすいと考えられる．
 
@@ -192,7 +192,7 @@ RoBERTa BASEモデルを利用した．
 % で，Dense層を加えたモデルのエンコード部分を用いることで分類タスクに応用できる．
 % 入力部分にDense層を付加
 
-追加学習には，Wikipediaの英文をClaimを述べるかEvidenceを述べるかでラベル付けしたRutyらのIBM Debater$^{\textregistered}$ - Claims and Evidenceを利用した
+追加学習には，Wikipediaの英文をClaimを述べるかEvidenceを述べるかでラベル付けしたRutyらのIBM \textcolor{red}{Debater} - Claims and Evidenceを利用した
 % \cite{rinott_show_2015}
 ．
 2294個のClaimは「トピックを直接サポートする一般的で簡潔な文」，
@@ -205,7 +205,7 @@ RoBERTa BASEモデルを利用した．
 % 学習の損失関数には交差エントロピーを使用した．
 
 % \begin{table}[H]
-%   \caption{IBM Debater$^{\textregistered}$ - Claims and Evidencでラベル付けされたClaimの文(C)とEvidenceの文(E)の例}
+%   \caption{IBM \textcolor{red}{Debater} - Claims and Evidencでラベル付けされたClaimの文(C)とEvidenceの文(E)の例}
 %   \centering
 %   \begin{tabular}{llp{6cm}}
 %     \hline
@@ -246,16 +246,16 @@ Sentence-BERT，コサイン値，Ward法を用いた
 「出来事と分類した文を記事ごとに結合した文章」と「主張と分類した文」のそれぞれを，Sentence-BERTを用いて
 % 機械が解釈しやすい数
 ベクトルに変換した．
-Sentence-BERTは文章を文意を加味した
+Sentence-BERTは文章を\textcolor{red}{その意味を表す}
+% 文意を加味した
 % 数
-ベクトルに変換できる機械学習モデルである．
+ベクトルに変換\textcolor{red}{する}機械学習モデルである．
 % ，RoBERTaで65時間かかっていた文の類似度算出を約5秒に短縮し，STSタスク（Semantic Textual Similarity tasks）で2019年の最先端のスコアを有している\cite{reimers_sentence-bert_2019}．
 事前に学習されたSentence-BERTのモデルには
 % ，ライブラリにデフォルトで提供されている
-Nilsらが公開しているparaphrase-MiniLM-L6-v2を使用した．
+Nilsらが公開しているparaphrase-MiniLM-L6-v2を使用した\textcolor{red}{．
 % 省略可能
-
-文章間の
+文}章間の
 % 非類似度
 距離の算出には
 % Sentence-BERTの論文で用いられていた
@@ -266,12 +266,14 @@ Nilsらが公開しているparaphrase-MiniLM-L6-v2を使用した．
 クラスタ間の
 % 非類似度
 距離の算出にはWard法を用いた．
-本研究ではより類似した出来事で異なる主張を得るために，
-具体的で有限個存在する出来事の文章に基づいて記事を先にクラスタリングし，
-得られた各クラスタについて一般的で
-% 無数
-複数の出来事と対応する主張の文を抽出してクラスタリングした．
-
+% 本研究ではより類似した出来事で異なる主張を得るために，
+% 具体的で有限個存在する出来事の文章に基づいて記事を先にクラスタリングし，
+% 得られた各クラスタについて一般的で
+% % 無数
+% 複数の出来事と対応する主張の文を抽出してクラスタリングした．
+\textcolor{red}{
+記事は出来事に対して主張を述べる構造を持つため，先に出来事の文章で記事をクラスタリングし，その後主張の文をクラスタリングする．
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Section 実験
@@ -280,7 +282,7 @@ Nilsらが公開しているparaphrase-MiniLM-L6-v2を使用した．
 
 \subsection{出来事の文と主張の文の分類器の調整と評価}
 
-% 分類器の学習では，IBM Debater$^{\textregistered}$ - Claims and Evidenceの8割を訓練用，2割をテスト用に分割して評価を行った．
+% 分類器の学習では，IBM \textcolor{red}{Debater} - Claims and Evidenceの8割を訓練用，2割をテスト用に分割して評価を行った．
 % 学習は全データを40文ごとのバッチ
 % GPUが許す限り大きくした
 % RoBERTaの論文にバッチサイズは大きいほど良いとの記載
@@ -291,7 +293,7 @@ Nilsらが公開しているparaphrase-MiniLM-L6-v2を使用した．
 % また，
 分類器の
 COVID-19 News Articlesでの分類精度を確認するため，
-% IBM Debater$^{\textregistered}$ - Claims and Evidenceのラベル付けの傾向を
+% IBM \textcolor{red}{Debater} - Claims and Evidenceのラベル付けの傾向を
 COVID-19 News Articlesの各国から3件の記事を抽出し，計163個の文を出来事か主張かで手動でラベル付けし，分類器で付与したラベルとの比較評価を行った．
 評価指標には，
 分類数が少なかった主張の文に着目して
@@ -303,15 +305,15 @@ COVID-19 News Articlesの各国から3件の記事を抽出し，計163個の文
 適合率と再現率
 % ，マシューズ相関係数（MCC）
 を用いた．
-適合率は主張だと判断した文のうち正しく判断できた文の割合，
-再現率は主張の文のうち正しく判断できた主張の文の割合を示す．
+適合率は主張だと\textcolor{red}{分類}した文のうち\textcolor{red}{実際に主張の文であった}割合，
+再現率は主張の文のうち正しく\textcolor{red}{分類}できた主張の文の割合を示す．
 % MCCは分類器の精度を総合的に評価する指標で，TP，TN，FP，FNが不均衡なときにも頑健に評価できる\cite{chicco_advantages_2020}．
-どちらの指標も1に近いことが望ましい．
-
-文のラベル付けと分類結果との比較は表\ref{classification_example}のように行った．
+どちらの指標も1に近いことが望ましい．\textcolor{red}{実験の結果，適合率は1，再現率は0.4となった．}
+% 文のラベル付けと分類結果との比較は表\ref{classification_example}のように行った．
+\textcolor{red}{表\ref{classification_example}に分類結果の例を示す．}
 3つ目の文は，一般の大衆にいえる筆者の主張が述べられているが，出来事に誤分類されている．
-表\ref{classification_evaluation}に評価結果を示す．
-適合率と再現率が共に最大となる3エポック時の分類器が最適であるといえる．
+% 表\ref{classification_evaluation}に評価結果を示す．
+% 適合率と再現率が共に最大となる3エポック時の分類器が最適であるといえる．
 % また，適合率が1であり，主張の文だと判断したときは全て正しく判断できていることがわかる．
 % \textcolor{red}{学習ごとに}損失関数の出力が単調増加していたため，エポック数が大きいと訓練データ以外のデータ
 % COVID-19 News Articlesを始めとした一般的なデータ
@@ -324,7 +326,7 @@ COVID-19 News Articlesの各国から3件の記事を抽出し，計163個の文
   {\tabcolsep=0.1cm
   \begin{tabular}{cp{6.5cm}}
       \hline
-      分類 & \multicolumn{1}{c}{入力文}
+      分類 & \multicolumn{1}{c}{\textcolor{red}{COVID-19 News Articlesの文}}
       \\
       \hline
       $C$(正) & the goal was to bolster international competitiveness.
@@ -354,56 +356,57 @@ COVID-19 News Articlesの各国から3件の記事を抽出し，計163個の文
     }
 \end{table}
 
-\begin{table}[H]
-  \caption{
-    COVID-19 News Articlesの163文の分類の評価
-    % 使用データとエポック数ごとの
-    % 分類器の評価
-    % （IBM：IBM Debater$^{\textregistered}$ - Claims and Evidence，News：COVID-19 News Articles）
-    }
-  \centering
-  {\tabcolsep=0.15cm
-    \begin{tabular}{ccccp{6cm}}
-    \hline
-    % データ & 評価指標 & $2$ epochs & $\mathbf{3}$ \textbf{epochs} & $4$ epochs
-    評価指標 & $2$ epochs & $\mathbf{3}$ \textbf{epochs} & $4$ epochs
-    \\
-    \hline
-    % IBM & Loss & $\mathbf{0.21}$ & $0.24$ & $0.30$
-    % \\
-    % IBM & MCC & $0.82$ & $\mathbf{0.83}$ & $0.82$
-    % \\
-    % News & TP & $4$ & $\mathbf{6}$ & $5$
-    % \\
-    % News & TN & $\mathbf{148}$ & $\mathbf{148}$ & $147$
-    % \\
-    % News & FP & $\mathbf{0}$ & $\mathbf{0}$ & $1$
-    % \\
-    % News & FN & $11$ & $\mathbf{9}$ & $10$
-    % \\
-    % News & 適合率 & $\mathbf{1.00}$ & $\mathbf{1.00}$ & $0.83$
-    適合率 & $\mathbf{1.00}$ & $\mathbf{1.00}$ & $0.83$
-    \\
-    % News & 再現率 & $0.27$ & $\mathbf{0.40}$ & $0.33$
-    再現率 & $0.27$ & $\mathbf{0.40}$ & $0.33$
-    \\
-    % News & MCC & $0.50$ & $\mathbf{0.61}$ & $0.50$
-    % \\
-    \hline
-    \end{tabular}
-  }
-  \label{classification_evaluation}
-\end{table}
+% \begin{table}[H]
+%   \caption{
+%     COVID-19 News Articlesの163文の分類の評価
+%     % 使用データとエポック数ごとの
+%     % 分類器の評価
+%     % （IBM：IBM \textcolor{red}{Debater} - Claims and Evidence，News：COVID-19 News Articles）
+%     }
+%   \centering
+%   {\tabcolsep=0.15cm
+%     \begin{tabular}{ccccp{6cm}}
+%     \hline
+%     % データ & 評価指標 & $2$ epochs & $\mathbf{3}$ \textbf{epochs} & $4$ epochs
+%     評価指標 & $2$ epochs & $\mathbf{3}$ \textbf{epochs} & $4$ epochs
+%     \\
+%     \hline
+%     % IBM & Loss & $\mathbf{0.21}$ & $0.24$ & $0.30$
+%     % \\
+%     % IBM & MCC & $0.82$ & $\mathbf{0.83}$ & $0.82$
+%     % \\
+%     % News & TP & $4$ & $\mathbf{6}$ & $5$
+%     % \\
+%     % News & TN & $\mathbf{148}$ & $\mathbf{148}$ & $147$
+%     % \\
+%     % News & FP & $\mathbf{0}$ & $\mathbf{0}$ & $1$
+%     % \\
+%     % News & FN & $11$ & $\mathbf{9}$ & $10$
+%     % \\
+%     % News & 適合率 & $\mathbf{1.00}$ & $\mathbf{1.00}$ & $0.83$
+%     適合率 & $\mathbf{1.00}$ & $\mathbf{1.00}$ & $0.83$
+%     \\
+%     % News & 再現率 & $0.27$ & $\mathbf{0.40}$ & $0.33$
+%     再現率 & $0.27$ & $\mathbf{0.40}$ & $0.33$
+%     \\
+%     % News & MCC & $0.50$ & $\mathbf{0.61}$ & $0.50$
+%     % \\
+%     \hline
+%     \end{tabular}
+%   }
+%   \label{classification_evaluation}
+% \end{table}
 
 
 \subsection{2回の階層的クラスタリングの調整と評価}
-クラスタリングの実行時にメモリが不足したため，入力記事は959件に減らした．
+% クラスタリングの実行時にメモリが不足したため，入力記事は959件に減らした．
+\textcolor{red}{クラスタリングの実験には5000件の記事を用いた．}
 図\ref{claim_sentences_dendrogram}に主張の階層的クラスタリングの結果を示す．
-クラスタを結合するそれぞれのクラスタ間の距離が一様に分布しており，主張の文意が階層構造を持つことがわかる．
-主張の文の推薦に用いる階層のレベルには
-% 式(\ref{silhouette_coefficient})に示す
-シルエット係数が大きいものを選択した．
-この係数が大きいほど同一クラスタ内の文が類似し，異なるクラスタ間の文が類似しないといえる．
+クラスタを結合するそれぞれのクラスタ間の距離が一様に分布しており，主張の文\textcolor{red}{の}意\textcolor{red}{味}が階層構造を持つことがわかる．
+% 主張の文の推薦に用いる階層のレベルには
+% % 式(\ref{silhouette_coefficient})に示す
+% シルエット係数が大きいものを選択した．
+% この係数が大きいほど同一クラスタ内の文が類似し，異なるクラスタ間の文が類似しないといえる．
 % $a(i)$は文$s(i)$と文$s(i)$が属するクラスタの他の文との平均の非類似度であり，$a(i)$が0に近いとクラスタ内の文章がよく凝集しているといえる．
 % $b(i)$は文$s(i)$と文$s(i)$の最近傍のクラスタの他の文との平均の非類似度であり，$a(i)$が1に近いと異なるクラスタの文章がよく乖離しているといえる．
 % $a(i)$，$b(i)$から得た$Sil(i)$は，1に近いほどよく凝縮と乖離をしているといえる．
@@ -413,17 +416,21 @@ COVID-19 News Articlesの各国から3件の記事を抽出し，計163個の文
 %   Sil(i) &= \frac{b(i) - a(i)}{\max ( b(i) , a(i))}
 %   \label{silhouette_coefficient}
 % \end{align}
-シルエット係数に基づき，記事を910個のクラスタに分割し，そのうち主張の文を11個持つクラスタの主張の文を9個のクラスタに分割した．
+% シルエット係数に基づき，記事を910個のクラスタに分割し，そのうち主張の文を11個持つクラスタの主張の文を9個のクラスタに分割した．
 % 図\ref{num_article_clusters_and_silhouette}，\ref{num_sentence_clusters_and_silhouette}に示すようにクラスタ数が入力文の数に近いときに$\overline{Sil(i)}$が最大値を取る．
-
-
 % しかし，読者の迅速な出来事の把握のためには似た文はグループ化したいため，最適なクラスタ数として最大のクラスタ数の95\%以下の領域で$\overline{Sil(i)}$が最大値を取るようなクラスタ数を選択した．
 % 図\ref{num_sentence_clusters_and_silhouette}は，この選択に基づいて図\ref{num_article_clusters_and_silhouette}でクラスタ数910，$\overline{Sil(i)} \sim 0.38$となるように出来事の文章のクラスタリングを行った後，主張の文の数が多い1つのクラスタについて主張の文のクラスタリングを行った結果である．
+\textcolor{red}{
+クラスタに分ける階層のレベルには，クラスタ間の距離を上げていったときに，クラスタ数の減少が遅くなり始めるクラスタ間の距離$0.85$を選択した．
+この距離は，より類似しない文章がクラスタにまとめられ始めるクラスタ間の距離に対応する．
+}
 
 \begin{figure}[H]
 	\centering
 	% \includegraphics[keepaspectratio, width=60mm]{img/process-07_sentences-cluster_color_dendrogram_reduced-data-to-959_Trim.png}
-	\includegraphics[keepaspectratio, width=60mm]{img/process-07_sentences-cluster_dendrogram_reduced-data-to-959_Trim.png}
+	% \includegraphics[keepaspectratio, width=60mm]{img/process-07_sentences-cluster_dendrogram_reduced-data-to-959_Trim.png}
+	% \includegraphics[keepaspectratio, width=60mm]{img/process-07_sentences-cluster_from-cluster-230_with-threshold-85_color_dendrogram_reduced-data-to-5000_Trim.png}
+	\includegraphics[keepaspectratio, width=75mm]{img/process-07_sentences-cluster_from-cluster-230_with-threshold-85_color_dendrogram_reduced-data-to-5000_Trim.png}
 	\caption{
     主張の文のクラスタリング結果の可視化
   }
@@ -450,12 +457,19 @@ COVID-19 News Articlesの各国から3件の記事を抽出し，計163個の文
 % 	\label{num_sentence_clusters_and_silhouette}
 % \end{figure}
 
-選択した記事のクラスタには2つの記事が含まれており，どちらもCOVID-19の感染力を話題としていた．
-表\ref{clustering_result_samples}に
-% 図\ref{num_sentence_clusters_and_silhouette}でクラスタ数13，$\overline{Sil(i)} \sim 0.23$となるように主張の文のクラスタリングを行った結果の一部を示す．
-クラスタ内外の主張の文の例を示す．
-同じクラスタ$c_1$内には感染力に関する簡潔な主張の文が集まり，それとは別のクラスタ$c_2$には感染力から派生した他の主張の文が配置されていることがわかる．$c_1, c_2$以外のクラスタの8個の文のうち，$c_1$の文と類似してしまった文は2個，$c_1$の文から派生した異なる主張の文は3個，$c_1$の文と関連しない文は3個存在した．$c_1$の文と関連しない文は全て，$c_1$とのクラスタ間距離が大きいクラスタに属していた．
+% には2つの記事が含まれており，どちらもCOVID-19の感染力を話題としていた．
+% 表\ref{clustering_result_samples}に
+% % 図\ref{num_sentence_clusters_and_silhouette}でクラスタ数13，$\overline{Sil(i)} \sim 0.23$となるように主張の文のクラスタリングを行った結果の一部を示す．
+% クラスタ内外の主張の文の例を示す．
+% 同じクラスタ$c_1$内には感染力に関する簡潔な主張の文が集まり，それとは別のクラスタ$c_2$には感染力から派生した他の主張の文が配置されていることがわかる．$c_1, c_2$以外のクラスタの8個の文のうち，$c_1$の文と類似してしまった文は2個，$c_1$の文から派生した異なる主張の文は3個，$c_1$の文と関連しない文は3個存在した．$c_1$の文と関連しない文は全て，$c_1$とのクラスタ間距離が大きいクラスタに属していた．
 % /** 定量化した主観評価を追加する？ **/
+\textcolor{red}{
+38件の記事を持つあるクラスタでは，主張の文を13件持ち，うち10件がウイルス感染対策に関して共通する出来事の文であった．
+表\ref{clustering_result_samples}にこれらの主張の文をクラスタリングした結果の一部を示す．
+クラスタ$c_1$には飲食店での感染対策に関する主張がグループ化され，これとは異なりクラスタ$c_2$には運動時の感染対策に関する主張がグループ化されていた．
+% また，ただ1つの主張の文を持つクラスタ$c_3$について，他の12文のうち類似した出来事の異なる主張といえる文は（評価が難しい）
+$c_1$以外のクラスタに属する感染対策に関する7文のうち，7文全てが飲食店以外の感染対策に関する主張であった．
+}
 
 \begin{table}[H]
   \caption{
@@ -468,11 +482,13 @@ COVID-19 News Articlesの各国から3件の記事を抽出し，計163個の文
     ID & \multicolumn{1}{c}{主張の文}
     \\
     \hline
-    $c_1$ & it spreads rapidly all over the world and overtakes the people attacking their immune system.
+    $c_1$ & try not to eat in restaurants as much as possible.
     \\
-    $c_1$ & the patient then spreads the disease to others clandestinely.
+    $c_1$ & franchise cafes and dessert shops were obligated to offer only takeout around the clock.
     \\
-    $c_2$ & the chances of similar outbreaks are lower if the virus infects humans and then evolve its highly pathogenic properties.
+    $c_2$ & sports event are also obligated to keep the ceiling of 30 percent at stadiums.
+    \\
+    $c_2$ & outdoor exercise will be banned and wearing masks will be mandatory.
     \\
     \hline
     \end{tabular}
@@ -508,14 +524,27 @@ COVID-19 News Articlesの各国から3件の記事を抽出し，計163個の文
 %% Section 考察
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{考察}
-表\ref{classification_evaluation}に示すように適合率が極めて大きいため，殆ど正しい主張のみでクラスタリングと推薦を行うことができる．
-一方で再現率は低く，本来主張である文をクラスタリングに組み込めない可能性が高い．
-しかし，入力記事を増やすことで多くの主張の文を組み込むことができるため，再現率の低さは大きな問題ではない．
-入力記事は分散処理によって増やすことが可能である．
-なお，主張の文は163文のうち6文しかなかったため，より信頼できる適合率と再現率の算出のためにより多くの文での評価が必要である．
+\textcolor{red}{分類の}適合率が極めて大きいため，殆ど正しい主張のみでクラスタリングと推薦を行うことができ\textcolor{red}{た}．
+一方で再現率は低く，本来主張である文\textcolor{red}{の}クラスタリング\textcolor{red}{手法への適用が難しい}可能性が\textcolor{red}{ある．}
+\textcolor{red}{入}力記事を増やすことで多くの主張の文を\textcolor{red}{得ることはできるが}，
+\textcolor{red}{特定の特徴を持つ主張の文を得られていない可能性があるため，この特徴の精査が必要である．}
+% 指示語があるとサポートの文として出来事に分類されることが多い
+% 表1 の3文目にthere isがあるが，これに指示語としての役割は弱い
+% 重複が多くても，見逃している主張が存在している可能性が捨てきれない
+% ~~再現率の低さは大きな問題ではない．~~
+% 入力記事は分散処理によって増やすことが可能である．
+なお，\textcolor{red}{確認した163文のうち主張の文は}6文しかなかったため，より信頼できる適合率と再現率の算出のためにより多くの文での評価が必要である．
 
-2回のクラスタリングで得られた$c_1$と$c_2$内の記事は互いに異なる記事から構成されており，別の記事から類似した出来事の異なる主張を得ることができたといえる．
-その精度は$\frac{4}{9}\sim0.44$であり，クラスタ間距離から絞り込むことで更なる精度の向上が期待できる．
+% 2回のクラスタリングで得られた$c_1\textcolor{red}{,~}c_2$内
+\textcolor{red}{表\ref{clustering_result_samples}の文}は\textcolor{red}{全て}異なる記事から\textcolor{red}{抽出}されており，\textcolor{red}{閲覧記事とは}別の記事から類似した出来事の異なる主張を得ることができ\textcolor{red}{ている}．
+% 記事ID = 2422, 3437, 8909, 20865
+\textcolor{red}{
+出来事を感染対策に限定して主張の文を見たとき，異なるクラスタには異なる主張の文が属することを飲食店に関する文で確認できた．
+しかし，10件の感染対策に関する文とその他3件の文を出来事として区別できていないため，階層を分けるクラスタ間距離の決定方法に更なる改善が必要である．
+}
+
+
+% その精度は$\frac{4}{9}\sim0.44$であり，クラスタ間距離から絞り込むことで更なる精度の向上が期待できる．
 % /**
 
 % 主観評価を被験者を増やして行う
@@ -539,10 +568,10 @@ COVID-19 News Articlesの各国から3件の記事を抽出し，計163個の文
 %% Section まとめ
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{まとめ}
-本研究では出来事の文と主張の文のクラスタを用いた多様な主張を提示するニュース推薦手法の提案を行った．
+本研究では出来事の文と主張の文のクラスタを用いた多様な主張を提示するニュース推薦手法\textcolor{red}{を}提案\textcolor{red}{した}．
 提案手法ではより類似した出来事の異なる主張を推薦するため，記事の文を出来事の文か主張の文かで分類し，それぞれの文に基づいて2回の階層的クラスタリングを行った．
-その結果，高い適合率で分類を行い，44\%の精度で類似した出来事の異なる主張を推薦できた．
-今後の課題として，クラスタ間距離から推薦の精度を向上する必要がある．
+その結果，高い適合率で分類を行い，\textcolor{red}{別々のクラスタから}類似した出来事の異なる主張を推薦できた．
+\textcolor{red}{今後の課題として，誤分類した文の特徴の精査や階層レベルの指定方法の改善を行う必要がある．}
 % /**
 
 % 手法の目的を１文で説明
