@@ -432,9 +432,15 @@ def main():
     log.v("cluster_by_threshold:", cluster_by_threshold)
     log.v("num_of_cluster:", num_of_cluster)
 
+    size_of_clusters = [0] * num_of_cluster
+
     clusters_articles = [''] * num_of_cluster
     for article_id, cluster_id in enumerate(cluster_by_threshold):
         clusters_articles[cluster_id] += articles_lines[article_id]
+        size_of_clusters[cluster_id] += 1
+
+    ave_size_of_cluster = sum(size_of_clusters) / len(size_of_clusters)
+    log.v("ave_size_of_cluster:", ave_size_of_cluster)
 
     # write
     for _, cluster_id in enumerate(cluster_by_threshold):
