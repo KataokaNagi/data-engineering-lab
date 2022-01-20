@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""process_06_articles_cluster_generator_with_maximal_silhoette.py
+"""process_06_articles_cluster_generator_with_selected_num_of_clusters.py
 
 @author    Kataoka Nagi (calm1836[at]gmail.com)
 @brief     calc best article cluster with evidence embed & silhouette-coefficient
@@ -14,7 +14,7 @@
 @note      out : process-06_articles-cluster_threshold-dependencies.png
 @note      out : process-06_articles-cluster_num_of_cluster.png
 @note      out : process-06_articles-cluster_num-of-clusters-dependency-on-silhouette-coefficient.png
-@note      python3 process_06_articles_cluster_generator_with_maximal_silhoette.py
+@note      python3 process_06_articles_cluster_generator_with_selected_num_of_clusters.py
 @date      2022-01-15 13:59:47
 @version   1.0
 @history   add
@@ -49,11 +49,13 @@ TITLE_SIZE = 48
 LABEL_TITLE_SIZE = 36
 LABEL_SIZE = 28
 
-REDUCED_NUM = 10000
+REDUCED_NUM = 5000
 RANDOM_SEED = 2021
 
 MAX_NUM_OF_CLUSTER_RATE = 0.95
 # MAX_NUM_OF_CLUSTER_RATE = 1.0 / 2.0
+
+THRESHOLD = 2.0
 
 log.d("METRIC:", METRIC)
 log.d("METHOD:", METHOD)
@@ -70,23 +72,23 @@ def main():
     base_dir = "./covid-19-news-articles/process-06_articles-cluster/"
 
     embeds_pdist_dir = base_dir + \
-        "process-06_articles-cluster_embeds-pdist_with-maximal-silhoette.txt"
-    dest_dir = base_dir + "process-06_articles-cluster_with-maximal-silhoette_reduced-data-to-" + \
-        str(REDUCED_NUM) + "/" + "process-06_articles-cluster_with-maximal-silhoette.txt"
+        "process-06_articles-cluster_embeds-pdist_with-selected-num-of-clusters.txt"
+    dest_dir = base_dir + "process-06_articles-cluster_with-selected-num-of-clusters_reduced-data-to-" + \
+        str(REDUCED_NUM) + "/" + "process-06_articles-cluster_with-selected-num-of-clusters.txt"
     dendrogram_dir = base_dir + \
-        "process-06_articles-cluster_dendrogram_with-maximal-silhoette.png"
+        "process-06_articles-cluster_dendrogram_with-selected-num-of-clusters.png"
     color_dendrogram_dir = base_dir + \
-        "process-06_articles-cluster_color_dendrogram_with-maximal-silhoette.png"
+        "process-06_articles-cluster_color_dendrogram_with-selected-num-of-clusters.png"
     result_dir = base_dir + \
-        "process-06_articles-cluster_result_with-maximal-silhoette.csv"
+        "process-06_articles-cluster_result_with-selected-num-of-clusters.csv"
     threshold_dependencies_dir = base_dir + \
-        "process-06_articles-cluster_threshold-dependencies_with-maximal-silhoette.png"
+        "process-06_articles-cluster_threshold-dependencies_with-selected-num-of-clusters.png"
     num_of_cluster_dir = base_dir + \
-        "process-06_articles-cluster_num_of_cluster_with-maximal-silhoette.png"
+        "process-06_articles-cluster_num_of_cluster_with-selected-num-of-clusters.png"
     silhouette_coefficient_dir = base_dir + \
-        "process-06_articles-cluster_num-of-clusters-dependency-on-silhouette-coefficient_with-maximal-silhoette.png"
+        "process-06_articles-cluster_num-of-clusters-dependency-on-silhouette-coefficient_with-selected-num-of-clusters.png"
 
-    exe_time_dir = "./covid-19-news-articles/archive/exe-time/exe-time_process_06_articles_cluster_generator_with-maximal-silhoette.txt"
+    exe_time_dir = "./covid-19-news-articles/archive/exe-time/exe-time_process_06_articles_cluster_generator_with-selected-num-of-clusters.txt"
 
     log.v(articles_dir)
     log.v(embeds_pdist_dir)
@@ -270,87 +272,87 @@ def main():
     log.v("embeds_square_form[1]:", embeds_square_form[1])
     log.v("embeds_square_form[2]:", embeds_square_form[2])
 
-    ##################################################
-    log.d("*** print clustering result ***")
-    ##################################################
-    result_df = pd.DataFrame(result1)
-    result_df.to_csv(result_dir)
+    # ##################################################
+    # log.d("*** print clustering result ***")
+    # ##################################################
+    # result_df = pd.DataFrame(result1)
+    # result_df.to_csv(result_dir)
 
-    if do_debug:
-        log.v("result_df:", result_df)
-    log.v("result_df[0][0] (1st node      ) :", result_df[0][0])
-    log.v("result_df[1][0] (2nd node      ) :", result_df[1][0])
-    log.v("result_df[2][0] (nodes distance) :", result_df[2][0])
-    log.v("result_df[3][0] (cluster_id    ) :", result_df[3][0])
+    # if do_debug:
+    #     log.v("result_df:", result_df)
+    # log.v("result_df[0][0] (1st node      ) :", result_df[0][0])
+    # log.v("result_df[1][0] (2nd node      ) :", result_df[1][0])
+    # log.v("result_df[2][0] (nodes distance) :", result_df[2][0])
+    # log.v("result_df[3][0] (cluster_id    ) :", result_df[3][0])
 
-    ##################################################
-    log.d("*** draw num of clusters dependency on silhouette coefficient ***")
-    log.d("*** & calc best them ***")
-    ##################################################
-    # time mesurement: start
-    drawing_num_and_silhouette_start_time = time.time()
+    # ##################################################
+    # log.d("*** draw num of clusters dependency on silhouette coefficient ***")
+    # log.d("*** & calc best them ***")
+    # ##################################################
+    # # time mesurement: start
+    # drawing_num_and_silhouette_start_time = time.time()
 
-    # distance_matrix = get_distance_matrix(result_df)
-    distance_matrix = embeds_square_form
-    best_num_of_cluster = 0
-    best_cluster_by_number = []
-    max_silhouette_coefficient = -100100100
-    max_num_of_cluster = REDUCED_NUM * MAX_NUM_OF_CLUSTER_RATE
-    # max_num_of_cluster = len(result_df) * MAX_NUM_OF_CLUSTER_RATE
-    x = []
-    y = []
-    for num_of_cluster in range(2, len(result_df)):
-        cluster_by_number = get_cluster_by_number(result1, num_of_cluster)
-        silhouette_coefficient = silhouette_coefficient2(
-            cluster_by_number, distance_matrix)
-        # if silhouette_coefficient > max_silhouette_coefficient:
-        if silhouette_coefficient > max_silhouette_coefficient and num_of_cluster <= max_num_of_cluster:
-            best_num_of_cluster = num_of_cluster
-            best_cluster_by_number = cluster_by_number
-            max_silhouette_coefficient = silhouette_coefficient
-        x.append(num_of_cluster)
-        y.append(silhouette_coefficient)
+    # # distance_matrix = get_distance_matrix(result_df)
+    # distance_matrix = embeds_square_form
+    # best_num_of_cluster = 0
+    # best_cluster_by_number = []
+    # max_silhouette_coefficient = -100100100
+    # max_num_of_cluster = REDUCED_NUM * MAX_NUM_OF_CLUSTER_RATE
+    # # max_num_of_cluster = len(result_df) * MAX_NUM_OF_CLUSTER_RATE
+    # x = []
+    # y = []
+    # for num_of_cluster in range(2, len(result_df)):
+    #     cluster_by_number = get_cluster_by_number(result1, num_of_cluster)
+    #     silhouette_coefficient = silhouette_coefficient2(
+    #         cluster_by_number, distance_matrix)
+    #     # if silhouette_coefficient > max_silhouette_coefficient:
+    #     if silhouette_coefficient > max_silhouette_coefficient and num_of_cluster <= max_num_of_cluster:
+    #         best_num_of_cluster = num_of_cluster
+    #         best_cluster_by_number = cluster_by_number
+    #         max_silhouette_coefficient = silhouette_coefficient
+    #     x.append(num_of_cluster)
+    #     y.append(silhouette_coefficient)
 
-    silhouette_fig = plt.figure(figsize=(19.2, 14.4))
-    plt.plot(x, y)
-    plt.xlabel("Num of Clusters", fontsize=LABEL_TITLE_SIZE)
-    plt.ylabel("Silhouette Coefficient", fontsize=LABEL_TITLE_SIZE)
-    plt.grid()
-    plt.tick_params(labelsize=LABEL_SIZE)
-    # plt.show()
-    silhouette_fig.savefig(silhouette_coefficient_dir)
+    # silhouette_fig = plt.figure(figsize=(19.2, 14.4))
+    # plt.plot(x, y)
+    # plt.xlabel("Num of Clusters", fontsize=LABEL_TITLE_SIZE)
+    # plt.ylabel("Silhouette Coefficient", fontsize=LABEL_TITLE_SIZE)
+    # plt.grid()
+    # plt.tick_params(labelsize=LABEL_SIZE)
+    # # plt.show()
+    # silhouette_fig.savefig(silhouette_coefficient_dir)
 
-    # print time
-    drawing_num_and_silhouette_time = time.time(
-    ) - drawing_num_and_silhouette_start_time
-    log.d("drawing num and silhouette time (sec):",
-          drawing_num_and_silhouette_time)
+    # # print time
+    # drawing_num_and_silhouette_time = time.time(
+    # ) - drawing_num_and_silhouette_start_time
+    # log.d("drawing num and silhouette time (sec):",
+    #       drawing_num_and_silhouette_time)
 
-    log.d("len(nation_and_article_ids): ", len(nation_and_article_ids))
-    log.d("max_num_of_cluster: ", max_num_of_cluster)
-    log.d("best_num_of_cluster: ", best_num_of_cluster)
-    log.d("max_silhouette_coefficient: ", max_silhouette_coefficient)
-    log.v("best_cluster_by_number: ", best_cluster_by_number)
-    log.v()
+    # log.d("len(nation_and_article_ids): ", len(nation_and_article_ids))
+    # log.d("max_num_of_cluster: ", max_num_of_cluster)
+    # log.d("best_num_of_cluster: ", best_num_of_cluster)
+    # log.d("max_silhouette_coefficient: ", max_silhouette_coefficient)
+    # log.v("best_cluster_by_number: ", best_cluster_by_number)
+    # log.v()
 
-    ##################################################
-    log.d("*** draw threshold dependency ***")
-    ##################################################
-    # time mesurement: start
-    drawing_threshold_dependency_start_time = time.time()
+    # ##################################################
+    # log.d("*** draw threshold dependency ***")
+    # ##################################################
+    # # time mesurement: start
+    # drawing_threshold_dependency_start_time = time.time()
 
-    # exe
-    best_threshold = draw_threshold_dependency(
-        result1,
-        threshold_dependencies_dir,
-        best_num_of_cluster)
-    log.d("best_threshold:", best_threshold)
+    # # exe
+    # best_threshold = draw_threshold_dependency(
+    #     result1,
+    #     threshold_dependencies_dir,
+    #     best_num_of_cluster)
+    # log.d("best_threshold:", best_threshold)
 
-    # print time
-    drawing_threshold_dependency_time = time.time(
-    ) - drawing_threshold_dependency_start_time
-    log.d("drawing threshold dependency time (sec):",
-          drawing_threshold_dependency_time)
+    # # print time
+    # drawing_threshold_dependency_time = time.time(
+    # ) - drawing_threshold_dependency_start_time
+    # log.d("drawing threshold dependency time (sec):",
+    #       drawing_threshold_dependency_time)
 
     ##################################################
     log.d("*** draw dendrogram ***")
@@ -359,24 +361,23 @@ def main():
     # time mesurement: start
     drawing_dendrogram_start_time = time.time()
 
-    # exe
-    dendrogram_fig = plt.figure(figsize=(14.4, 19.2))
-    dendrogram(
-        result1,
-        orientation='right',
-        labels=[''] * len(nation_and_article_ids),
-        # labels=nation_and_article_ids,
-        color_threshold=0.0
-    )
-    # plt.title(
-    #     "Article Dendrogram by Evidence Sentences",
-    #     fontsize=TITLE_SIZE - 6)
-    plt.xlabel("Threshold", fontsize=LABEL_TITLE_SIZE)
-    plt.ylabel("Article ID", fontsize=LABEL_TITLE_SIZE)
-    plt.grid()
-    plt.tick_params(labelsize=LABEL_SIZE)
-    # plt.show()
-    dendrogram_fig.savefig(dendrogram_dir)
+    # # exe
+    # dendrogram_fig = plt.figure(figsize=(14.4, 19.2))
+    # dendrogram(result1,
+    #            orientation='right',
+    #            labels=[''] * len(nation_and_article_ids),
+    #            # labels=nation_and_article_ids,
+    #            color_threshold=0.0
+    #            )
+    # # plt.title(
+    # #     "Article Dendrogram by Evidence Sentences",
+    # #     fontsize=TITLE_SIZE - 6)
+    # plt.xlabel("Threshold", fontsize=LABEL_TITLE_SIZE)
+    # plt.ylabel("Article ID", fontsize=LABEL_TITLE_SIZE)
+    # plt.grid()
+    # plt.tick_params(labelsize=LABEL_SIZE)
+    # # plt.show()
+    # dendrogram_fig.savefig(dendrogram_dir)
 
     # exe color ver
 
@@ -384,6 +385,8 @@ def main():
     # @see https://www.webdevqa.jp.net/ja/python/python%EF%BC%88linkcolorfunc%EF%BC%9F%EF%BC%89%E3%81%AEscipy%E6%A8%B9%E7%8A%B6%E5%9B%B3%E3%81%AE%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%AF%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%BC%E3%82%AB%E3%83%A9%E3%83%BC/825416841/
     # cmap = cm.Rainbow(np.linspace(0, 1, best_num_of_cluster))
     # link_cols = [mpl.colors.rgb2hex(rgb[:3]) for rgb in cmap]
+
+    best_threshold = THRESHOLD
 
     color_dendrogram_fig = plt.figure(figsize=(14.4, 19.2))
     dendrogram(
@@ -397,7 +400,7 @@ def main():
     # plt.title(
     #     "Article Dendrogram by Evidence Sentences",
     #     fontsize=TITLE_SIZE - 6)
-    plt.xlabel("Threshold", fontsize=LABEL_TITLE_SIZE)
+    plt.xlabel("Distance between Clusters", fontsize=LABEL_TITLE_SIZE)
     plt.ylabel("Article ID", fontsize=LABEL_TITLE_SIZE)
     plt.grid()
     plt.tick_params(labelsize=LABEL_SIZE)
@@ -411,23 +414,29 @@ def main():
     ##################################################
     log.d("*** draw best_num_of_cluster ***")
     ##################################################
-    num_of_cluster_fig = plt.figure(figsize=(19.2, 14.4))
-    plt.hist(best_cluster_by_number)
-    plt.xlabel("Cluster ID", fontsize=LABEL_TITLE_SIZE)
-    plt.ylabel("Num of Article", fontsize=LABEL_TITLE_SIZE)
-    plt.tick_params(labelsize=LABEL_SIZE)
-    plt.grid()
-    num_of_cluster_fig.savefig(num_of_cluster_dir)
+    # num_of_cluster_fig = plt.figure(figsize=(19.2, 14.4))
+    # plt.hist(best_cluster_by_number)
+    # plt.xlabel("Cluster ID", fontsize=LABEL_TITLE_SIZE)
+    # plt.ylabel("Num of Article", fontsize=LABEL_TITLE_SIZE)
+    # plt.tick_params(labelsize=LABEL_SIZE)
+    # plt.grid()
+    # num_of_cluster_fig.savefig(num_of_cluster_dir)
 
     ##################################################
     log.d("*** save lines in each cluster with best_cluster_by_number ***")
     ##################################################
-    clusters_articles = [''] * best_num_of_cluster
-    for article_id, cluster_id in enumerate(best_cluster_by_number):
+
+    cluster_by_threshold = get_cluster_by_threshold(THRESHOLD)
+    num_of_cluster = (max(cluster_by_threshold) + 1)
+    log.v("cluster_by_threshold:", cluster_by_threshold)
+    log.v("num_of_cluster:", num_of_cluster)
+
+    clusters_articles = [''] * num_of_cluster
+    for article_id, cluster_id in enumerate(cluster_by_threshold):
         clusters_articles[cluster_id] += articles_lines[article_id]
 
     # write
-    for _, cluster_id in enumerate(best_cluster_by_number):
+    for _, cluster_id in enumerate(cluster_by_threshold):
         dest_dir_each_cluster_id = re.sub(
             "\\.txt", "_" + str(cluster_id) + ".txt", dest_dir)
         with open(dest_dir_each_cluster_id, "w+", encoding="utf_8") as f:
@@ -446,11 +455,11 @@ def main():
         f.write("drawing_dendrogram_time (sec): ")
         f.write(str(drawing_dendrogram_time) + "\n")
 
-        f.write("drawing_threshold_dependency_time (sec): ")
-        f.write(str(drawing_threshold_dependency_time) + "\n")
+        # f.write("drawing_threshold_dependency_time (sec): ")
+        # f.write(str(drawing_threshold_dependency_time) + "\n")
 
-        f.write("drawing_num_and_silhouette_time (sec): ")
-        f.write(str(drawing_num_and_silhouette_time) + "\n")
+        # f.write("drawing_num_and_silhouette_time (sec): ")
+        # f.write(str(drawing_num_and_silhouette_time) + "\n")
 
         f.write("\n")
 
@@ -498,8 +507,62 @@ def draw_threshold_dependency(
     dependencies_fig.savefig(threshold_dependencies_dir)
     return best_threshold
 
+# 指定した thoreshold でクラスタを得る関数を作る
+
+
+def get_cluster_by_threshold(result, threshold):
+    output_clusters = []
+    output_cluster_ids = []
+    x_result, y_result = result.shape
+    n_clusters = x_result + 1
+    cluster_id = x_result + 1
+    father_of = {}
+    x1 = []
+    y1 = []
+    x2 = []
+    y2 = []
+    for i in range(len(result) - 1):
+        n1 = int(result[i][0])
+        n2 = int(result[i][1])
+        current_threshold = result[i][2]
+        n_clusters -= 1
+        if current_threshold < threshold:
+            father_of[n1] = cluster_id
+            father_of[n2] = cluster_id
+
+        cluster_id += 1
+
+    cluster_dict = {}
+    for n in range(x_result + 1):
+        if n not in father_of:
+            output_clusters.append([n])
+            continue
+
+        n2 = n
+        m = False
+        while n2 in father_of:
+            m = father_of[n2]
+            #print [n2, m]
+            n2 = m
+
+        if m not in cluster_dict:
+            cluster_dict.update({m: []})
+        cluster_dict[m].append(n)
+
+    output_clusters += cluster_dict.values()
+
+    output_cluster_id = 0
+    output_cluster_ids = [0] * (x_result + 1)
+    for cluster in sorted(output_clusters):
+        for i in cluster:
+            output_cluster_ids[i] = output_cluster_id
+        output_cluster_id += 1
+
+    return output_cluster_ids
 
 # 指定したクラスタ数でクラスタを得る関数を作る。
+
+
 def get_cluster_by_number(result, number):
     output_clusters = []
     x_result, y_result = result.shape
@@ -641,10 +704,6 @@ def silhouette_coefficient2(clusters, distance_matrix):
 
     # calc silhouette coefficient
     return sum(silhouette_coefficients) / len(silhouette_coefficients)
-
-
-if __name__ == "__main__":
-    main()
 
 
 if __name__ == "__main__":
