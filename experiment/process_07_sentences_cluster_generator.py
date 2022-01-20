@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""process-07_sentences_cluster_generator_with_threshold.py
+"""process_07_sentences_cluster_generator.py
 
 @author    Kataoka Nagi (calm1836[at]gmail.com)
 @brief     calc best sentence cluster with claim embeds & silhouette-coefficient
@@ -13,7 +13,7 @@
 @note      out : process-07_sentences-cluster_threshold-dependencies.png
 @note      out : process-07_sentences-cluster_num_of_cluster.png
 @note      out : process-07_sentences-cluster_num-of-clusters-dependency-on-silhouette-coefficient.png
-@note      python3 process-07_sentences_cluster_generator_with_threshold.py
+@note      python3 process_07_sentences_cluster_generator.py
 @date      2022-01-16 11:57:32
 @version   1.0
 @history   add
@@ -49,8 +49,8 @@ LABEL_TITLE_SIZE = 36
 LABEL_SIZE = 28
 # LABEL_SIZE = 14
 
-# REDUCED_NUM = 959
-REDUCED_NUM = 5000
+REDUCED_NUM = 959
+# REDUCED_NUM = 5000
 # REDUCED_NUM = 10000
 
 RANDOM_SEED = 2021
@@ -61,21 +61,23 @@ MAX_NUM_OF_CLUSTER_RATE = 0.95
 DRAW_IDS = True
 
 # ** REDUCED_NUM = 959 **
+# ARTICLES_CLUSTER_ID = 741
+# ARTICLES_CLUSTER_ID = 718
+# ARTICLES_CLUSTER_ID = 100
+# ARTICLES_CLUSTER_ID = 319
 ARTICLES_CLUSTER_ID = 19
 
 # ** REDUCED_NUM = 5000 **
 
 # ** REDUCED_NUM = 10000 **
 
-# THRESHOLD = 2.0
-THRESHOLD = 0.85
 
 ARTICLES_DIR = "./covid-19-news-articles/process-06_articles-cluster/" +\
     "process-06_articles-cluster_" + \
-    "with-threshold-" + str(int(THRESHOLD * 100)) + '_' + \
+    "with-maximal-silhoette_" + \
     "reduced-data-to-" + str(REDUCED_NUM) + '/' + \
     "process-06_articles-cluster_" + \
-    "with-threshold-" + str(int(THRESHOLD * 100)) + '_' + \
+    "with-maximal-silhoette_" + \
     "reduced-data-to-" + str(REDUCED_NUM) + "_" + \
     str(ARTICLES_CLUSTER_ID) + ".txt"
 
@@ -88,32 +90,31 @@ log.d("REDUCED_NUM:", REDUCED_NUM)
 log.d("RANDOM_SEED:", RANDOM_SEED)
 log.v("MAX_NUM_OF_CLUSTER_RATE:", MAX_NUM_OF_CLUSTER_RATE)
 log.v("ARTICLES_CLUSTER_ID:", ARTICLES_CLUSTER_ID)
-log.v("THRESHOLD:", THRESHOLD)
 
 
 def main():
     articles_dir = ARTICLES_DIR
     base_dir = "./covid-19-news-articles/process-07_sentences-cluster/"
 
-    embeds_pdist_dir = base_dir + "process-07_sentences-cluster_with-threshold-" + \
-        str(int(THRESHOLD * 100)) + "_embeds-pdist.txt"
+    embeds_pdist_dir = base_dir + \
+        "process-07_sentences-cluster_embeds-pdist.txt"
     dest_dir = base_dir + \
-        "process-07_sentences-cluster_with-threshold-" + str(int(THRESHOLD * 100)) + "_reduced-data-to-" + \
+        "process-07_sentences-cluster_reduced-data-to-" + \
         str(REDUCED_NUM) + '/' + \
-        "process-07_sentences-cluster_with-threshold-" + str(int(THRESHOLD * 100)) + ".txt"
-    dendrogram_dir = base_dir + "process-07_sentences-cluster_with-threshold-" + \
-        str(int(THRESHOLD * 100)) + "_dendrogram.png"
-    color_dendrogram_dir = base_dir + "process-07_sentences-cluster_with-threshold-" + \
-        str(int(THRESHOLD * 100)) + "_color_dendrogram.png"
-    result_dir = base_dir + "process-07_sentences-cluster_with-threshold-" + \
-        str(int(THRESHOLD * 100)) + "_result.csv"
-    threshold_dependencies_dir = base_dir + "process-07_sentences-cluster_with-threshold-" + \
-        str(int(THRESHOLD * 100)) + "_threshold-dependencies.png"
-    num_of_cluster_dir = base_dir + "process-07_sentences-cluster_with-threshold-" + \
-        str(int(THRESHOLD * 100)) + "_num_of_cluster.png"
-    silhouette_coefficient_dir = base_dir + "process-07_sentences-cluster_with-threshold-" + \
-        str(int(THRESHOLD * 100)) + "_num-of-clusters-dependency-on-silhouette-coefficient.png"
-    exe_time_dir = "./covid-19-news-articles/archive/exe-time/exe-time_process-07_sentences_cluster_generator_with_threshold.txt"
+        "process-07_sentences-cluster.txt"
+    dendrogram_dir = base_dir + \
+        "process-07_sentences-cluster_dendrogram.png"
+    color_dendrogram_dir = base_dir + \
+        "process-07_sentences-cluster_color_dendrogram.png"
+    result_dir = base_dir + \
+        "process-07_sentences-cluster_result.csv"
+    threshold_dependencies_dir = base_dir + \
+        "process-07_sentences-cluster_threshold-dependencies.png"
+    num_of_cluster_dir = base_dir + \
+        "process-07_sentences-cluster_num_of_cluster.png"
+    silhouette_coefficient_dir = base_dir + \
+        "process-07_sentences-cluster_num-of-clusters-dependency-on-silhouette-coefficient.png"
+    exe_time_dir = "./covid-19-news-articles/archive/exe-time/exe-time_process_07_sentences_cluster_generator.txt"
 
     log.v(articles_dir)
     log.v(embeds_pdist_dir)
@@ -424,8 +425,6 @@ def main():
     # cmap = cm.Rainbow(np.linspace(0, 1, best_num_of_cluster))
     # link_cols = [mpl.colors.rgb2hex(rgb[:3]) for rgb in cmap]
 
-    best_threshold = THRESHOLD
-
     # color_dendrogram_fig = plt.figure(figsize=(14.4, 19.2))
     # color_dendrogram_fig = plt.figure(figsize=(19.2, 14.4))
     color_dendrogram_fig = plt.figure(figsize=(19.2, 7.2))
@@ -464,24 +463,11 @@ def main():
     ##################################################
     log.d("*** save lines in each cluster with best_cluster_by_number ***")
     ##################################################
-
-    cluster_by_threshold = get_cluster_by_threshold(
-        clustering_result, THRESHOLD)
-    num_of_cluster = (max(cluster_by_threshold) + 1)
-    log.v("cluster_by_threshold:", cluster_by_threshold)
-    log.v("num_of_cluster:", num_of_cluster)
-
-    size_of_clusters = [0] * num_of_cluster
-
     # [["(claim line 1 of cluster 1 including \n)(claim line 2 of cluster 1 including \n)..."], ...]
     clusters_claims = [''] * best_num_of_cluster
     for claim_idx, cluster_id in enumerate(best_cluster_by_number):
         claim_line = claim_lines[claim_idx]
         clusters_claims[cluster_id] += claim_line
-        size_of_clusters[cluster_id] += 1
-
-    ave_size_of_cluster = sum(size_of_clusters) / len(size_of_clusters)
-    log.v("ave_size_of_cluster:", ave_size_of_cluster)
 
     # write
     for _, cluster_id in enumerate(best_cluster_by_number):
@@ -564,62 +550,8 @@ def draw_threshold_dependency(
     # for finding best clustering
     return best_threshold
 
-# 指定した thoreshold でクラスタを得る関数を作る
-
-
-def get_cluster_by_threshold(result, threshold):
-    output_clusters = []
-    output_cluster_ids = []
-    x_result, y_result = result.shape
-    n_clusters = x_result + 1
-    cluster_id = x_result + 1
-    father_of = {}
-    x1 = []
-    y1 = []
-    x2 = []
-    y2 = []
-    for i in range(len(result) - 1):
-        n1 = int(result[i][0])
-        n2 = int(result[i][1])
-        current_threshold = result[i][2]
-        n_clusters -= 1
-        if current_threshold < threshold:
-            father_of[n1] = cluster_id
-            father_of[n2] = cluster_id
-
-        cluster_id += 1
-
-    cluster_dict = {}
-    for n in range(x_result + 1):
-        if n not in father_of:
-            output_clusters.append([n])
-            continue
-
-        n2 = n
-        m = False
-        while n2 in father_of:
-            m = father_of[n2]
-            #print [n2, m]
-            n2 = m
-
-        if m not in cluster_dict:
-            cluster_dict.update({m: []})
-        cluster_dict[m].append(n)
-
-    output_clusters += cluster_dict.values()
-
-    output_cluster_id = 0
-    output_cluster_ids = [0] * (x_result + 1)
-    for cluster in sorted(output_clusters):
-        for i in cluster:
-            output_cluster_ids[i] = output_cluster_id
-        output_cluster_id += 1
-
-    return output_cluster_ids
 
 # get cluster = [class(sentence idx), ...] from num of clusters
-
-
 def get_cluster_by_number(result, num_clusters):
     output_clusters = []
     num_connect, _ = result.shape
