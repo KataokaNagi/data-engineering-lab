@@ -1,15 +1,15 @@
 #!/bin/bash
 #
-# @file      process_06_articles_cluster_generator_with_selected_num_of_clusters.sh
+# @file      process_06_articles_cluster_generator_with_threshold.sh
 # @author    Kataoka Nagi (calm1836[at]gmail.com)
-# @brief     execute process_06_articles_cluster_generator_with_selected_num_of_clusters.py
+# @brief     execute process_06_articles_cluster_generator_with_threshold.py
 # @date      2022-01-14 05:00:51
 # @version   1.0
 # @history   add
 # @copyright (c) 2021 Kataoka Nagi This src is released under the MIT License, see LICENSE.
 # 
 
-SRC_DIR="process_06_articles_cluster_generator_with_selected_num_of_clusters.py"
+SRC_DIR="process_06_articles_cluster_generator_with_threshold.py"
 
 date=`date "+%Y%m%d-%H%M%S"`
 log_dir="./logs/${SRC_DIR/.py/_${date}.log}"

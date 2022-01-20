@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""process_06_articles_cluster_generator_with_selected_num_of_clusters.py
+"""process_06_articles_cluster_generator_with_threshold.py
 
 @author    Kataoka Nagi (calm1836[at]gmail.com)
 @brief     calc best article cluster with evidence embed & silhouette-coefficient
@@ -14,7 +14,7 @@
 @note      out : process-06_articles-cluster_threshold-dependencies.png
 @note      out : process-06_articles-cluster_num_of_cluster.png
 @note      out : process-06_articles-cluster_num-of-clusters-dependency-on-silhouette-coefficient.png
-@note      python3 process_06_articles_cluster_generator_with_selected_num_of_clusters.py
+@note      python3 process_06_articles_cluster_generator_with_threshold.py
 @date      2022-01-15 13:59:47
 @version   1.0
 @history   add
