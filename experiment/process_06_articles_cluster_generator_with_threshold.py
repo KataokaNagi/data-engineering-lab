@@ -254,7 +254,7 @@ def main():
     # exe
     # result1 = linkage(article_embeds, metric=METRIC, method=METHOD)
     embeds_pdist = pdist(article_embeds, metric=METRIC)
-    result1 = linkage(embeds_pdist, method=METHOD)
+    clustering_result = linkage(embeds_pdist, method=METHOD)
 
     # print time
     clustering_time = time.time() - clustering_start_time
@@ -390,7 +390,7 @@ def main():
 
     color_dendrogram_fig = plt.figure(figsize=(14.4, 19.2))
     dendrogram(
-        result1,
+        clustering_result,
         orientation='right',
         labels=[''] * len(nation_and_article_ids),
         # labels=nation_and_article_ids,
@@ -426,7 +426,8 @@ def main():
     log.d("*** save lines in each cluster with best_cluster_by_number ***")
     ##################################################
 
-    cluster_by_threshold = get_cluster_by_threshold(THRESHOLD)
+    cluster_by_threshold = get_cluster_by_threshold(
+        clustering_result, THRESHOLD)
     num_of_cluster = (max(cluster_by_threshold) + 1)
     log.v("cluster_by_threshold:", cluster_by_threshold)
     log.v("num_of_cluster:", num_of_cluster)
