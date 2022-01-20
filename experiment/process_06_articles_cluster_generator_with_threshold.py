@@ -71,24 +71,25 @@ def main():
     articles_dir = "./covid-19-news-articles/process-05_calced-sentences-features.txt"
     base_dir = "./covid-19-news-articles/process-06_articles-cluster/"
 
-    embeds_pdist_dir = base_dir + \
-        "process-06_articles-cluster_embeds-pdist_with-selected-num-of-clusters.txt"
-    dest_dir = base_dir + "process-06_articles-cluster_with-selected-num-of-clusters_reduced-data-to-" + \
-        str(REDUCED_NUM) + "/" + "process-06_articles-cluster_with-selected-num-of-clusters.txt"
-    dendrogram_dir = base_dir + \
-        "process-06_articles-cluster_dendrogram_with-selected-num-of-clusters.png"
-    color_dendrogram_dir = base_dir + \
-        "process-06_articles-cluster_color_dendrogram_with-selected-num-of-clusters.png"
-    result_dir = base_dir + \
-        "process-06_articles-cluster_result_with-selected-num-of-clusters.csv"
+    embeds_pdist_dir = base_dir + "process-06_articles-cluster_embeds-pdist_with-threshold-" + \
+        str(int(THRESHOLD * 100)) + ".txt"
+    dest_dir = base_dir + "process-06_articles-cluster_with-threshold-" + str(int(THRESHOLD * 100)) + "_reduced-data-to-" + \
+        str(REDUCED_NUM) + "/" + "process-06_articles-cluster_with-threshold-" + str(int(THRESHOLD * 100)) + ".txt"
+    dendrogram_dir = base_dir + "process-06_articles-cluster_dendrogram_with-threshold-" + \
+        str(int(THRESHOLD * 100)) + ".png"
+    color_dendrogram_dir = base_dir + "process-06_articles-cluster_color_dendrogram_with-threshold-" + \
+        str(int(THRESHOLD * 100)) + ".png"
+    result_dir = base_dir + "process-06_articles-cluster_result_with-threshold-" + \
+        str(int(THRESHOLD * 100)) + ".csv"
     threshold_dependencies_dir = base_dir + \
-        "process-06_articles-cluster_threshold-dependencies_with-selected-num-of-clusters.png"
-    num_of_cluster_dir = base_dir + \
-        "process-06_articles-cluster_num_of_cluster_with-selected-num-of-clusters.png"
+        "process-06_articles-cluster_threshold-dependencies_with-threshold-" + str(int(THRESHOLD * 100)) + ".png"
+    num_of_cluster_dir = base_dir + "process-06_articles-cluster_num_of_cluster_with-threshold-" + \
+        str(int(THRESHOLD * 100)) + ".png"
     silhouette_coefficient_dir = base_dir + \
-        "process-06_articles-cluster_num-of-clusters-dependency-on-silhouette-coefficient_with-selected-num-of-clusters.png"
+        "process-06_articles-cluster_num-of-clusters-dependency-on-silhouette-coefficient_with-threshold-" + str(int(THRESHOLD * 100)) + ".png"
 
-    exe_time_dir = "./covid-19-news-articles/archive/exe-time/exe-time_process_06_articles_cluster_generator_with-selected-num-of-clusters.txt"
+    exe_time_dir = "./covid-19-news-articles/archive/exe-time/exe-time_process_06_articles_cluster_generator_with-threshold-" + \
+        str(int(THRESHOLD * 100)) + ".txt"
 
     log.v(articles_dir)
     log.v(embeds_pdist_dir)
