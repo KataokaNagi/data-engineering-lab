@@ -1,15 +1,15 @@
 #!/bin/bash
 #
-# @file      process-07_sentences_cluster_generator.sh
+# @file      process-07_sentences_cluster_generator_with_threshold.sh
 # @author    Kataoka Nagi (calm1836[at]gmail.com)
-# @brief     execute process-07_sentences_cluster_generator.py
+# @brief     execute process-07_sentences_cluster_generator_with_threshold.py
 # @date      2022-01-14 05:00:51
 # @version   1.0
 # @history   add
 # @copyright (c) 2021 Kataoka Nagi This src is released under the MIT License, see LICENSE.
 # 
 
-SRC_DIR="process-07_sentences_cluster_generator.py"
+SRC_DIR="process-07_sentences_cluster_generator_with_threshold.py"
 
 date=`date "+%Y%m%d-%H%M%S"`
 log_dir="./logs/${SRC_DIR/.py/_${date}.log}"
