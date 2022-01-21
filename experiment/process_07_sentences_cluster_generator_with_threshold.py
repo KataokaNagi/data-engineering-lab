@@ -45,9 +45,12 @@ METRIC = "cosine"
 METHOD = "ward"
 
 TITLE_SIZE = 48
-LABEL_TITLE_SIZE = 36
-LABEL_SIZE = 28
+LABEL_TITLE_SIZE = 40
+LABEL_SIZE = 32
 # LABEL_SIZE = 14
+DENDROGRAM_ID_SIZE = 20
+DENDROGRAM_FIGSIZE_X = 19.2
+DENDROGRAM_FIGSIZE_Y = 7.7
 
 # REDUCED_NUM = 959
 REDUCED_NUM = 5000
@@ -349,7 +352,8 @@ def main():
         x.append(num_of_cluster)
         y.append(silhouette_coefficient)
 
-    silhouette_fig = plt.figure(figsize=(19.2, 14.4))
+    silhouette_fig = plt.figure(
+        figsize=(19.2, 14.4))
     plt.plot(x, y)
     plt.xlabel("Num of Clusters", fontsize=LABEL_TITLE_SIZE)
     plt.ylabel("Silhouette Coefficient", fontsize=LABEL_TITLE_SIZE)
@@ -403,7 +407,10 @@ def main():
     # exe
     # dendrogram_fig = plt.figure(figsize=(14.4, 19.2))
     # dendrogram_fig = plt.figure(figsize=(19.2, 14.4))
-    dendrogram_fig = plt.figure(figsize=(19.2, 7.2))
+    dendrogram_fig = plt.figure(
+        figsize=(
+            DENDROGRAM_FIGSIZE_X,
+            DENDROGRAM_FIGSIZE_Y))
     dendrogram(
         clustering_result,
         orientation='right',
@@ -416,7 +423,8 @@ def main():
     plt.xlabel("Distance between Clusters", fontsize=LABEL_TITLE_SIZE)
     plt.ylabel("Claim Sentence ID", fontsize=LABEL_TITLE_SIZE)
     plt.grid()
-    plt.tick_params(labelsize=LABEL_SIZE / 2)
+    plt.tick_params(axis='x', labelsize=LABEL_SIZE)
+    plt.tick_params(axis='y', labelsize=DENDROGRAM_ID_SIZE)
     # plt.show()
     dendrogram_fig.savefig(dendrogram_dir)
 
@@ -431,7 +439,10 @@ def main():
 
     # color_dendrogram_fig = plt.figure(figsize=(14.4, 19.2))
     # color_dendrogram_fig = plt.figure(figsize=(19.2, 14.4))
-    color_dendrogram_fig = plt.figure(figsize=(19.2, 7.2))
+    color_dendrogram_fig = plt.figure(
+        figsize=(
+            DENDROGRAM_FIGSIZE_X,
+            DENDROGRAM_FIGSIZE_Y))
     dendrogram(
         clustering_result,
         orientation='right',
@@ -445,7 +456,8 @@ def main():
     plt.xlabel("Distance between Clusters", fontsize=LABEL_TITLE_SIZE)
     plt.ylabel("Claim Sentence ID", fontsize=LABEL_TITLE_SIZE)
     plt.grid()
-    plt.tick_params(labelsize=LABEL_SIZE / 2)
+    plt.tick_params(axis='x', labelsize=LABEL_SIZE)
+    plt.tick_params(axis='y', labelsize=DENDROGRAM_ID_SIZE)
     # plt.show()
     color_dendrogram_fig.savefig(color_dendrogram_dir)
 
