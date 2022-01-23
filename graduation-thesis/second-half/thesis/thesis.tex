@@ -902,26 +902,90 @@ Matthewsが1975年に提案したマシューズ相関係数（MCC;Matthews Corr
 % (0*0-1*1)/(1*1*1*1)^-1 = -1
 % @see https://www.datarobot.com/jp/blog/matthews-correlation-coefficient/
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{文章の類似度の算出}
-~
-% @see 
+\section{文章の距離の算出}
+後述のクラスタリングを行うにあたり，クラスタリングに必要な文章の距離（非類似度）の算出法について記す．
+小節\ref{subsection_sentence_bert}では文章を埋め込みに変換するSentence-BERTについて説明し，小節\ref{subsection_cosine_distance}では変換した埋め込みを用いて計算するコサイン距離について説明する．
 
 \subsection{Sentence-BERT}
-~
-% @see 
+\label{subsection_sentence_bert}
+Reimersらが2019年に提案したSentence-BERTは，文章の埋め込みを生成するためのBERTを転移学習した機械学習モデルである\cite{reimers_sentence-bert_2019}．
+図\ref{fig_sentence_bert}にSentence-BERTのモデルアーキテクチャを示す．
+Sentence-BERTでは転移学習済みのBERTに1つの文を入力し，出力したベクトル群にpoolingと呼ばれる情報の抽出処理を行って文章の埋め込みを得る．
+転移学習では，埋め込みを応用したSTSタスクなどの精度を上げるために，
+% 3つ関数Classification Objective Function，Regressioon Objective Function，Triplet Objective Functionを用いた
+3種類の工夫された学習が行われている．
+poolingでは3つの手法が比較されており，BERTで出力したベクトル群の平均を埋め込みとする手法が最もSTSタスクのスコアが優れていた．
 
-\subsection{コサイン類似度}
-~
-% @see 
+% @see 3. Model
+
+
+\begin{figure}[H]
+	\centering
+	% \includegraphics[keepaspectratio, width=120mm]{img/sentence-bert.png}
+	\includegraphics[keepaspectratio, width=60mm]{img/sentence-bert.png}
+	\caption{Sentence-BERTのモデルアーキテクチャ\protect\footnotemark[8]}
+	\label{fig_sentence_bert}
+\end{figure}
+\footnotetext[8]{\cite{reimers_sentence-bert_2019}の図より一部抜粋}
+
+BERTやRoBERTaで1万文から最も意味的類似度が高い2文を得たいとき，図\ref{fig_fine_tuning_of_bert}のように2文同時に入力すると$\frac{10000(10000-1)}{2}=49995000$回の実行が必要であり，Reimersらの実験では65時間の処理を要した．
+そこでReimersらは，BERTやRoBERTaに1文を入力して単語埋め込みを得る処理を$10000$回行い，埋め込み間の類似度を計算し，処理時間を約5秒に短縮した．
+埋め込み間の類似度には，式(\ref{cosine_similarity})に示すコサイン類似度が用いられている．
+
+\begin{align}
+  \text{cos-sim}\left(\bm{u}, \bm{v}\right) = \frac{\bm{u} \cdot \bm{v}}{\|\bm{u}\|\|\bm{v}\|}
+  \label{cosine_similarity}
+\end{align}
+
+表\ref{sentence_bert_evaluation}にSentEvalツールキットを用いた文埋め込みの比較評価を示す．
+表より，Sentence-BERTは多くの自然言語処理タスクにおいて2019年の最先端のスコアを有することがわかる．
+
+\begin{table}[H]
+  \caption{
+    SentEvalツールキットを用いた文埋め込みの比較評価
+    \protect\footnotemark[9]
+    }
+  \vspace{3mm}
+  \centering
+  {\tabcolsep=0.1cm
+    \begin{tabular}{l|cccccccc}
+      \hline Model & MR & CR & SUBJ & MPQA & SST & TREC & MRPC & Avg. \\
+      \hline Avg. GloVe embeddings & $77.25$ & $78.30$ & $91.17$ & $87.85$ & $80.18$ & $83.0$ & $72.87$ & $81.52$ \\
+      Avg. fast-text embeddings & $77.96$ & $79.23$ & $91.68$ & $87.81$ & $82.15$ & $83.6$ & $74.49$ & $82.42$ \\
+      Avg. BERT embeddings & $78.66$ & $86.25$ & $94.37$ & $88.66$ & $84.40$ & $92.8$ & $69.45$ & $84.94$ \\
+      BERT CLS-vector & $78.68$ & $84.85$ & $94.21$ & $88.23$ & $84.13$ & $91.4$ & $71.13$ & $84.66$ \\
+      InferSent - GloVe & $81.57$ & $86.54$ & $92.50$ & $\mathbf{9 0 . 3 8}$ & $84.18$ & $88.2$ & $75.77$ & $85.59$ \\
+      Universal Sentence Encoder & $80.09$ & $85.19$ & $93.98$ & $86.70$ & $86.38$ & $\mathbf{9 3 . 2}$ & $70.14$ & $85.10$ \\
+      \hline SBERT-NLI-base & $83.64$ & $89.43$ & $94.39$ & $89.86$ & $88.96$ & $89.6$ & $\mathbf{7 6 . 0 0}$ & $87.41$ \\
+      SBERT-NLI-large & $\mathbf{8 4 . 8 8}$ & $\mathbf{9 0 . 0 7}$ & $\mathbf{9 4 . 5 2}$ & $90.33$ & $\mathbf{9 0 . 6 6}$ & $87.4$ & $75.94$ & $\mathbf{8 7 . 6 9}$ \\
+      \hline
+    \end{tabular}
+  }  
+  \label{sentence_bert_evaluation}
+\end{table}
+\footnotetext[9]{\cite{reimers_sentence-bert_2019}より引用}
+
+% 文章間の意味的類似度の算出を約5秒に短縮し，STSタスクで2019年の最先端のスコアを有している．
+% SentenceTransformer(
+%   (0): Transformer({'max_seq_length': 128, 'do_lower_case': False}) with Transformer model: BertModel 
+%   (1): Pooling({'word_embedding_dimension': 384, 'pooling_mode_cls_token': False, 'pooling_mode_mean_tokens': True, 'pooling_mode_max_tokens': False, 'pooling_mode_mean_sqrt_len_tokens': False})
+% )
+% @see https://data-analytics.fun/2020/08/04/understanding-sentence-bert/
+% @see https://www.vareal.co.jp/column/sentence-bert%E8%AB%96%E6%96%87-%E5%92%8C%E8%A8%B3/
+% @see https://github.com/UKPLab/sentence-transformers
+% @see https://www.google.com/search?client=firefox-b-d&q=paraphrase-MiniLM-L6-v2
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{クラスタリング}
-~
-% @see 
+% クラスタリングは，データの集合を
+% 教師なし学習である．
 
-\subsection{非階層クラスタリング}
-~
+% @see 木村先生のデータ解析法
+% @see 神嶌先生の講義資料
+
+% \subsection{非階層クラスタリング}
+% ~
 % @see 
 
 \subsection{階層的クラスタリング}
@@ -940,6 +1004,8 @@ Matthewsが1975年に提案したマシューズ相関係数（MCC;Matthews Corr
 ~
 % @see 
 
+
+% knn法
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{関連研究}
