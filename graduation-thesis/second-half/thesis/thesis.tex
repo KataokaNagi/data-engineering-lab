@@ -560,7 +560,7 @@ URLやメールアドレスといったユニークな文字の羅列は，出�
 % @see [自然言語処理における前処理の種類とその威力(2017)](https://qiita.com/Hironsan/items/2466fe0f344115aff177)
 
 \subsection{Attention}
-Dzmitryらが2014年に提案したAttentionは，時系列データの機械学習を行う際，出力データと関わりが強い入力データに効率よく比重を与えるモジュールである\cite{aurellen20}\cite{bahdanau_neural_2016}．
+Bahdanauらが2014年に提案したAttentionは，時系列データの機械学習を行う際，出力データと関わりが強い入力データに効率よく比重を与えるモジュールである\cite{aurellen20}\cite{bahdanau_neural_2016}．
 モデルにAttentionを組み込むことで無駄なデータの学習が減り，モデルが過去に学習した内容を忘却しにくくなる．
 これにより，30語以上の長い文章の機械翻訳タスクの精度が大幅に向上する．
 
@@ -593,7 +593,7 @@ $\vec{h_i}$は文脈を加味した単語の意味情報をもつベクトルで
 式(\ref{attention_e})の$v_{a}^{\top},~ W_{a},~ U_{a}$はニューラルネットワークの重みである．
 
 \subsection{Transformer}
-Ashishらが2017年に提案したTransformerは，Attentionを組み込んだ翻訳タスクに用いられる機械学習モデルで，2017年の最先端のモデルと比べて数分の1のコストで最大級の精度を有する\cite{aurellen20}\cite{vaswani_attention_nodate}．
+Vaswaniらが2017年に提案したTransformerは，Attentionを組み込んだ翻訳タスクに用いられる機械学習モデルで，2017年の最先端のモデルと比べて数分の1のコストで最大級の精度を有する\cite{aurellen20}\cite{vaswani_attention_nodate}．
 時系列データを扱う従来の機械学習にはRNN（Recurrent Neural Network）が多く組み込まれていたが，このモデルは単語を逐次的に処理する仕組みになっており，並列演算が難しい．
 一方でTransformerは，RNNを組み込まずに並列演算が可能なAttentionを多く組み込んで時系列データを処理するため，処理コストが低い．
 
@@ -644,7 +644,7 @@ $QW_i^Q$はXのどの部分を処理するかを表し，$KW_i^K$はXの注目�
 % @see p.549-
 
 \subsection{BERT}
-BERT(Bidirectional Encoder Representations from Transformers)は文の意味や文脈を加味した自然言語処理を行うための機械学習モデルである\cite{aurellen20}\cite{devlin_bert_2019}．
+Liuらが2019年に提案したBERT(Bidirectional Encoder Representations from Transformers)は，文の意味や文脈を加味した自然言語処理を行うための機械学習モデルである\cite{aurellen20}\cite{devlin_bert_2019}．
 研究者が大規模な計算資源を用いて自然言語の特徴を学習したBERTモデルを公開しており，学習されたモデルに用途に合わせた追加の学習を行うことで，小規模な計算資源で様々な自然言語タスクを高精度で行うことができる．
 このような前段階での学習を事前学習，その後の用途に合わせた学習を転移学習と呼ぶ．
 
@@ -715,7 +715,7 @@ NSPとしての学習では，入力文の50\%を文章中で連続する2文，
 % @see https://qiita.com/omiita/items/72998858efc19a368e50
 
 \subsection{RoBERTa}
-RoBERTaはBERTの学習方法を改善した機械学習モデルで，多くの自然言語処理タスクのベンチマークでBERTのスコアを上回る．
+Devlinらが2019年に提案したRoBERTaはBERTの学習方法を改善した機械学習モデルで，多くの自然言語処理タスクのベンチマークでBERTのスコアを上回る．
 RoBERTaのモデルアーキテクチャは図\ref{fig_bert}のBERTと同じものを使用する．
 MLMとしての学習でBERTでは10回学習するごとに同じマスクを使用していたため，どの学習でも異なるマスクを使用することでSQuAD（Stanford Question Answering Dataset）とSST-2（The Stanford Sentiment Treebank）のスコアを向上させた．
 % 余裕があれば表を挿入
