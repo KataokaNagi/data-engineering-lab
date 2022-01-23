@@ -831,7 +831,7 @@ BERTでは学習データとして250万単語のEnglish Wikipediaと80万単語
 表\ref{confusion_matrix}の4件のデータは正しく分類した陽性クラスであり，真陽性（TP; true positive）があるという．
 以降の小小節
 \ref{subsubsection_precision}，
-\ref{subsubsection_accuracy}，
+\ref{subsubsection_recall}，
 \ref{subsubsection_mcc}，
 では，これらTN，FN，FP，TPを用いて計算した評価指標である適合率，再現率，マシューズ相関係数について記す．
 
@@ -851,22 +851,43 @@ BERTでは学習データとして250万単語のEnglish Wikipediaと80万単語
   \label{confusion_matrix}
 \end{table}
 
-
 % @see 92-94 104-106
 % @see https://zellij.hatenablog.com/entry/20120214/p1
 % @see https://www.datarobot.com/jp/blog/matthews-correlation-coefficient/
 
+
 \subsubsection{適合率}
 \label{subsubsection_precision}
+適合率（precision）は，陽性クラスだと分類したデータのうち真陽性クラスであるデータの割合である\cite{aurellen20}．
+表\ref{confusion_matrix}の例では，ラベルが1だと予測データのうち実際に1であったデータの割合を指す．
+したがって，式(\ref{precision})のように適合率が計算される．
 
+\begin{align}
+  precision ~=~ \frac{TP}{TP+FP} ~=~ \frac{4}{4+1} ~=~ 0.8
+  \label{precision}
+\end{align}
 
-% @see 
+適合率は，数ある映像から子どもに観せても安心な映像を検出する分類器などで重視される．
+観せて安心な映像を陽性クラスの映像だとしたとき，分類器の適合率が高ければ，観せて安心な映像だと分類した映像の多くは真に観せて安心な映像であることが多い．
+
 
 \subsubsection{再現率}
-\label{subsubsection_accuracy}
-~
+\label{subsubsection_recall}
+再現率（recall）は，陽性クラスのデータのうち真陽性クラスであるデータの割合である\cite{aurellen20}．
+表\ref{confusion_matrix}の例では，ラベルが1のデータのうち予測も1であったデータの割合を指す．
+したがって，式(\ref{recall})のように再現率が計算される．
 
-% @see 
+\begin{align}
+  recall ~=~ \frac{TP}{TP+FN} ~=~ \frac{4}{4+3} ~\sim~ 0.57
+  \label{recall}
+\end{align}
+
+再現率は，監視カメラに映る人物の映像から万引き犯の映像を検出する分類器などで重視される．
+万引き犯の映像を陽性クラスの映像だとしたとき，分類器の再現率が高ければ，万引き犯の映像の多くは予測も万引き犯の映像となる．
+
+適合率と再現率は一般にトレードオフの関係にあり，分類器の目的によってそれぞれの評価指標をどれほど重要視するかを考慮する必要がある．
+上述の監視カメラの例では，適合率が低く万引き犯だと分類した映像のいくつかが万引き反でない人物となってしまうことよりも，再現率が高く確実に万引き犯を検出できることの方が重要である．
+
 
 \subsubsection{マシューズ相関係数}
 \label{subsubsection_mcc}
