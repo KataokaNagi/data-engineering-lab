@@ -976,6 +976,20 @@ BERTやRoBERTaで1万文から最も意味的類似度が高い2文を得たい�
 % @see https://www.google.com/search?client=firefox-b-d&q=paraphrase-MiniLM-L6-v2
 
 
+\subsection{コサイン距離}
+\label{subsection_cosine_distance}
+
+コサイン距離は，2つのベクトルの角度がどの程度離れているかを表す距離（非類似度）であり，式(\ref{cosine_distance})のように計算される．
+コサイン距離は，単語埋め込みや文章の埋め込みの距離の算出によく用いられる．
+
+\begin{align}
+  \text{cos-dist}\left(\bm{u}, \bm{v}\right) ~&=~
+  1 -
+  \text{cos-sim}\left(\bm{u}, \bm{v}\right) ~=~
+  1 - \frac{\bm{u} \cdot \bm{v}}{\|\bm{u}\|\|\bm{v}\|}
+  \label{cosine_distance}
+\end{align}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{クラスタリング}
 % クラスタリングは，データの集合を
