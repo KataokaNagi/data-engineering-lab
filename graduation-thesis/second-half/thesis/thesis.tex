@@ -891,9 +891,16 @@ BERTでは学習データとして250万単語のEnglish Wikipediaと80万単語
 
 \subsubsection{マシューズ相関係数}
 \label{subsubsection_mcc}
-~
+Matthewsが1975年に提案したマシューズ相関係数（MCC;Matthews Correlation Coefficient）は，混同行列を基に分類器の精度を総合的に評価する指標で，TP，TN，FP，FNの数が不均衡なときにも頑健に評価できる\cite{chicco_advantages_2020}．
+マシューズ相関係数は式(\ref{mcc})のように計算される$[-1, 1]$の範囲の実数値であり，この値が大きいほど分類器の精度が高いといえる．
+\begin{align}
+  MCC ~=~ \frac{\mathrm{TP} \times \mathrm{TN}-\mathrm{FP} \times \mathrm{FN}}{\sqrt{(\mathrm{TP}+\mathrm{FP}) \times(\mathrm{TP}+\mathrm{FN}) \times(\mathrm{TN}+\mathrm{FP}) \times(\mathrm{TN}+\mathrm{FN})}}
+  \label{mcc}
+\end{align}
 
-% @see 
+% (1*1-0*0)/(1*1*1*1)^-1 = 1
+% (0*0-1*1)/(1*1*1*1)^-1 = -1
+% @see https://www.datarobot.com/jp/blog/matthews-correlation-coefficient/
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{文章の類似度の算出}
