@@ -819,22 +819,57 @@ BERTでは学習データとして250万単語のEnglish Wikipediaと80万単語
 
 % @see 
 
-\subsection{混同行列を用いた2値分類器の評価}
-~
+\subsection{混同行列を用いた分類器の評価}
+分類器の評価では，混同行列を用いたいくつかの評価指標がよく用いられる\cite{aurellen20}．
+混同行列は，分類器の入力の$n$種類のラベルと出力の$n$種類のラベルの計$n^2$組の組み合わせについて，それぞれの数を要素とした$n$次正方行列である．
 
-% @see 
+表\ref{confusion_matrix}に10件のデータを0か1かの2値ラベルで分類したときの混同行列の例を示す．
+評価指標の計算で着目するクラスを陽性クラス（positive class），その他のクラスを陰性クラス（negative class）といい，表\ref{confusion_matrix}では1を陽性クラス，0を陰性クラスとして考える．
+表\ref{confusion_matrix}の2件のデータは正しく分類した陰性クラスであり，真陰性（TN; true negative）があるという．
+表\ref{confusion_matrix}の1件のデータは誤分類した陰性クラスであり，偽陰性（FN; false negative）があるという．
+表\ref{confusion_matrix}の4件のデータは誤分類した陽性クラスであり，偽陽性（FP; false positive）があるという．
+表\ref{confusion_matrix}の3件のデータは正しく分類した陽性クラスであり，真陽性（TP; true positive）があるという．
+以降の小小節
+\ref{subsubsection_precision}，
+\ref{subsubsection_accuracy}，
+\ref{subsubsection_mcc}，
+では，これらTN，FN，FP，TPを用いて計算した評価指標である適合率，再現率，マシューズ相関係数について記す．
+
+\begin{table}[H]
+  \caption{
+    混同行列の例
+    }
+  \vspace{3mm}
+  \centering
+    \begin{tabular}{c|cc}
+     & 予測は0 & 予測は1 \\
+    \hline
+    入力は0 & 2 & 1 \\
+    入力は1 & 3 & 4
+  \end{tabular}
+  % }
+  \label{confusion_matrix}
+\end{table}
+
+
+% @see 92-94 104-106
+% @see https://zellij.hatenablog.com/entry/20120214/p1
+% @see https://www.datarobot.com/jp/blog/matthews-correlation-coefficient/
 
 \subsubsection{適合率}
+\label{subsubsection_precision}
 ~
 
 % @see 
 
 \subsubsection{再現率}
+\label{subsubsection_accuracy}
 ~
 
 % @see 
 
 \subsubsection{マシューズ相関係数}
+\label{subsubsection_mcc}
 ~
 
 % @see 
