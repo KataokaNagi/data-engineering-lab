@@ -492,10 +492,10 @@ $\bm{b}$は一般に1を要素とするバイアスニューロンと呼ばれ�
   \label{sigmoid}
 \end{align}
 
-$y^{(i)}$は入力する特徴$\mathbf{x}$の個々の要素のラベルで、$\hat{p}$は$\mathbf{x}$の個々の要素についてモデルが予測したラベルが1となる確率である。
-Log Loss$J(\theta)$は個々の$y^{(i)}$と$\hat{p}^{(i)}$の差が大きいほど大きくなり、この差が小さいほど0に漸近する。
-式(\ref{logistic_probability})の$\theta$は特徴$\mathbf{x}$のどの要素を重視するかを設定する重み係数である。
-式(\ref{sigmoid})の$\sigma(t)$はシグモイド関数と呼ばれる連続関数であり，実数tを入力したとき図\ref{fig_sigmoid}のように確率の範囲$(0, 1)$で実数を出力する．シグモイド関数を用いることで、$(0, 1)$の範囲にないモデルの出力を$(0, 1)$の範囲に落とし込むことができる。
+$y^{(i)}$は入力する特徴$\mathbf{x}$の個々の要素のラベルで，$\hat{p}$は$\mathbf{x}$の個々の要素についてモデルが予測したラベルが1となる確率である．
+Log Loss$J(\theta)$は個々の$y^{(i)}$と$\hat{p}^{(i)}$の差が大きいほど大きくなり，この差が小さいほど0に漸近する．
+式(\ref{logistic_probability})の$\theta$は特徴$\mathbf{x}$のどの要素を重視するかを設定する重み係数である．
+式(\ref{sigmoid})の$\sigma(t)$はシグモイド関数と呼ばれる連続関数であり，実数tを入力したとき図\ref{fig_sigmoid}のように確率の範囲$(0, 1)$で実数を出力する．シグモイド関数を用いることで，$(0, 1)$の範囲にないモデルの出力を$(0, 1)$の範囲に落とし込むことができる．
 
 % $h \left( \bm{X}^{\left( i \right)} \right)$
 % はモデルの出力，
@@ -664,15 +664,15 @@ BERTモデルは，中間層の数や個々のTransformerの数，Transformer内
 
 図\ref{fig_fine_tuning_of_bert}にBERTの事前学習と転移学習の手順を示す．
 事前学習で入力するベクトルの要素は，分類のための出力の次元調整に用いる定ベクトル[CLS]，入力する2文の単語埋め込み，2文の分割位置を示す定ベクトル[SEP]で構成される．
-図中の左の事前学習では，文法や単語の意味の意味を理解するためのMasked Language Modelとしての学習と，文意と文脈を理解するためのNext Sentence Predictionとしての学習を同時に行う．
+図中の左の事前学習では，文法や単語の意味の意味を理解するためのMLM（Masked Language Model）としての学習と，文意と文脈を理解するためのNSP（Next Sentence Prediction）としての学習を同時に行う．
 
-Masked Language Modelとしての学習では，まずモデルに入力する2文の単語の15\%のうち，80\%を文字列[MASK]に置き換え，10\%を無作為に抽出した単語に置き換える．残りの10\%は何も置き換えない．
+MLMとしての学習では，まずモデルに入力する2文の単語の15\%のうち，80\%を文字列[MASK]に置き換え，10\%を無作為に抽出した単語に置き換える．残りの10\%は何も置き換えない．
 この置き換えにより，事前学習でしか入力しない文字列[MASK]について，事前学習と転移学習とのミスマッチを低減することができる．
 その後，出力されたベクトルの入力でマスクされた位置と同じ位置の要素を使用し，マスク前の単語がどの単語であったかを予測する単語ごとの確率を計算して出力する．
 % 1層の全結合層とソフトマックス関数
 出力した確率とマスクした正解の単語を基に損失関数を計算し，モデルの重みの更新を行う．
 
-Next Sentence Predictionとしての学習では，入力文の50\%を文章中で連続する2文，残りの50\%を文章中で連続しない無作為に抽出された2文として入力する．
+NSPとしての学習では，入力文の50\%を文章中で連続する2文，残りの50\%を文章中で連続しない無作為に抽出された2文として入力する．
 入力する2文には，文章中で連続した2文であるかそうでないかのラベル付けがなされている．
 その後，出力されたベクトルの[CLS]と同じ位置の要素Cとラベルを使用してどちらの2文であったかの損失関数を計算し，モデルの重みを更新する．
 
@@ -715,7 +715,86 @@ Next Sentence Predictionとしての学習では，入力文の50\%を文章中�
 % @see https://qiita.com/omiita/items/72998858efc19a368e50
 
 \subsection{RoBERTa}
-~
+RoBERTaはBERTの学習方法を改善した機械学習モデルで，多くの自然言語処理タスクのベンチマークでBERTのスコアを上回る．
+RoBERTaのモデルアーキテクチャは図\ref{fig_bert}のBERTと同じものを使用する．
+MLMとしての学習でBERTでは10回学習するごとに同じマスクを使用していたため，どの学習でも異なるマスクを使用することでSQuAD（Stanford Question Answering Dataset）とSST-2（The Stanford Sentiment Treebank）のスコアを向上させた．
+% 余裕があれば表を挿入
+BERTが行っていたNSPとしての学習は比較実験により有効でないことが確認され，RoBERTaではこれを行っていない．
+比較実験では，BERTが行ったSEGMENT-PAIRのNSPの学習の代わりにSENTENCE-PAIRのNSPの学習，FULL-SENTENCESのNSPをしない学習，DOC-SENTENCESのNSPをしない学習を行い，NSPの学習を行わなくてもSQuAD，SST-2，MNLI-m（The Multi-Genre Natural Language Inference Matched），RACE（Reading Comprehension）のスコアが概ね向上することを確認した．
+% 余裕があれば表を挿入
+BERTでは学習データとして250万単語のEnglish Wikipediaと80万単語のBooksCorpusで計16GBのデータを用いていたが，RoBERTaではこれに加えて76GBのCC-News，38GBのOpenWebText，31GBのStoriesを学習した．
+さらに，1回の学習で用いるデータサイズ（バッチサイズ）を256から8,000に増やすことで，BERTよりもSQuAD，MNLI-m，SST-2のスコアが向上することを確認した．
+
+
+表\ref{roberta_glue}にBERTとRoBERTaのGLUE（General Language Understanding Evaluation）タスクのベンチマークスコアを示す．
+それぞれのベンチマークでは以下のタスクを行っている．
+
+\begin{itemize}
+  \item MNLI（The Multi-Genre Natural Language Inference）
+  \begin{itemize}
+    \item 2つの文が含意，矛盾，中立のどの関係にあるかを判定
+  \end{itemize}
+  \item QNLI（Question Natural Language Inference）
+  \begin{itemize}
+    \item 質問文とともに入力した文が質問に対する正しい回答であるかを判定
+  \end{itemize}
+  \item QQP（Quora Question Pairs）
+  \begin{itemize}
+    \item 2つの質問文が同じ意味であるかを判定
+  \end{itemize}
+  \item RTE（Recognizing Textual Entailment）
+  \begin{itemize}
+    \item 2つの文が含意関係にあるかを判定
+  \end{itemize}
+  \item SST（The Stanford Sentiment Treebank）
+  \begin{itemize}
+    \item 映画のレビュー文がポジティブであるかネガティブであるかを判定
+  \end{itemize}
+  \item MRPC（Microsoft Research Paraphrase Corpus）
+  \begin{itemize}
+    \item 2つの文が同じ意味であるかを判定
+  \end{itemize}
+  \item CoLA（The Corpus of Linguistic Acceptability）
+  \begin{itemize}
+    \item 英文の文法が正しいかを判定
+  \end{itemize}
+  \item STS（Semantic Textual Similarity Benchmark）
+  \begin{itemize}
+    \item ニュースの2つの見出し文の類似度を5段階で評価
+  \end{itemize}
+\end{itemize}
+本研究におけるクラス分類ではSTSのスコアが重要であり、このスコアはRoBERTaの学習方法により90.0から92.4に向上している。
+
+\begin{table}[H]
+  \caption{
+    BERTとRoBERTaのGLUEタスクのベンチマークスコア．
+    全ての結果は24層のアーキテクチャを使用し，5回の実行結果の中央値を取っている．
+    \protect\footnotemark[7]
+    }
+  \centering
+  \vspace{3.0mm}
+  % {\tabcolsep=0.13cm
+    % \begin{tabular}{lccccccccc}
+    % \hline
+    % & \textbf{MNLI} & \textbf{QNLI} & \textbf{QQP} & \textbf{RTE} & \textbf{SST} & \textbf{MRPC} & \textbf{CoLA} & \textbf{STS} & \textbf{WNLI} \\
+    % \hline
+    % $\text{BERT}_{\text{LARGE}}$ & 86.6 & 92.3 & 91.3 & 70.4 & 93.2 & 88.0 & 60.6 & 90.0 & - \\
+    % RoBERTa & \textbf{90.2} & \textbf{94.7} & \textbf{92.2} & \textbf{86.6} & \textbf{96.4} & \textbf{90.9} & \textbf{68.0} & \textbf{92.4} & 91.3 \\
+    \begin{tabular}{lcccccccc}
+    \hline
+    & \textbf{MNLI} & \textbf{QNLI} & \textbf{QQP} & \textbf{RTE} & \textbf{SST} & \textbf{MRPC} & \textbf{CoLA} & \textbf{STS} \\
+    \hline
+    $\text{BERT}_{\text{LARGE}}$ & 86.6 & 92.3 & 91.3 & 70.4 & 93.2 & 88.0 & 60.6 & 90.0 \\
+    RoBERTa & \textbf{90.2} & \textbf{94.7} & \textbf{92.2} & \textbf{86.6} & \textbf{96.4} & \textbf{90.9} & \textbf{68.0} & \textbf{92.4} \\
+    \hline
+  \end{tabular}
+  % }
+  \label{roberta_glue}
+\end{table}
+\footnotetext[7]{\cite{liu_roberta_2019}より一部抜粋}
+
+% @see https://note.com/npaka/n/n5086fc19c5fc
+
 % @see https://data-analytics.fun/2020/05/08/understanding-roberta/
 % @see https://github.com/pytorch/fairseq/tree/main/examples/roberta
 % @see https://tensorflow.classcat.com/2021/05/16/huggingface-transformers-4-6-pretrained-models/
