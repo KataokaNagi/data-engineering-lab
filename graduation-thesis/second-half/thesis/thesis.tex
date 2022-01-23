@@ -826,9 +826,9 @@ BERTでは学習データとして250万単語のEnglish Wikipediaと80万単語
 表\ref{confusion_matrix}に10件のデータを0か1かの2値ラベルで分類したときの混同行列の例を示す．
 評価指標の計算で着目するクラスを陽性クラス（positive class），その他のクラスを陰性クラス（negative class）といい，表\ref{confusion_matrix}では1を陽性クラス，0を陰性クラスとして考える．
 表\ref{confusion_matrix}の2件のデータは正しく分類した陰性クラスであり，真陰性（TN; true negative）があるという．
-表\ref{confusion_matrix}の1件のデータは誤分類した陰性クラスであり，偽陰性（FN; false negative）があるという．
-表\ref{confusion_matrix}の4件のデータは誤分類した陽性クラスであり，偽陽性（FP; false positive）があるという．
-表\ref{confusion_matrix}の3件のデータは正しく分類した陽性クラスであり，真陽性（TP; true positive）があるという．
+表\ref{confusion_matrix}の1件のデータは誤って陽性クラスだと分類した陰性クラスであり，偽陽性（FP; false positive）があるという．
+表\ref{confusion_matrix}の3件のデータは誤って陰性クラスだと分類した陽性クラスであり，偽陰性（FN; false negative）があるという．
+表\ref{confusion_matrix}の4件のデータは正しく分類した陽性クラスであり，真陽性（TP; true positive）があるという．
 以降の小小節
 \ref{subsubsection_precision}，
 \ref{subsubsection_accuracy}，
@@ -858,7 +858,7 @@ BERTでは学習データとして250万単語のEnglish Wikipediaと80万単語
 
 \subsubsection{適合率}
 \label{subsubsection_precision}
-~
+
 
 % @see 
 
