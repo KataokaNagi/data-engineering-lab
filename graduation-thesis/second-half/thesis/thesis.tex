@@ -903,8 +903,9 @@ Matthewsが1975年に提案したマシューズ相関係数（MCC;Matthews Corr
 % @see https://www.datarobot.com/jp/blog/matthews-correlation-coefficient/
 
 \section{文章の距離の算出}
+\label{section_sentence_distance}
 後述のクラスタリングを行うにあたり，クラスタリングに必要な文章の距離（非類似度）の算出法について記す．
-小節\ref{subsection_sentence_bert}では文章を埋め込みに変換するSentence-BERTについて説明し，小節\ref{subsection_cosine_distance}では変換した埋め込みを用いて計算するコサイン距離について説明する．
+本節\ref{section_sentence_distance}では，小節\ref{subsection_sentence_bert}で文章を埋め込みに変換するSentence-BERTについて説明し，小節\ref{subsection_cosine_distance}で変換した埋め込みを用いて計算するコサイン距離について説明する．
 
 \subsection{Sentence-BERT}
 \label{subsection_sentence_bert}
@@ -991,32 +992,78 @@ BERTやRoBERTaで1万文から最も意味的類似度が高い2文を得たい�
 \end{align}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{クラスタリング}
-% クラスタリングは，データの集合を
-% 教師なし学習である．
+\section{階層的クラスタリング}
+\label{section_clustering}
+クラスタリングは，データの集合を何らかのアルゴリズムに基づいてクラスタと呼ばれる部分集合に分割する教師なし学習である
+% \cite{aurellen20}
+．
+類似したデータをクラスタにまとめることで，データの要約や傾向の分析を行うことができる．
+
+本節\ref{section_clustering}では，小節\ref{subsection_wards_method}でクラスタ間の距離を算出するWard法について説明し，小節\ref{subsection_hierarchical_clustering}でクラスタリングの一種である階層的クラスタリングについて説明する．
+% し，小節\ref{subsection_dendrogram}で階層的クラスタリングの工程を可視化するデンドログラムについて説明する．
 
 % @see 木村先生のデータ解析法
 % @see 神嶌先生の講義資料
 
 % \subsection{非階層クラスタリング}
 % ~
-% @see 
-
-\subsection{階層的クラスタリング}
-~
-% @see 
+% @see p.12
 
 \subsection{Ward法}
-~
-% @see 
+\label{subsection_wards_method}
+階層的クラスタリングの処理には，データの部分集合であるクラスタ同士の距離（クラスタ間距離）が必要となる．
+クラスタ間距離の算出には単一連結法や最遠隣法など様々な手法が用いられているが，本研究では1963年にWardが提案したWard法（最小分散法）を使用する\cite{murtagh_wards_2014}．
+Ward法は異常なデータの値（外れ値）の影響を受けにくく，クラスタ間距離の算出法として広く用いられている．
 
-\subsection{（その他使用した手法）}
-~
-% @see 
+Ward法では式(\ref{wards_method})に示すように，
+併合後のクラスタ$C_{k} \cup C_{c}$の分散と
+併合前のクラスタ$C_{k}, C_{c}$のそれぞれの分散の和との差$d_{k c}$をクラスタ間距離とする．
 
-\subsection{t-SNE (使うかも)}
-~
-% @see 
+% 分散の実装方法にはユークリッド距離の観点から実装したものと平方ユークリッド距離の観点から実装したものがあるが，本研究ではデンドログラムでの分析で有用なユークリッド距離の観点から実装したものを用いる．
+% ユークリッド距離を使うか平方ユークリッド距離を使うかの実装の差がある
+
+\begin{align}
+  d_{k c} &= \operatorname{Var} \left( C_{k} \cup C_{c} \right)
+  -
+  \left(
+    \operatorname{Var}\left(C_{k}\right)
+    +
+    \operatorname{Var}\left(C_{c}\right)
+  \right)
+  \label{wards_method}
+\end{align}
+
+% @see https://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.linkage.html
+
+
+\subsection{階層的クラスタリング}
+\label{subsection_hierarchical_clustering}
+階層的クラスタリング（凝集型クラスタリング）は，図\ref{fig_clustering_example}に示すようにクラスタ間距離が最も近い2つのクラスタを順次1つのクラスタに結合していく手法である．
+
+結合前のクラスタは結合後のクラスタの部分集合となり，最終的には1つのクラスタとなる．
+従って階層的クラスタリングは，このような部分集合の階層構造をもつデータの分析に有用である．
+どのクラスタ間距離でクラスタの結合を止めるかによって，様々な粒度のクラスタ群を得ることができる．
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[keepaspectratio, width=120mm]{img/clustering_example.png}
+	\caption{階層的クラスタリング}
+	\label{fig_clustering_example}
+\end{figure}
+
+% @see p.261
+
+% \subsection{デンドログラム}
+% \label{subsection_dendrogram}
+
+
+% \subsection{（その他使用した手法）}
+% ~
+% % @see 
+
+% \subsection{t-SNE (使うかも)}
+% ~
+% % @see 
 
 
 % knn法
