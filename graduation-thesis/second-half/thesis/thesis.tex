@@ -1247,6 +1247,19 @@ Yangらは，ニュース読者が出来事を正確かつ迅速に把握でき�
 RoBERTaが出来事の文と主張の文の分類に適用できるよう，出来事か主張かでラベル付けされた文を含むデータセットを用いて転移学習を行った．
 図\ref{fig_single_sentence_classification_of_bert}に示したように入力は文字列[CLS]と分類したい1文とし，[CLS]に対応する出力Cと正解のラベルを基に損失関数の計算を行う．
 具体的には，出力Cを入力とする1層の全結合層と1ノードの出力層を接続し，その出力とLog Lossを用いて損失を計算した．
+
+RoBERTaの事前学習モデルにはLiuらのRoBERTa baseを利用した\cite{liu_roberta_2019}．
+RoBERTa baseは1層に16個のScaled Dot-Product Attentionを含むTransformerエンコーダを768個持つ層を12層用いている．
+% 125Mパラメータ
+また，ニュース記事を含む約160GBの英文をバッチサイズ8,000で50万回学習している．
+% 英語
+% 大文字と小文字を区別するらしい...
+% The model was trained on 1024 V100 GPUs for 500K steps with a batch size of 8K and a sequence length of 512. The optimizer used is Adam with a learning rate of 6e-4, β1=0.9\beta_{1} = 0.9β1​=0.9, β2=0.98\beta_{2} = 0.98β2​=0.98 and ϵ=1e−6\epsilon = 1e-6ϵ=1e−6, a weight decay of 0.01, learning rate warmup for 24,000 steps and linear decay of the learning rate after.
+% @see https://huggingface.co/roberta-base
+% 12-層，768-隠れ次元，16-ヘッド，125M パラメータ
+% @see https://tensorflow.classcat.com/2021/05/16/huggingface-transformers-4-6-pretrained-models/
+% @see https://github.com/pytorch/fairseq/tree/main/examples/roberta
+
 % 2層とRoBERTaを学習した
 % class RobertaClassificationHead(nn.Module):
 %     """Head for sentence-level classification tasks."""
@@ -1256,7 +1269,6 @@ RoBERTaが出来事の文と主張の文の分類に適用できるよう，出�
 %         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 %         self.out_proj = nn.Linear(config.hidden_size, config.num_labels)
 
-% @see 
 
 \subsection{Sentence-BERT，コサイン値，Ward法を用いた出来事の文と主張の文の階層的クラスタリング}
 
@@ -1264,10 +1276,46 @@ RoBERTaが出来事の文と主張の文の分類に適用できるよう，出�
 次に，出来事の文章の埋め込みを基に記事の階層的クラスタリングを行った．
 最後に，それぞれ記事のクラスタについて，主張の文の埋め込みを基に階層的クラスタリングを行った．
 階層的クラスタリングを行うとき，文埋め込み間の距離の算出にはコサイン距離を使用し，この距離を基にWard法を用いてクラスタ間の距離を算出した．
-
 ここで出来事の文章の埋め込みに基づいたクラスタリングを先に行ったのは，複数の出来事に対して複数の主張が階層的に紐づいた構造を持つためである．
+
+Sentence-BERTのモデルにはRaimersらのparaphrase-MiniLM-L6-v2を使用した\cite{reimers_sentence-bert_2019}．
+paraphrase-MiniLM-L6-v2は1層に12個のScaled Dot-Product Attentionを含むTransformerエンコーダを384個持つ層を6層用いている．
+% 125Mパラメータ
+MNLIとSNLI（The Stanford Natural Language Inference）の約100万文のうち約10万文の英文をバッチサイズ16で1回学習している．
+MNLIは話し言葉と書き言葉の様々な英文をカバーしている．
+% {
+%   "_name_or_path": "old_models/paraphrase-MiniLM-L6-v2/0_Transformer",
+%   "architectures": [
+%     "BertModel"
+%   ],
+%   "attention_probs_dropout_prob": 0.1,
+%   "gradient_checkpointing": false,
+%   "hidden_act": "gelu",
+%   "hidden_dropout_prob": 0.1,
+%   "hidden_size": 384,
+%   "initializer_range": 0.02,
+%   "intermediate_size": 1536,
+%   "layer_norm_eps": 1e-12,
+%   "max_position_embeddings": 512,
+%   "model_type": "bert",
+%   "num_attention_heads": 12,
+%   "num_hidden_layers": 6,
+%   "pad_token_id": 0,
+%   "position_embedding_type": "absolute",
+%   "transformers_version": "4.7.0",
+%   "type_vocab_size": 2,
+%   "use_cache": true,
+%   "vocab_size": 30522
+% }
+
+% MRPC．並列するニュースソースからMicrosoft Research Paraphrase Cor-pus (Dolan et al., 2004)を抽出．
+
+% SNLI (Bowman et al., 2015) と Multi-Genre NLI (Williams et al., 2018) のデータセットの組み合わせでSBERTを学習させる．SNLIは，contradiction，eintailment，neu-tralのラベルでアノテーションされた57万文のペアのcol-lectionである．MultiNLIは43万文のペアを含み，話し言葉と書き言葉の様々なジャンルをカバーしています．SBERTを3ウェイソフトマックス分類器の目的関数で1エポック分微調整した．バッチサイズ16，学習率2e-5のアダムオプティマイザを用い，学習データの10%に渡って線形学習率のウォームアップを行った．デフォールトプーリング戦略はMEANである．
+
 % シャッフル
-% @see 
+% @see https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjs26WKr8r1AhWQzpQKHXpCBDcQFnoECAoQAQ&url=https%3A%2F%2Fhuggingface.co%2Fsentence-transformers%2Fparaphrase-MiniLM-L6-v2&usg=AOvVaw0vPzyNJ5AtBMiIa-USrve7
+% @see https://www.sbert.net/docs/pretrained_models.html
+% @see https://huggingface.co/sentence-transformers/paraphrase-MiniLM-L6-v2/blob/main/config.json
 
 \subsection{k-NN分類法を用いた主張のクラスタとクラスタに紐づく記事の推薦}
 まず，読者が興味を持っている記事$A$を1つ選択し，記事内の文が出来事の文であるか主張の文であるかに分類する．
@@ -1281,10 +1329,9 @@ RoBERTaが出来事の文と主張の文の分類に適用できるよう，出�
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{データセットの選定}
 \label{section_select_dataset}
-~
 % @see 
 
-\subsection{出来事の文と主張の文の分類器の学習データ（IBM Debater Datasetの議論）}
+\subsection{分類器の学習データ}
 ~
 % @see 
 
