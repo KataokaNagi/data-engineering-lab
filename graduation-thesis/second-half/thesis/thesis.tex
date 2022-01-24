@@ -17,6 +17,7 @@
 \usepackage{bm}
 \usepackage{url}
 \usepackage{otf}
+\usepackage{multicol}
 
 \renewcommand{\baselinestretch}{1.5}
 
@@ -551,6 +552,7 @@ Log Loss$J(\theta)$は個々の$y^{(i)}$と$\hat{p}^{(i)}$の差が大きいほ�
 % @see p.430
 
 \subsection{テキストの前処理}
+\label{subsection_texts_preprocessing}
 単語埋め込みのように，自然言語処理ではテキストをコンピュータが解釈しやすい数値に変換して処理することが多い．
 このとき，コンピュータはテキストを文字の羅列としか見ていないため，Appleとappleを別の単語と見なし，違う数値に変換してしまう．
 このような単語の表記揺れは，文章中の単語の出現頻度の情報を不正確なものにする．
@@ -1405,17 +1407,44 @@ Yangらの研究と同様に話題がCOVID-19に限定されてしまってい�
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{データの前処理}
 \label{section_preprocessing_data}
-~
 % @see 
 
-\subsection{自然言語処理のためのテキストの前処理（前処理の種類，なぜ前処理するのかなどの議論）}
+\subsection{自然言語処理のためのテキストの前処理}
+IBM Debater$^{\textregistered}$ - Claims and EvidenceとCOVID-19 News Articlesの文章に対し，小節\ref{subsection_texts_preprocessing}で述べたような単語の表記揺れを少なくするいくつかの前処理を行った．
+具体的な処理は\ref{section_data_preprocessing_implement}で説明する．
+% には，正規表現などを使用して以下の処理を行った．
+
+% \begin{multicols}{2}
+%   \begin{itemize}
+%   \item 大文字の小文字化
+%   \item 改行文字の除去
+%   \item タブ文字の除去
+%   \item 改ページ文字の除去
+%   \item no break spaceの除去
+%   \item thin spaceの除去
+%   \item 絵文字の除去
+%   \item URLの除去
+%   \item メールアドレスの除去
+%   \item 英数字，空白，句読点以外の文字の除去
+%   \item 
+%   \item 
+%   \item 
+%   \item 
+%   \columnbreak
+%   \item 
+%   \end{itemize}
+% \end{multicols}
+
+\subsection{省略のピリオドなどを考慮した文章の分割}
 ~
 % @see 
-
-\subsection{（その他工夫した前処理）}
-~
-% @see 
-
+% \subsection{テキストの前処理}
+% 単語埋め込みのように，自然言語処理ではテキストをコンピュータが解釈しやすい数値に変換して処理することが多い．
+% このとき，コンピュータはテキストを文字の羅列としか見ていないため，Appleとappleを別の単語と見なし，違う数値に変換してしまう．
+% このような単語の表記揺れは，文章中の単語の出現頻度の情報を不正確なものにする．
+% 表記揺れによって増加した出現頻度の少ない単語が学習のノイズとなってしまうこともある．
+% 従って，テキストに何らかの処理をする前に，大文字を小文字に変換するなどの表記揺れを解消する処理を行う必要がある．
+% URLやメールアドレスといったユニークな文字の羅列は，出現頻度が極めて少ないノイズとなり得るため，事前に除去しておくと良い．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{実装}
@@ -1439,6 +1468,7 @@ Yangらの研究と同様に話題がCOVID-19に限定されてしまってい�
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{データの前処理}
+\label{section_data_preprocessing_implement}
 ~
 % @see 
 
