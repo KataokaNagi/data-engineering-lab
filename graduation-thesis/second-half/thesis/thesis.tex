@@ -1129,12 +1129,25 @@ kは事前に設定しておく必要がある．
 % @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{（要追加調査：比較評価できる推薦手法）（出来事，主張に着目するシステムなど）}
-~
+% \section{（要追加調査：比較評価できる推薦手法）（出来事，主張に着目するシステムなど）}
+\section{主張の文のクラスタリングを行う研究}
+% ~
 % @see 
 
-\subsection{Investigating COVID-19 News Across Four Nations A Topic Modeling and Sentiment Analysis Approach}
-~
+\subsection{Scalable Fact-checking with Human-in-the-Loop}
+
+Yangらは，ニュース読者が出来事を正確かつ迅速に把握できるように
+階層的クラスタリングを用いて記事に対するツイートの主張をグループ化する手法を提案した\cite{yang_scalable_2021}．
+この研究ではCOVID-19の話題に限定した主張の文をグループ化しているが，この手法を記事に適用した場合，多くの話題について主張のまとまりが生成されることになる．
+これでは，COVID-19の飲み薬やワクチンなど異なる話題に含まれる安全性に関する共通した主張の文がグループ化されるため，読者が興味を持っている出来事の異なる主張の収集に時間を要してしまう．
+
+% TODO
+% クラスタリングについて詳しく
+% 図を利用
+% クラスタ数が低減していないことに言及
+
+% \subsection{Investigating COVID-19 News Across Four Nations A Topic Modeling and Sentiment Analysis Approach}
+% ~
 % @see 
 
 \subsubsection{トピックモデル，top2vec, roberta}
@@ -1143,8 +1156,9 @@ kは事前に設定しておく必要がある．
 
 %%%%%%%%%%
 % \section{tf-idf -->}
-~%% @see 
- <!-- SCDV -->
+~
+% @see 
+%  <!-- SCDV -->
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
