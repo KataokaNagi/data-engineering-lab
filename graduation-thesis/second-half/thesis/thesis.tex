@@ -384,7 +384,8 @@ Conoverらや笹原和俊らは，アメリカの選挙期間中のTwitterユー
 図\ref{fig_nn}に示すニューラルネットワークは，動物の脳細胞からヒントを得た機械学習の基本的なモデルである\cite{aurellen20}．
 式(\ref{nn_layer})に示すように，複数の入力から1つ以上の出力を得る関数や，この関数をいくつか合成させた関数で表される．
 図\ref{fig_nn}の個々の円をノード，左端のモデルの入力を受け取るノード群を入力層，右端のモデルの出力を担うノード群を出力層と呼ぶ．
-また，入力層と出力層の間に位置する縦1列のノード群を中間層（隠れ層）と呼ぶ．
+また，入力層と出力層の間に位置する縦1列のノード群を中間層（隠れ層）という．
+中間層のうち，前後の層の全てのノードと接続する層を全結合層という．
 
 \begin{figure}[H]
 	\centering
@@ -1241,7 +1242,20 @@ Yangらは，ニュース読者が出来事を正確かつ迅速に把握でき�
 % @see 
 
 \subsection{RoBERTaを用いた出来事の文と主張の文の分類}
-~
+
+出来事と主張の文の分類のため，RoBERTaを転移学習した分類器を作成した．
+RoBERTaが出来事の文と主張の文の分類に適用できるよう，出来事か主張かでラベル付けされた文を含むデータセットを用いて転移学習を行った．
+図\ref{fig_single_sentence_classification_of_bert}に示したように入力は文字列[CLS]と分類したい1文とし，[CLS]に対応する出力Cと正解のラベルを基に損失関数の計算を行う．
+具体的には，出力Cを入力とする1層の全結合層と1ノードの出力層を接続し，その出力とLog Lossを用いて損失を計算した．
+% 2層とRoBERTaを学習した
+% class RobertaClassificationHead(nn.Module):
+%     """Head for sentence-level classification tasks."""
+%     def __init__(self, config):
+%         super().__init__()
+%         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
+%         self.dropout = nn.Dropout(config.hidden_dropout_prob)
+%         self.out_proj = nn.Linear(config.hidden_size, config.num_labels)
+
 % @see 
 
 \subsection{Sentence-BERT，コサイン値，Ward法を用いた出来事の文と主張の文の階層的クラスタリング}
