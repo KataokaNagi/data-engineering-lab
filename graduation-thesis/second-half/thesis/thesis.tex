@@ -1331,7 +1331,7 @@ MNLIは話し言葉と書き言葉の様々な英文をカバーしている．
 \label{section_select_dataset}
 % @see 
 
-\subsection{分類器の転移学習に用いたデータ}
+\subsection{分類器の転移学習に用いたデータセット}
 追加の学習に用いるデータセットには，Wikipediaの英文をClaimを述べるかEvidenceを述べるかでラベル付けしたRinottらのIBM Debater$^{\textregistered}$ - Claims and Evidenceを利用した\cite{rinott_show_2015}．
 2294個のClaimの文は「トピックを直接サポートする一般的で簡潔な文」，
 4692組のEvidenceの文章は「トピックの文脈の中でClaimを直接サポートする文章」
@@ -1373,14 +1373,34 @@ Claimの文とEvidenceの文を100件ずつ確認したところ，他の多く�
 
 % @see 
 
-\subsection{分類とクラスタリングを行ったデータ（covid-19-articlesの議論）}
-~
-% @see 
+\subsection{分類とクラスタリングを行ったデータセット}
+分類とクラスタリングを行うデータセットには，Ghasiyaらが収集したCOVID-19 News Articlesを選定した\cite{ghasiya_investigating_2021}．
+表\ref{covid_19_news_articles_composition}示すように，COVID-19 News Articlesはイギリス，インド，日本，韓国の主要な新聞8紙の英語版ウェブサイトから約10万件の記事を収集している．
+これらの記事は，スクレイピングライブラリBeautiful Soupを用いて収集された記事のうち文字列COVID-19またはCoronavirusを含む記事である．
+このうちイギリスの記事には句点が含まれておらず，文章を文に分割できなかったため使用しなかった．
 
-%%%%%%%%%%<!-- 
-% \section{Japanese fakenews dataset -->}
-~
-% @see 
+\begin{table}[H]
+  \caption{COVID-19 News Articlesの構成}
+  \centering
+  \vspace{4mm}
+  \begin{tabular}{ccc}
+    \hline
+    Countries & Newspapers & No. of Articles \\
+    \hline
+    UK & The Daily Mail & 23,821 \\
+    India & Hindustan Times, The Indian Express & 47,342 \\
+    Japan & The Japan Times, Asahi Shimbun, Mainichi Shimbun & 21,039 \\
+    South Korea & Korea Herald, Korea Times & 10,076 \\
+    \hline
+    \end{tabular}
+  \label{covid_19_news_articles_composition}
+\end{table}
+
+COVID-19 News Articlesは3ヶ国の英記事が含まれるため，政治や文化の違いに由来する多くの異なる主張が分析できると考えた．
+加えてCOVID-19に関連する出来事は記者によって多くの異なる主張が記されているため，分析に適していると考えた．
+また，このデータセットは2020年1月1日から2020年12月1日の11カ月間という短い期間で収集されているため，より類似した出来事に関する記事が得られると期待できる．
+Yangらの研究と同様に話題がCOVID-19に限定されてしまっているが，限定された話題でも同じ出来事の異なる主張がクラスタリングされる様子は観測できると考えた．
+% @see weekly-report_20210930.md
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{データの前処理}
