@@ -1331,11 +1331,49 @@ MNLIは話し言葉と書き言葉の様々な英文をカバーしている．
 \label{section_select_dataset}
 % @see 
 
-\subsection{分類器の学習データ}
-~
+\subsection{分類器の転移学習に用いたデータ}
+追加の学習に用いるデータセットには，Wikipediaの英文をClaimを述べるかEvidenceを述べるかでラベル付けしたRinottらのIBM Debater$^{\textregistered}$ - Claims and Evidenceを利用した\cite{rinott_show_2015}．
+2294個のClaimの文は「トピックを直接サポートする一般的で簡潔な文」，
+4692組のEvidenceの文章は「トピックの文脈の中でClaimを直接サポートする文章」
+と定義されている．
+ラベル付けは5人のアノテータによって行われており，少なくとも3人が同じラベルを付与した文章を収集している．
+
+表\ref{claim_evidence_example}にラベル付けされたClaimの文とEvidenceの文の例を示す．
+Claimの文は炭素排出量のトピックについて森林伐採に焦点を当てた簡潔な説明がなされており，具体的な森林の名前を挙げずに一般の森林の話をしている．
+Evidenceの文ではナイジェリアの森林面積が減少していることを具体的な数字を用いて説明しており，Claimの文を直接補っている．
+
+\begin{table}[H]
+  \caption{IBM Debater$^{\textregistered}$ - Claims and Evidenceでラベル付けされたClaimの文とEvidenceの文の例}
+  \vspace{4mm}
+  \centering
+  \begin{tabular}{lp{12.3cm}}
+    \hline
+    \multicolumn{1}{c}{ラベル} & \multicolumn{1}{c}{IBM Debater$^{\textregistered}$ - Claims and Evidenceの文}
+    \\
+    \hline
+    Claim & global carbon emissions are caused by deforestation
+    % 世界の炭素排出量は森林伐採によってもたらされている
+    % コンマがないのはデフォルト
+    \\
+    Evidence & \baselineskip=16pt
+    From 1990 to 2010 Nigeria nearly halved their amount of Forest Cover, moving from 17,234 to 9041 hectares.
+    % 1990年から2010年にかけて，ナイジェリアの森林面積は17,234ヘクタールから9041ヘクタールと，ほぼ半減している．
+    \\[0.5mm]
+    \hline
+  \end{tabular}
+  \label{claim_evidence_example}
+\end{table}
+% もう少し増やしたい
+
+表の例は，本研究で定義した主張の文と出来事の文の定義と似た性質を持つ．
+Claimの文は炭素排出量のトピックについて記者が伝えるべきだと判断した森林伐採の説明をしており，主張の文の定義に即している．
+Evidenceの文は具体的な数字や森林のある地域名を用いて記者の解釈に依存しない事象を説明しており，出来事の文の定義に即している．
+Claimの文とEvidenceの文を100件ずつ確認したところ，他の多くの例でもClaimが主張に，Evidenceが出来事に対応していた．
+このことから，本研究ではClaimの文を主張の文，Evidenceの文を出来事の文として扱い，分類器の学習を行った．
+
 % @see 
 
-\subsection{分類とクラスタリングを行うデータ（covid-19-articlesの議論）}
+\subsection{分類とクラスタリングを行ったデータ（covid-19-articlesの議論）}
 ~
 % @see 
 
