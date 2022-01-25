@@ -1195,7 +1195,7 @@ Yangらは，ニュース読者が出来事を正確かつ迅速に把握でき�
     主張の文の類似度で主張の文をクラスタリングする
     \newline
     \qquad\quad(\ajroman{4})
-    読者が興味を持っている記事と同じ出来事を扱う記事のクラスタを
+    読者が興味を持っている記事と最も類似した出来事を扱う記事のクラスタを
     \newline
     \qquad\qquad\quad
     同定し，そのクラスタに紐づく主張の文をクラスタごとにまとめ，
@@ -1477,6 +1477,9 @@ IBM Debater$^{\textregistered}$ - Claims and EvidenceとCOVID-19 News Articles�
 そこで，テキスト解析のための機械学習ライブラリStanzaを用いて句点としてのピリオドの位置を同定した\cite{qi_stanza_2020}．
 他のテキスト解析のツールとしてUDPipeやspaCyも広く用いられているが，2018 UD Shared Taskの英語の句点の同定におけるスコアはStanzaが最も優れている．
 Stanzaの英語版モデルには，ウェブログ，ニュース文，メール文，レビュー文，Yahoo! answersの16621文とそのテキスト解析結果を含むデータセットUD English EWTを学習したモデルを使用した．
+% @see https://stanfordnlp.github.io/stanza/available_models.html
+% @see https://universaldependencies.org/treebanks/en_ewt/index.html
+% @see https://paperswithcode.com/paper/stanza-a-python-natural-language-processing/review/
 % ライセンスは[Attribution-ShareAlike 4.0 International (CC BY-SA 4.0) ](https://creativecommons.org/licenses/by-sa/4.0/)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1485,19 +1488,74 @@ Stanzaの英語版モデルには，ウェブログ，ニュース文，メー�
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{システムの設計指針（入出力，使い方など）}
-~
+\section{システムの設計指針}
+提案手法を実装するシステムは，入力を「読者が興味を持っている1件の記事」とし，出力を「入力した記事と最も類似した出来事を扱う記事のクラスタに紐づく複数の主張の文」と「出力する主張の文の抽出元である記事」とした．
+また，分類器の学習のためにIBM Debater$^{\textregistered}$ - Claims and Evidenceを，クラスタの作成のためにCOVID-19 News Articlesを使用した．
+
+COVID-19 News Articlesから生成した記事のクラスタ群と主張の文のクラスタ群は，クラスタごとにテキストファイルに保存した．
+COVID-19 News Articlesの各記事には，主張の文から記事を特定するための固有のIDと記事の出来事の文章から生成した文埋め込みの情報を付与した．
+また，各文には文に固有のIDと抽出元の記事のID，出来事か主張かのラベル，文埋め込みの情報を付与した．
+
+実験では分類とクラスタリングの実装を行い，これらの評価を行った．
+
 % @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{システム構成（モジュールの説明）}
-~
+後回し
 % @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{実装環境（PCスペック，ライブラリバージョンなど）}
-~
-% @see 
+\section{実行環境}
+本システムの実行には，表\ref{pc_spec}に示す構成のコンピュータと表\ref{module_version}に示す
+ツール
+% プログラミング言語やライブラリ
+を用いた．
+
+\begin{table}[H]
+  \caption{実行したコンピュータの構成}
+  \centering
+  \vspace{4mm}
+  % \begin{tabular}{cp{12.3cm}}
+  \begin{tabular}{cl}
+    \hline
+    項目 & \multicolumn{1}{c}{詳細} \\
+    \hline
+    CPU & Intel$^{\textregistered}$ Core$^{TM}$ i5-7640X (4.00GHz, 4コア) \\
+    GPU & GeForce RTX 3070 (8GB, CUDA Version 11.5) \\
+    メモリ & 2667 MT/s 16GB 2枚 \\
+    OS & Ubuntu (Version 18.04) \\
+    \hline
+    \end{tabular}
+  \label{pc_spec}
+\end{table}
+
+% https://qiita.com/DaisukeMiyamoto/items/98ef077ddf44b5727c29
+
+\begin{table}[H]
+  % \caption{使用したプログラミング言語とライブラリとそのバージョン}
+  \caption{使用したツール}
+  \centering
+  \vspace{4mm}
+  % \begin{tabular}{cp{12.3cm}}
+  \begin{tabular}{lll}
+    \hline
+    \multicolumn{1}{c}{項目} & \multicolumn{1}{c}{バージョン} & \multicolumn{1}{c}{用途} \\
+    \hline
+    GNU awk & 4.1.4 & テキストの前処理 \\
+    Python & 3.6.9 & GNU gawk以外のプログラムの実行 \\
+    Stanza & 1.3.0 & 文章の文への分割 \\
+    pandas & 1.1.5 & 分類器に合わせたデータの入力形式の変更 \\
+    Simple Transformers & 0.63.3 & RoBERTAを用いた分類器の作成 \\
+    SentenceTransformers & 2.1.0 & Sentence-BERTを用いた文埋め込みの作成 \\
+    scikit-learn & 0.24.2 & 混同行列を用いた評価指標の算出 \\
+    scipy & 1.5.4 & 階層的クラスタリングの実行と結果の可視化 \\
+    \hline
+    \end{tabular}
+  \label{module_version}
+\end{table}
+
+% @see experiment/logs/tools_*.log
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{データの前処理}
