@@ -1272,7 +1272,7 @@ RoBERTa baseは1層に16個のScaled Dot-Product Attentionを含むTransformer�
 %         self.out_proj = nn.Linear(config.hidden_size, config.num_labels)
 
 
-\subsection{Sentence-BERT，コサイン値，Ward法を用いた出来事の文と主張の文の階層的クラスタリング}
+\subsection{Sentence-BERT，コサイン距離，Ward法を用いた記事と主張の文の階層的クラスタリング}
 
 まず，クラスタリングの前準備として「出来事と分類した文を記事ごとに結合した文章」と「主張と分類した文」のそれぞれをSentence-BERTに入力して文埋め込みを作成した．
 次に，出来事の文章の埋め込みを基に記事の階層的クラスタリングを行った．
@@ -1411,7 +1411,7 @@ Yangらの研究と同様に話題がCOVID-19に限定されてしまってい�
 
 \subsection{自然言語処理のためのテキストの前処理}
 IBM Debater$^{\textregistered}$ - Claims and EvidenceとCOVID-19 News Articlesの文章に対し，小節\ref{subsection_texts_preprocessing}で述べたような単語の表記揺れを少なくするいくつかの前処理を行った．
-具体的な処理は\ref{section_data_preprocessing_implement}で説明する．
+具体的な処理は\ref{subsection_data_preprocessing_implement}で説明する．
 % には，正規表現などを使用して以下の処理を行った．
 
 % \begin{multicols}{2}
@@ -1502,7 +1502,7 @@ COVID-19 News Articlesの各記事には，主張の文から記事を特定す�
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{システム構成（モジュールの説明）}
-後回し
+後回し，もしくは除去
 % @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1565,43 +1565,38 @@ COVID-19 News Articlesの各記事には，主張の文から記事を特定す�
 % @see experiment/logs/tools_*.log
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{データの前処理}
-\label{section_data_preprocessing_implement}
+\section{システムの実装}
+
+\subsection{GNU awkを用いたテキストの前処理の実装}
+\label{subsection_data_preprocessing_implement}
 ~
 % @see 
 
-\subsection{正規表現による前処理（awkの正規表現などの議論）}
+\subsection{Stanzaを用いた文章を文単位に分割する実装}
+~
+% （Stanza, spacyの議論）
+% @see 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{RoBERTaを用いた出来事の文と主張の文の分類器の実装}
 ~
 % @see 
 
-\subsection{省略のピリオドに注意した文章の分割（Stanza, spacyの議論）}
+% \subsection{Simple Transformers}
+% ~
+% @see 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Sentence-BERTを用いた文埋め込みを生成する実装}
 ~
 % @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{出来事の文と主張の文の分類}
-~
-% @see 
-
-\subsection{Simple Transformers}
+\subsection{コサイン距離とWard法を用いた記事の階層的クラスタリングの実装}
 ~
 % @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{出来事の文章のクラスタリング}
-~
-% @see 
-
-\subsection{(要検討)}
-~
-% @see 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{主張の文のクラスタリング}
-~
-% @see 
-
-\subsection{(要検討)}
+\subsection{コサイン距離とWard法を用いた主張の文の階層的クラスタリングの実装}
 ~
 % @see 
 
