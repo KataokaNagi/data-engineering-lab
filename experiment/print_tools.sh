@@ -24,7 +24,12 @@ CMDS=(
     "nvidia-smi"
     # mem
     "cat /proc/meminfo"
-    # "sudo dmidecode --type memory"
+    "sudo dmidecode --type memory"
+    # storage
+    "df"
+    "sudo parted -l"
+    # mother board
+    "sudo dmidecode -t baseboard"
     # os
     "uname -a"
     "cat /etc/lsb-release"
