@@ -1435,8 +1435,6 @@ IBM Debater$^{\textregistered}$ - Claims and EvidenceとCOVID-19 News Articles�
 %   \end{itemize}
 % \end{multicols}
 
-\subsection{省略のピリオドなどを考慮した文章の分割}
-~
 % @see 
 % \subsection{テキストの前処理}
 % 単語埋め込みのように，自然言語処理ではテキストをコンピュータが解釈しやすい数値に変換して処理することが多い．
@@ -1445,6 +1443,41 @@ IBM Debater$^{\textregistered}$ - Claims and EvidenceとCOVID-19 News Articles�
 % 表記揺れによって増加した出現頻度の少ない単語が学習のノイズとなってしまうこともある．
 % 従って，テキストに何らかの処理をする前に，大文字を小文字に変換するなどの表記揺れを解消する処理を行う必要がある．
 % URLやメールアドレスといったユニークな文字の羅列は，出現頻度が極めて少ないノイズとなり得るため，事前に除去しておくと良い．
+
+\subsection{省略のピリオドなどを考慮した文章の分割}
+記事の文を分類するにあたり，文章を文ごとに分割する必要がある．
+しかし，表\ref{period_usecase}英語の句点に用いられるピリオドは句点以外にも様々な用法があり，人間が決めたアルゴリズムによる文章の分割が難しい\cite{kreuzthaler_detection_2015}．
+% F1スコア
+% 1117
+% @see weekly-report-20211110-1215
+\begin{table}[H]
+  \caption{英語のピリオドの用例}
+  \centering
+  \vspace{4mm}
+  % \begin{tabular}{cp{12.3cm}}
+  \begin{tabular}{cl}
+    \hline
+    種類 & \multicolumn{1}{c}{例} \\
+    \hline
+    文頭の省略語 & Prof. Kimura studies. \\
+    文中の省略語 & Alphabets e.g. A, B, C. \\
+    文末の省略語 & The tail of a bull, cow, ox etc. \\
+    日付 & 25.01.2022. \\
+    ファイル名 & readme.txt \\
+    URL & \text{http://www.wikipedia.org} \\
+    IPアドレス & 127.0.0.1. \\
+    メールアドレス & abc@shibaura-it.ac.jp \\
+    分類コード & A01.9 \\
+    \hline
+    \end{tabular}
+  \label{period_usecase}
+\end{table}
+% これ全部が解決できたことを確認していない
+
+そこで，テキスト解析のための機械学習ライブラリStanzaを用いて句点としてのピリオドの位置を同定した\cite{qi_stanza_2020}．
+他のテキスト解析のツールとしてUDPipeやspaCyも広く用いられているが，2018 UD Shared Taskの英語の句点の同定におけるスコアはStanzaが最も優れている．
+Stanzaの英語版モデルには，ウェブログ，ニュース文，メール文，レビュー文，Yahoo! answersの16621文とそのテキスト解析結果を含むデータセットUD English EWTを学習したモデルを使用した．
+% ライセンスは[Attribution-ShareAlike 4.0 International (CC BY-SA 4.0) ](https://creativecommons.org/licenses/by-sa/4.0/)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{実装}
