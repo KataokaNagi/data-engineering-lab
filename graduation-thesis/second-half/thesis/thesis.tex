@@ -1355,28 +1355,6 @@ Yangらの研究と同様に話題がCOVID-19に限定されてしまってい�
 \subsection{自然言語処理のためのテキストの前処理}
 IBM Debater$^{\textregistered}$ - Claims and EvidenceとCOVID-19 News Articlesの文章に対し，小節\ref{subsection_texts_preprocessing}で述べたような単語の表記揺れを少なくするいくつかの前処理を行った．
 具体的な処理は\ref{subsection_data_preprocessing_implement}で説明する．
-% には，正規表現などを使用して以下の処理を行った．
-
-% \begin{multicols}{2}
-%   \begin{itemize}
-%   \item 大文字の小文字化
-%   \item 改行文字の除去
-%   \item タブ文字の除去
-%   \item 改ページ文字の除去
-%   \item no break spaceの除去
-%   \item thin spaceの除去
-%   \item 絵文字の除去
-%   \item URLの除去
-%   \item メールアドレスの除去
-%   \item 英数字，空白，句読点以外の文字の除去
-%   \item 
-%   \item 
-%   \item 
-%   \item 
-%   \columnbreak
-%   \item 
-%   \end{itemize}
-% \end{multicols}
 
 % @see 
 % \subsection{テキストの前処理}
@@ -1487,11 +1465,12 @@ COVID-19 News Articlesの各記事には，主張の文から記事を特定す�
     \hline
     \multicolumn{1}{c}{項目} & \multicolumn{1}{c}{バージョン} & \multicolumn{1}{c}{用途} \\
     \hline
-    GNU awk & 4.1.4 & テキストの前処理 \\
+    GNU Awk & 4.1.4 & テキストの前処理 \\
     Python & 3.6.9 & GNU gawk以外のプログラムの実行 \\
     Stanza & 1.3.0 & 文章の文への分割 \\
     pandas & 1.1.5 & 分類器に合わせたデータの入力形式の変更 \\
     Simple Transformers & 0.63.3 & RoBERTAを用いた分類器の作成 \\
+    PyTorch & 1.8.2 $+$ cu111 & Simple Transformerの内部処理 \\
     SentenceTransformers & 2.1.0 & Sentence-BERTを用いた文埋め込みの作成 \\
     scikit-learn & 0.24.2 & 混同行列を用いた評価指標の算出 \\
     scipy & 1.5.4 & 階層的クラスタリングの実行と結果の可視化 \\
@@ -1505,15 +1484,46 @@ COVID-19 News Articlesの各記事には，主張の文から記事を特定す�
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{システムの実装}
 
-\subsection{GNU awkを用いたテキストの前処理の実装}
+\subsection{GNU Awkを用いたテキストの前処理の実装}
 \label{subsection_data_preprocessing_implement}
-~
-% @see 
+GNU Awkは，あるパターンに従う文字列を検索し，他の文字列に置換するなどの処理を行えるプログラミング言語である．
+文字列のパターンは，正規表現と呼ばれる表現形式で別の文字列を用いて表すことができる．
+
+2つのデータセットIBM Debater$^{\textregistered}$ - Claims and EvidenceとCOVID-19 News Articlesについて，小節\ref{subsection_texts_preprocessing}で述べた単語の表記揺れやノイズを少なくするため，GNU Awkと正規表現を用いて以下の処理を順に行った．
+
+\begin{multicols}{2}
+  \begin{enumerate}
+  \item 大文字の小文字化
+  \item 改行文字の除去
+  \item タブ文字の除去
+  \item 改行文字の除去
+  \item 特殊な空白文字（no break space，thin space）の除去
+  \item 絵文字の除去
+  \columnbreak
+  \item URLの除去
+  \item メールアドレスの除去
+  \item 英数字，空白文字，句読点以外の文字の除去
+  \item ピリオド，疑問符，感嘆符の前の空白文字の除去
+  \item 2つ以上の空白文字を1つの空白文字に置換
+  \item 行頭の1つ以上の空白文字，ピリオド，疑問符，感嘆符の除去
+  \end{enumerate}
+\end{multicols}
+
+また，この2つのデータセットで文の形式を合わせるため，IBM Debater$^{\textregistered}$ - Claims and Evidenceの文の末尾にピリオドを追加した．
+加えて，IBM Debater$^{\textregistered}$ - Claims and Evidenceの文のみに含まれていた特殊な文字列[REF]を除去した．
+
+% awk の基本的な機能は，あるパターンを含む行 (あるいはその他のテキスト単位) をファイルから探し出すことです．行がパターンの 1 つにマッチすると，awk はその行に対して指定された処理を行います．awk は入力ファイルの最後に達するまで，この方法で入力行を処理し続けます．
+% @see https://www.gnu.org/software/gawk/manual/gawk.html
 
 \subsection{Stanzaを用いた文章を文単位に分割する実装}
+PythonライブラリであるStanzaを使用し，IBM Debater$^{\textregistered}$ - Claims and EvidenceのEvidenceの文章とCOVID-19 News Articlesの文章の句点としてのピリオドの位置を同定した．その後，同定したピリオドの後ろに改行文字を挿入した．
+分割したEvidenceの文には重複する文の組が多く見受けられたため，重複する文は1文を残してPythonで除去した．
+% uniqueの{}
+
 \textcolor{red}{
   Stanzaの英語版モデルには，ウェブログ，ニュース文，メール文，レビュー文，Yahoo! answersの16621文とそのテキスト解析結果を含むデータセットUD English EWTを学習したモデルを使用した． 
 }
+
 % @see https://stanfordnlp.github.io/stanza/available_models.html
 % @see https://universaldependencies.org/treebanks/en_ewt/index.html
 % @see https://paperswithcode.com/paper/stanza-a-python-natural-language-processing/review/
@@ -1547,13 +1557,33 @@ RoBERTa baseは1層に16個のScaled Dot-Product Attentionを含むTransformer�
 %         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 %         self.out_proj = nn.Linear(config.hidden_size, config.num_labels)
 
-% @see 
+RoBERTa baseの転移学習と分類の実行には，PythonライブラリであるSimple Transformersを使用した．
+Simple Transformersの内部では同じくPythonのライブラリであるPyTorchが用いられている．
 
-% \subsection{Simple Transformers}
-% ~
-% @see 
+転移学習ではIBM \textcolor{red}{Debater} - Claims and Evidenceの出来事の文と主張の文のそれぞれについて8割を訓練データ，2割をテストデータに分割し，バイナリクロスエントロピーの計算を行った．
+このとき，データの順序に由来する不必要な学習を回避するため，文とラベルは疑似乱数を用いた無作為な順序で学習した\cite{aurellen20}．
+% random.shuffle
+% @see p.127 412
+また，出来事の文は4692文，主張の文は2294文と数が不均衡であるため，出来事の文の学習の重みに$\frac{2294}{4692}$を乗算し，出来事の文を学習しにくくした．
+学習のバッチサイズは40文とし，その他の学習のパラメータはSimple Transforsのデフォルトの値を使用した．
+
+% 回数を変えて学習したとき，バイナリクロスエントロピーの値は2エポックで約0.207，3エポックで約0.237，4エポックで約0.297，12エポックで約0.590と単調増加していた．
+% つまり，
+
+学習した分類器にCOVID-19 News Articlesの文を入力し，分類したラベル，記事のID，文のIDとともにテキストファイルに保存した．
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Sentence-BERTを用いた文埋め込みを生成する実装}
+出来事の文は記事に記載された順序で記事ごとに結合し，Sentence-BERTに入力した．
+% 文脈情報の保存
+% 本当はリストに格納して1回渡すだけ
+文の間には空白文字を挿入して結合した．
+% 実際の文章と同様に
+出来事の文章を基に生成した文埋め込みは記事のIDと紐づけてテキストファイルに保存した．
+主張の文は1文ずつSentence-BERTに入力し，文のIDと紐づけてテキストファイルに保存した．
+% 本当はリストに格納して1回渡すだけ
+
+
 \textcolor{red}{
 Sentence-BERTのモデルにはRaimersらのparaphrase-MiniLM-L6-v2を使用した\cite{reimers_sentence-bert_2019}．
 paraphrase-MiniLM-L6-v2は1層に12個のScaled Dot-Product Attentionを含むTransformerエンコーダを384個持つ層を6層用いている．
