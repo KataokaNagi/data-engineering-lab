@@ -1742,15 +1742,215 @@ $n$回のクラスタの結合を行う階層的クラスタリングの結果�
 % @see 
 
 \subsection{実験方法}
-~
+IBM Debater$^{\textregistered}$ - Claims and Evidenceを1，2，3，4エポック学習した4つの分類器について，COVID-19 News Articlesの分類結果から適合率，再現率，マシューズ相関係数を算出した．
+COVID-19 News Articlesの正解ラベルには，3ヶ国の記事から3件ずつ記事を抽出した計163個の文を手動でラベル付けしたものを用いた．
+ラベル付けを行うにあたり，IBM Debater$^{\textregistered}$ - Claims and Evidenceの出来事の文と主張の文をそれぞれ100文ずつ分析し，ラベル付けの基準を作成した．
+適合率などの計算では，分類結果においても正解ラベルにおいても主張の文が出来事の文より少なかったため，主張の文のラベルを陽性クラスとした．
+
 % @see 
 
 \subsection{実験結果}
-~
-% @see 
+表\ref{covid_classification_criterion}にIBM Debater$^{\textregistered}$ - Claims and Evidenceの分析を基に作成したラベル付けの基準を示す．
+この基準に従い，COVID-19 News Articlesの163文のラベル付けを行った．
+% 基準がダブる場合は？
+
+\begin{table}[H]
+  \centering
+  \caption{
+    COVID-19 News Articlesのラベル付けの基準
+    % \newline
+    % \qquad~
+    （E : 出来事の文，
+    % \newline
+    C : 主張の文）
+    }
+    \centering
+  \vspace{4mm}
+  % {\tabcolsep=0.15cm
+    \begin{tabular}{cp{4cm}p{8cm}}
+    \hline
+    ラベル & \multicolumn{1}{c}{基準} & \multicolumn{1}{c}{IBM Debater$^{\textregistered}$ - Claims and Evidenceの例文}
+    \\
+    \hline
+    E
+    & \baselineskip=16pt
+    記者の解釈に依存しない事実を述べている
+    & \baselineskip=16pt
+    \textbf{michael martin was the first eu foreign minister to enter gaza in over a year}
+    \\[2mm]
+    & \baselineskip=16pt
+    指示語を含み，別の文を補助している
+    & \baselineskip=16pt
+    in \textbf{his} book maybe one bill mckibben argues in favor of a one child policy based on \textbf{this} research
+    \\[2mm]
+    & \baselineskip=16pt
+    具体的な事物の数値を含む
+    & \baselineskip=16pt
+    in \textbf{2020} total gross foreign aid to all developing countries was \textbf{76 billion}.
+    \\[2mm]
+    C
+    & \baselineskip=16pt
+    事実に対する解釈を述べている
+    & \baselineskip=16pt
+    this is the most \textbf{technologically advanced} and \textbf{safest} \textbf{pipeline} ever proposed.
+    \\[2mm]
+    & \baselineskip=16pt
+    主語や述語の一般性が高い
+    & \baselineskip=16pt
+    \textbf{gamblers persist in gambling} even after repeated losses.
+    \\[2mm]
+    % & \baselineskip=16pt
+    % 主語が筆者である
+    % & \baselineskip=16pt
+    % \\[0.5mm]
+    \hline
+    \end{tabular}
+  % }
+  \label{covid_classification_criterion}
+\end{table}
+
+% @see weekly report 20211229
+% - C
+% - 主語がデカい
+%     - 筆者の考え
+%     - 固有名詞，特定の１つでない
+% - 論文の文頭にきそう
+% - 長い文もある
+% - 言い切り
+% - 「また，」
+% - ～だったら～
+% - ～でしょう
+% - ～は当然だ
+% - 事実を語るだけでなく，事実に対する説明を行っている
+% - E
+% - 指示語
+% - その結果
+%     - Cによる影響
+% - 数字
+% - 事実
+% -   判明した
+% - 補助的でベクトルの異なる情報が多い
+% - ～を求めている
+% - を遺憾に思う
+% - 主張がある事実を客観視する文
+%     - メインの主張ではないのかも
+%     - 主張の文節の後に事実の文節
+% - 別の人も似たようなことを言っている　という文
+%     - メインの主張と似た事を挿すため，代表の主張にする必要はない
+%     - 出来事のクラスタリングに混ぜるのも悪すぎはしない？
+%     - 誰かが何かを話しているという「事実」
+% - 決意表明157
+% - 100文に2文ほど1行2文が存在
+%     - DeepLによるエラー
+
+表\ref{covid_classification_evaluation}にCOVID-19 News Articlesの163文の分類の評価結果を示す．
+適合率，再現率，マシューズ相関係数の全てにおいて3エポックの分類器が最も優れていた．
+3エポックの分類器は再現率が低いが，適合率とマシューズ相関係数が高く，分類器として機能していることがわかる．
+3エポックの分類器が主張の文を出来事の文と誤分類することは1度もなく，適合率は1となっている．
+以降の説明では，全てこの3エポックの分類器を用いた実験の結果を記す．
+
+\begin{table}[H]
+  \caption{
+    COVID-19 News Articlesの163文の分類の評価（小数第3位を四捨五入）
+  }
+  \centering
+  \vspace{4mm}
+  % {\tabcolsep=0.15cm
+    \begin{tabular}{ccccc}
+    \hline
+    評価指標 & $1$ epoch & $2$ epochs & $3$ epochs & $4$ epochs
+    \\
+    \hline
+    TP & $3$ & $4$ & $6$ & $5$
+    \\
+    TN & $146$ & $148$ & $148$ & $147$
+    \\
+    FP & $2$ & $0$ & $0$ & $1$
+    \\
+    FN & $12$ & $11$ & $9$ & $10$
+    \\
+    適合率 & $0.60$ & $\mathbf{1.00}$ & $\mathbf{1.00}$ & $0.83$
+    \\
+    再現率 & $0.20$ & $0.27$ & $\mathbf{0.40}$ & $0.33$
+    \\
+    MCC & $0.31$ & $0.50$ & $\mathbf{0.61}$ & $0.50$
+    \\
+    \hline
+    \end{tabular}
+  % }
+  \label{covid_classification_evaluation}
+\end{table}
+
+表\ref{covid_classification_example}に分類結果の例を示す．
+5つ目の文は，一般の家族や教育者にいえる筆者の解釈が述べられているが，出来事に誤分類されていた．
+6つ目の文は，一般のオンライン授業にいえる事実（them）に対する筆者（i）の解釈が述べられているが，出来事に誤分類されていた．
+
+
+\begin{table}[H]
+  \caption{分類器の主張の文 ($C$)と出来事の文($E$)の分類例}
+  \vspace{4mm}
+  \centering
+  {\tabcolsep=0.1cm
+  \begin{tabular}{ccp{10.5cm}}
+      \hline
+      正解ラベル & 分類結果 & \multicolumn{1}{c}{COVID-19 News Articlesの文}
+      \\
+      \hline
+      $C$ & $C$ & \baselineskip=16pt
+      the goal was to bolster international competitiveness.
+      % 国際的な競争力を強化するためです．
+      \\[2mm]
+      % JP69
+      $C$ & $C$ & \baselineskip=16pt
+      proponents see the pandemic as a chance to break with the modern calendar.
+      % パンデミックは現代のカレンダーと決別するチャンスだと考えています
+      % JP42
+      \\[2mm]
+      $E$ & $E$ & \baselineskip=16pt
+      the government is reportedly aiming to announce guidance early next month.
+      \\[2mm]
+      % JP81
+      % 政府は来月初めにガイダンスを発表することを目指していると言われています
+      $E$ & $E$ & \baselineskip=16pt
+      over 20000 people have signed an online petition calling for a shift to september school starts.
+      % 9月入学への移行を求めるオンライン署名に2000人以上が参加しました．
+      % JP54
+      \\[2mm]
+      $E$ & $C$ & \baselineskip=16pt
+      for now there is little that families and educators can do but wait to see what the abe administration has in mind.
+      % 今のところ，家族や教育者ができることは，ABE政権が何を考えているかを待つことだけです
+      % JP80
+      \\[2mm]
+      $E$ & $C$ & \baselineskip=16pt
+      i dont think online classes can completely replace them
+      % オンライン授業が完全に代替できるとは思えません．
+      % JP60
+      \\[1mm]
+      \hline
+    \end{tabular}
+    \label{covid_classification_example}
+    }
+\end{table}
+
 
 \subsection{実験の考察}
-~
+分類の適合率が極めて大きいため，2019年の最先端のモデルであるRoBERTaが適切に転移学習できたと考える．
+一方で再現率は学習時よりも0.52と大幅に下がっており，分類器が訓練データに過学習している可能性がある．
+
+再現率の改善のため，学習と分類に用いたデータセットの違いをより詳細に分析し，手法を見直す必要がある．
+学習に用いたデータセットでは指示語が含まれる文を出来事の文とすることが多かったのに対し，表\ref{covid_classification_example}で出来事と誤分類した主張の文には指示語に用いられる``there''が含まれていた．
+しかし，誤分類した文では``there is''という構文で用いられ，指示語として``there''を用いていない．
+したがって，このような構文を加味した分類を行うことにより再現率の向上が期待できる．
+
+また，学習に用いたIBM Debater$^{\textregistered}$ - Claims and Evidenceは自動討論システムや論証の構成を検出するシステムへの応用が想定されており，記事の文章との文の構造が根本的に異なっている可能性がある．
+したがって，記事をラベル付けした学習用データセットを調査もしくは作成することにより，再現率の向上が期待できる．
+
+過学習の緩和のため，分類モデルに使用したRoBERTaよりも過学習しにくいモデルを検討するのも有効である．
+CarlebachらはIBM Debater$^{\textregistered}$ - Claims Stance Datasetを学習したBERTモデルに記事由来のデータを入力して過学習を起こしてしまったが，別の機械学習モデルT5に変更することで過学習を緩和している\cite{carlebach_news_2020}．
+
+なお，確認した163文のうち主張の文は6文しかなかったため，より信頼できる適合率と再現率の算出のためにより多くの文での評価が必要である．
+
+% 主張の文が存在しない記事
 % @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1769,6 +1969,7 @@ $n$回のクラスタの結合を行う階層的クラスタリングの結果�
 
 \subsection{実験の考察}
 ~
+% 関連研究よりクラスタ数が減った
 % @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
