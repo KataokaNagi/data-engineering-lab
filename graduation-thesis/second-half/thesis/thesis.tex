@@ -1404,7 +1404,7 @@ IBM Debater$^{\textregistered}$ - Claims and EvidenceとCOVID-19 News Articles�
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{実装}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\label{chapter_implement}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{システムの設計指針}
@@ -1666,10 +1666,17 @@ $n$回のクラスタの結合を行う階層的クラスタリングの結果�
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{実験}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{chapter_experiment}
 
+第\ref{chapter_experiment}章では，第\ref{chapter_implement}章で述べた分類器とクラスタリングの実験について説明する．
+節\ref{section_ibm_classification_experiment}ではIBM Debater$^{\textregistered}$ - Claims and Evidenceのテストデータを用いた分類器の実験について説明し，
+節\ref{section_covid_classification_experiment}ではCOVID-19 News Articlesを用いた分類器の実験について説明する．
+その後，節\ref{section_article_clustering_experiment}で記事の階層的クラスタリングの実験について説明し，
+節\ref{section_sentence_clustering_experiment}で主張の文の階層的クラスタリングの実験について説明する．
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{出来事の文と主張の文の分類}
+\section{IBM Debater$^{\textregistered}$ - Claims and Evidenceのテストデータを用いた分類器の実験}
+\label{section_ibm_classification_experiment}
 ~
 % @see 
 
@@ -1685,12 +1692,9 @@ $n$回のクラスタの結合を行う階層的クラスタリングの結果�
 ~
 % @see 
 
-\subsection{（試行錯誤）}
-~
-% @see 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{出来事の文章のクラスタリング}
+\section{COVID-19 News Articlesを用いた分類器の実験}
+\label{section_covid_classification_experiment}
 ~
 % @see 
 
@@ -1706,12 +1710,9 @@ $n$回のクラスタの結合を行う階層的クラスタリングの結果�
 ~
 % @see 
 
-\subsection{（試行錯誤）}
-~
-% @see 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{主張の文のクラスタリング}
+\section{記事の階層的クラスタリングの実験}
+\label{section_article_clustering_experiment}
 ~
 % @see 
 
@@ -1727,12 +1728,9 @@ $n$回のクラスタの結合を行う階層的クラスタリングの結果�
 ~
 % @see 
 
-\subsection{（試行錯誤）}
-~
-% @see 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{（他の研究との比較実験）}
+\section{主張の文の階層的クラスタリングの実験}
+\label{section_sentence_clustering_experiment}
 ~
 % @see 
 
@@ -1748,38 +1746,34 @@ $n$回のクラスタの結合を行う階層的クラスタリングの結果�
 ~
 % @see 
 
-\subsection{（試行錯誤）}
-~
-% @see 
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \chapter{結果と考察}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{結果と考察}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{既存手法との比較}
+% ~
+% % @see 
 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{提案手法の妥当性}
+% ~
+% % @see 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{既存手法との比較}
-~
-% @see 
+% \subsection{入力と出力の妥当性}
+% ~
+% % @see 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{提案手法の妥当性}
-~
-% @see 
+% \subsection{処理速度の妥当性（分散システムの議論も）}
+% ~
+% % @see 
 
-\subsection{入力と出力の妥当性}
-~
-% @see 
-
-\subsection{処理速度の妥当性（分散システムの議論も）}
-~
-% @see 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{（結果を基に検討）}
-~
-% @see 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{（結果を基に検討）}
+% ~
+% % @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{まとめと展望}
@@ -1794,7 +1788,7 @@ $n$回のクラスタの結合を行う階層的クラスタリングの結果�
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{今後の展望}
 ~%% @see 
- \section{データセットの相性（ディベートとニュース）}
+% \section{データセットの相性（ディベートとニュース）}
 ~
 % @see 
 
