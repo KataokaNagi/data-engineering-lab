@@ -917,7 +917,7 @@ Matthewsが1975年に提案したマシューズ相関係数（MCC;Matthews Corr
 
 \subsection{Sentence-BERT}
 \label{subsection_sentence_bert}
-Reimersらが2019年に提案したSentence-BERTは，文章の埋め込みを生成するためのBERTを転移学習した機械学習モデルである\cite{reimers_sentence-bert_2019}．
+Reimersらが2019年に提案したSentence-BERTは，文の意味や文脈を加味した文埋め込みを生成するためのBERTを転移学習した機械学習モデルである\cite{reimers_sentence-bert_2019}．
 図\ref{fig_sentence_bert}にSentence-BERTのモデルアーキテクチャを示す．
 Sentence-BERTでは転移学習済みのBERTに1つの文を入力し，出力したベクトル群にpoolingと呼ばれる情報の抽出処理を行って文章の埋め込みを得る．
 転移学習では，埋め込みを応用したSTSタスクなどの精度を上げるために，
@@ -1192,12 +1192,18 @@ kは事前に設定しておく必要がある．
 % @see 
 
 \subsection{Scalable Fact-checking with Human-in-the-Loop}
+\label{subsection_scalable_fact_checking}
 
 Yangらは，ニュース読者が出来事を正確かつ迅速に把握できるように
 階層的クラスタリングを用いて記事に対するツイートの主張をグループ化する手法を提案した\cite{yang_scalable_2021}．
 この研究ではCOVID-19の話題に限定した主張の文をグループ化しているが，この手法を記事に適用した場合，多くの話題について主張のまとまりが生成されることになる．
 これでは，COVID-19の飲み薬やワクチンなど異なる話題に含まれる安全性に関する共通した主張の文がグループ化されるため，読者が興味を持っている出来事の異なる主張の収集に時間を要してしまう．
 
+\textcolor{red}{
+Yangらのシステムでは，959件の記事に対する28818件のツイートを収集し，これらのツイートをクラスタ間距離0.85を閾値としてクラスタに分割していた．
+このとき，全データのシルエット係数の平均が0.79となる705個のクラスタを生成しており，記事の主張を約74\%に要約できたことになる．
+しかし，異なる出来事が混在した705件の主張のクラスタが提示されたときに，読者が興味を持っている出来事の異なる主張を収集することは難しい．
+}
 % TODO
 % クラスタリングについて詳しく
 % 図を利用
@@ -2002,17 +2008,152 @@ CarlebachらはIBM Debater$^{\textregistered}$ - Claims Stance Datasetを学習�
 \subsection{実験方法}
 
 階層的クラスタリングの実験にはCOVID-19 News Articlesの5000件の記事を用いた．
+記事のIDに紐づけられた出来事の文章の文埋め込みを使用し，コサイン距離とWard法を用いた階層的クラスタリングを行う．
+
+まず，クラスタを結合する度に全埋め込みのシルエット係数の平均を算出した．
+これにより，クラスタを分けるクラスタ間距離ごとに，同一クラスタ内の埋め込みが類似しているか，異なるクラスタ間の埋め込みが類似していないかを確認した．
+
 クラスタを分けるクラスタ間距離には，クラスタ間距離を大きくしたときにクラスタ数の減少が緩やかになり始める距離を選択した．
 この距離は，より類似しない文章がクラスタにまとめられ始めるクラスタ間距離に対応する．
+このクラスタ間距離を同定するため，結合するクラスタ間距離ごとのクラスタの数をグラフに表した．
+また，このクラスタ間距離でクラスタごとの記事の数が読者の把握できる量を超えていないか確認するため，結合するクラスタ間距離ごとのクラスタがもつ平均の記事の数をグラフに表した．
+
+階層的クラスタリングを行った後，文字数が多いクラスタを1つ抽出し，クラスタ内の記事の主張の文が類似した出来事について説明しているかを目視で確認した．
+また，抽出したクラスタ内の主張の文のうちの，類似した出来事について述べている文の割合を算出した．
 % @see 
 
 \subsection{実験結果}
-~
+図\ref{articles_silhouette}にクラスタ数ごとのシルエット係数を示す．
+シルエット係数が常に0より大きいため，同一クラスタ内の埋め込みが類似し，異なるクラスタ間の埋め込みが類似していない傾向にあることがわかる．
+クラスタ数が2,500から5,000の範囲はシルエット係数は大きいが，1つのクラスタ内の記事の数が1, 2件であることが多く，異なる主張の文の提示には適していない．
+クラスタ数が500から2,500の間ではシルエット係数に大きな差がないため，この範囲でクラスタを分けるクラスタ間距離の設定を考える．
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[keepaspectratio, width=120mm]{img/process-06_articles-cluster_num-of-clusters-dependency-on-silhouette-coefficient_with-maximal-silhoette_reduced-data-to-5000_Trim.png}
+	\caption{記事の階層的クラスタリングにおけるクラスタ数ごとのシルエット係数}
+	\label{articles_silhouette}
+\end{figure}
+
+図\ref{num_and_size_of_clusters_of_articles}にクラスタを分けるクラスタ間距離ごとにまとめたクラスタ数とクラスタ内の平均記事数を示す．
+図\ref{num_and_size_of_clusters_of_articles}の上の図から，クラスタ間距離0.5の付近（クラスタ数2000の付近）でクラスタ数の減少が緩やかになり始めていることがわかる．
+クラスタ数2000から500にかけてはグラフが直線的であったため，小節\ref{subsection_scalable_fact_checking}で述べたYangらの研究と比較がしやすいクラスタ間距離0.85（クラスタ数666）で以降の実験を行うこととした\cite{yang_scalable_2021}．
+クラスタ間距離0.85でのクラスタ内の平均記事数は7.51件であり，読者への異なる主張の提示に適当な量であると考える．
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[keepaspectratio, width=120mm]{img/process-06_articles-cluster_threshold-dependencies_reduced-data-to-5000_edit-label_Trim.png}
+	\caption{クラスタを分けるクラスタ間距離ごとの「クラスタ数」と
+  % \newline
+  % \qquad~
+  「クラスタ内の平均記事数」}
+	\label{num_and_size_of_clusters_of_articles}
+\end{figure}
+
+図\ref{articles_dendrogram}に記事の階層的クラスタリングの結果をデンドログラムで示す．
+クラスタ間距離0.85までの最後の結合で分かれたクラスタに色を付けている．
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[keepaspectratio, width=120mm]{img/process-06_articles-cluster_color_dendrogram_with-threshold-85_reduced-data-to-5000_Trim.png}
+	\caption{記事の階層的クラスタリングの結果}
+	\label{articles_dendrogram}
+\end{figure}
+
+色付けされたクラスタのうち，3ヶ国すべての国の記事を含む最も文字数が多いクラスタを抽出した．
+% 記事ID 230
+% このクラスタは4番目に文字数が多かった．
+このクラスタには38件の記事が属しており，記事の文のうち主張の文は13文であった．
+表\ref{articles_clustering_example}にこの13文の主張の文と主張の対象とした出来事を示す．
+13文中10文（約77\%）がウイルス感染対策に関する類似した出来事に対して主張を述べる文であった．
+また，残りの3文のうち2文はウイルス感染の社会の影響に関する出来事に対して主張を述べる文であり，ウイルス感染対策と出来事が類似している．
+% 13文中12文（約92\%）が類似した出来事に対する主張の文であったとも解釈できる．
+
+また，インドから1文，韓国から9文，日本から3文だけ主張の文が抽出されており，異なる地域から主張や記事を提示可能であると期待できる．
+
+\begin{table}[H]
+  \caption{1つの記事のクラスタが含む主張の文と主張の対象とした出来事}
+  \vspace{4mm}
+  \centering
+  % {\tabcolsep=0.1cm
+  \begin{tabular}{ccp{10cm}}
+      \hline
+      国 & 出来事 & \multicolumn{1}{c}{記事のクラスタが含む主張の文}
+      \\
+      \hline
+      インド & 仕事 & \baselineskip=16pt
+      it was a laborious \textbf{job}.
+      \\[1.7mm]
+      韓国 & \textbf{感染対策} & \baselineskip=16pt
+      sports event are also obligated to \textbf{keep the ceiling of 30 percent at stadiums}.
+      \\[1.7mm]
+      韓国 & \textbf{感染対策} & \baselineskip=16pt
+      south korea operates a threetier \textbf{social distancing} system.
+      \\[1.7mm]
+      日本 & \textbf{感染対策} & \baselineskip=16pt
+      chinese banks have been ordered to \textbf{disinfect} old banknotes before reissuing them to the public.
+      \\[1.7mm]
+      日本 & \textbf{感染対策} & \baselineskip=16pt
+      uncertainly remained over how best to \textbf{stem the spread of the illness}.
+      \\[1.7mm]
+      日本 & \textbf{感染対策} & \baselineskip=16pt
+      \textbf{outdoor exercise will be banned} and \textbf{wearing masks} will be mandatory.
+      \\[1.7mm]
+      韓国 & \textbf{感染対策} & \baselineskip=16pt
+      franchie cafes and dessert shops were obligated to offer \textbf{only takeout around the clock}.
+      \\[1.7mm]
+      韓国 & \textbf{感染対策} & \baselineskip=16pt
+      health authorities remain \textbf{vigilant over sporadic cluster infections} at hospitals nursing homes and riskprone facilities.
+      \\[1.7mm]
+      韓国 & 感染の影響 & \baselineskip=16pt
+      \textbf{travelrelated cases} continue to \textbf{outnumber local cases}.
+      \\[1.7mm]
+      韓国 & \textbf{感染対策} & \baselineskip=16pt
+      to \textbf{keep out imported infections} authorities have \textbf{imposed more stringent measures on people} arriving from countries deemed highrisk.
+      \\[1.7mm]
+      韓国 & \textbf{感染対策} & \baselineskip=16pt
+      cities and provinces that agree to accommodate passengers who require a twoweek \textbf{quarantine} will be paid government incentives.
+      \\[1.7mm]
+      韓国 & \textbf{感染対策} & \baselineskip=16pt
+      \textbf{try not to eat in restaurants} as much as possible.
+      \\[1.7mm]
+      韓国 & 感染の影響 & \baselineskip=16pt
+      the citys \textbf{hospitals} are facing \textbf{an overcrowding crisis}.
+      \\[1mm]
+      \hline
+    \end{tabular}
+    \label{articles_clustering_example}
+    % }
+\end{table}
+
+% IN;24615;8;c;it was a laborious job.
+% KR;8909;18;c;sports event are also obligated to keep the ceiling of 30 percent at stadiums.
+% KR;8909;19;c;south korea operates a threetier social distancing system.
+% JP;13111;30;c;chinese banks have been ordered to disinfect old banknotes before reissuing them to the public.
+% JP;13111;34;c;uncertainly remained over how best to stem the spread of the illness.
+% JP;20865;22;c;outdoor exercise will be banned and wearing masks will be mandatory.
+% KR;3437;15;c;franchise cafes and dessert shops were obligated to offer only takeout around the clock.
+% KR;9550;6;c;health authorities remain vigilant over sporadic cluster infections at hospitals nursing homes and riskprone facilities.
+% KR;2422;4;c;travelrelated cases continue to outnumber local cases.
+% KR;2422;5;c;to keep out imported infections authorities have imposed more stringent measures on people arriving from countries deemed highrisk.
+% KR;2422;16;c;cities and provinces that agree to accommodate passengers who require a twoweek quarantine will be paid government incentives.
+% KR;2422;27;c;try not to eat in restaurants as much as possible.
+% KR;6163;13;c;the citys hospitals are facing an overcrowding crisis.
 % @see 
 
 \subsection{実験の考察}
-~
-% 関連研究よりクラスタ数が減った
+記事の階層的クラスタリングを行った結果，あるクラスタの主張の文の約77\%が類似した出来事に対する主張を述べており，提案手法のシステムで類似した出来事のグループ化が可能であることがわかった．
+また，表\ref{articles_clustering_example}で類似した出来事を対象としていると判断した文では``social distancing''，``stem the spread of the illness''，``qurantine''などの異なる単語や動詞句が判断基準となっており，Sentence-BERTによって文の意味や文脈を加味したグループ化ができていることがわかる．
+
+小節\ref{subsection_scalable_fact_checking}で述べたYangらのシステムではシルエット係数の平均値が0.79であり，提案手法のシステムの平均値（約0.17）よりも高い値をとっている\cite{yang_scalable_2021}．
+Yangらのシステムでシルエット係数が高い理由は，内容が個々の記事に依存するツイート群を収集しているからであると考える．
+つまり，ある1つの記事に対するツイート群で類似したクラスタが形成される傾向にあり，また異なる2つの記事に依存した2つのクラスタはそれぞれ類似しないツイート群で形成される傾向にあるため，シルエット係数が高くなる傾向にあると考えられる．
+
+提案手法のシステムでシルエット係数が低い理由は，出来事の文章の文埋め込みが384次元であるためにシステムが考慮する特徴が多く，極端にデータが類似することや類似しないことがないためだと考えられる．
+提案手法では出来事の文章を結合して文埋め込みを作成したが，システムが考慮する特徴が減るように，出来事の文章を要約した1文を抽出もしくは生成して文埋め込みを作成することでシルエット係数の平均値が向上する可能性がある．
+% 次元の呪いもある
+
+抽出した記事のクラスタでは10件のウイルス感染対策に関する文とその他3件の文を出来事として区別できていないため，クラスタ間距離の算出方法やクラスタを分けるクラスタ間距離の設定方法などに改善が必要である．
 % @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2031,6 +2172,7 @@ CarlebachらはIBM Debater$^{\textregistered}$ - Claims Stance Datasetを学習�
 
 \subsection{実験の考察}
 ~
+小節\ref{subsection_scalable_fact_checking}で述べたYangらシステムでは959件の記事の主張を705個の「出来事が混在した異なる主張のクラスタ」（約74\%）に要約していたのに対し，提案手法のシステムでは5000件の記事の主張を5個の「類似した出来事の異なる主張のクラスタ」（0.5\%）に要約できた．
 % 出来事をやらずに主張だけクラスタリングしたら面白そう
 % @see 
 
