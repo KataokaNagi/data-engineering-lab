@@ -987,8 +987,10 @@ BERTやRoBERTaで1万文から最も意味的類似度が高い2文を得たい�
 
 \subsection{コサイン距離}
 \label{subsection_cosine_distance}
-
-コサイン距離は，2つのベクトルの角度がどの程度離れているかを表す距離（非類似度）であり，式(\ref{cosine_distance})のように計算される．
+\textcolor{red}{
+式(\ref{cosine_distance})にコサイン距離は，2つのベクトルの距離の指標の1つである．
+2つの3次元ベクトル間のコサイン距離は，2つのベクトルがなす角の大きさに相当する．
+}
 コサイン距離は，単語埋め込みや文章の埋め込みの距離の算出によく用いられる．
 
 \begin{align}
