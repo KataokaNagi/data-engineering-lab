@@ -1,0 +1,419 @@
+<!-- tex script for md -->
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script type="text/x-mathjax-config">
+ MathJax.Hub.Config({
+ tex2jax: {
+ inlineMath: [['$', '$'] ],
+ displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+ }
+ });
+</script>
+
+# 週次報告書 2022年01月26日
+AL18036 片岡 凪
+
+## 1. 今回の報告会までに実施する予定だったこと
+- 
+
+## 2. 実施内容
+
+### 目次
+- 2.1 
+- 2.2 
+- 2.3 
+
+### 2.1 
+
+![](img/)
+<div style="text-align: center;">
+図. 
+</div>
+<br>
+<br>
+
+### 2.2 
+
+
+### 2.3 
+
+
+## 3. 次回までに実施予定であること
+- 
+
+## 4. メモ
+- 主張のクラスタリングの主観評価の定量化
+    - 714
+        - 同記事のみのクラスタ群なので無意味
+        - IN;33060;3;any medical or financial help needed by them should be provided.
+            - 医療や経済的な援助が必要な場合は、それを提供する必要があります。
+            - 医療、援助
+            - 提供すべき
+        - IN;33060;7;farmers and industrialists should come forward voluntarily to contribute to the fund.
+            - 農民や産業人は、自発的に基金に貢献するよう名乗り出るべきだ。
+            - 農民、産業人
+            - 基金に貢献すべき、名乗り出るべき
+        - IN;33060;12;the poor should be made aware of the benefits they can enjoy under various welfare schemes.
+            - 貧困層は、様々な福祉制度の恩恵を受けられることを認識すべきです。
+            - 貧困、福祉
+            - 恩恵がある、認識すべき
+        - IN;33060;15;prioritising halting of the exodus and workers return and rehabilitation can salvage the situation.
+            - このような状況を打開するためには、流出を食い止め、労働者の帰還とリハビリを優先させる必要があります。
+            - 労働者の流出
+            - 止めるべき、帰還させるべき、リハビリさせるべき
+        - IN;33060;21;educating each worker to not have more children will also ensure population control.
+            - また、労働者一人一人が子供を作らないように教育することで、人口抑制を図ることができます。
+            - 労働者、一人っ子制作、
+            - 人口抑制すべき
+        - IN;33060;24;full salaries should also be paid to them during the entire duration of the lockdown.
+            - また、ロックダウンの全期間中、給与を全額支払う必要があります。
+            - ロックダウン、給与
+            - 給与を払うべき
+        - IN;33060;26;giving them advance payment or a loan or gift to go back home or survive in this lean period can also help.
+            - また、この不況下で生き残るために、前払いやローン、贈答品を与えることも有効です。
+            - 不況、生存
+            - 前払いすべき、ローンするべき、贈答品を与えるべき
+        - IN;33060;30;their movement out of towns and cities spells total failure of the central government in taking care of their needs.
+            - 彼らの町や都市からの移動は、彼らのニーズに対する中央政府の完全な失敗を意味します。
+            - 移民
+            - 政府の失敗である
+        - IN;33060;35;the moneyed have no problems splurging on expensive cars and homes so feeding the people who labour for them making sure they are comfortable should not be a problem.
+            - お金持ちは高価な車や家を買うのに何の問題もありませんから、彼らのために働く人々を養い、彼らが快適に過ごせるようにすることは問題ではありません。
+            - 
+            - 
+        - IN;33060;37;they should also set aside certain percentages from their profits for their welfare.
+            - また、利益から一定割合を福祉に充てるべきである。
+            - 
+            - 
+        - IN;33060;41;to devise policies and provide services for seasonal migrant workers the state needs to have a realistic statistical account of their number and an understanding of the nature of their mobility.
+            - 季節労働者のための政策を考案し、サービスを提供するために、国家は彼らの数の現実的な統計的説明と彼らの移動の性質の理解が必要である。
+            - 
+            - 
+        - IN;33060;44;pension policies also have to be created for them.
+            - また、そのための年金制度も作らなければならない。
+            - 
+            - 
+        - IN;33060;50;the first priority of their employers and administration should be to win over their confidence.
+            - 雇用主や行政は、彼らの信頼を勝ち取ることを第一に考えなければなりません。
+            - 
+            - 
+        - IN;33060;51;guaranteed social security good income and boarding and lodging arrangements will perhaps persuade them to come back.
+            - 社会保障の充実と寮や宿泊の手配があれば、きっと戻ってこられるでしょう。
+            - 
+            - 
+        - IN;33060;53;people who hire them and central and state governments should ensure they are provided all necessities.
+            - また、中央政府および州政府は、彼らがすべての必要なものを提供されるようにする必要があります。
+            - 
+            - 
+        - IN;33060;54;if they want to go home then their train and bus tickets should be paid for to ensure they return safely.
+            - もし家に帰りたいのであれば、電車やバスのチケット代を負担して、安全に帰れるようにすべきです。
+            - 
+            - 
+    - 319
+        - *** clustering (substitute claim_embeds) ***
+        - clustering time (sec): 0.00037741661071777344
+        - clustering_result[0]: [4.         8.         0.31727236 2.        ]
+        - len(clustering_result): 10
+        - embeds_pdist[0]: 0.5996387610777518
+            - embeds_square_form[0]: [0.         0.59963876 0.55594853 0.76901186 0.56143009 0.- 63325735
+        -  0.83315434 0.84531688 0.79333242 0.62189862 0.92410676]
+            - embeds_square_form[1]: [0.59963876 0.         0.79476234 0.70977429 0.48057312 0.- 86192176
+        -  0.88668505 0.91563771 0.60254764 0.71453455 0.86070555]
+            - embeds_square_form[2]: [0.55594853 0.79476234 0.         0.87954642 0.69745076 0.- 73201001
+        -  0.84493517 0.94759742 0.90159826 0.64428243 0.75673016]
+        - *** print clustering result ***
+        - result_df[0][0] (1st node      ) : 4.0
+        - result_df[1][0] (2nd node      ) : 8.0
+        - result_df[2][0] (nodes distance) : 0.3172723553592529
+        - result_df[3][0] (cluster size  ) : 2.0
+        - *** draw num of clusters dependency on silhouette coefficient ***
+        - *** & calc best them ***
+        - drawing num and silhouette time (sec): 0.23293375968933105
+        - len(nation_article_claim_ids):  11
+        - max_num_of_cluster:  10.45
+        - best_num_of_cluster:  9
+        - max_silhouette_coefficient:  0.2680006640765816
+        - best_cluster_by_number:  [0, 1, 0, 2, 3, 4, 5, 6, 3, 7, 8]
+        - 
+        - *** draw threshold dependency ***
+        - best_threshold: 0.6020428004708422
+        - drawing threshold dependency time (sec): 0.21852707862854004
+        - *** draw dendrogram ***
+        - drawing dendrogram time (sec): 0.2569282054901123
+        - *** draw best_num_of_cluster ***
+        - *** save lines in each cluster with best_cluster_by_number ***
+        - *** save time logs ***
+        - 
+        - **KR;4689;21;it spreads rapidly all over the world and overtakes the people attacking their immune system.**
+            - この病気は世界中に急速に広がり、免疫システムを攻撃する人々を追い越していく。
+            - 病気（コロナ）
+            - 流行、猛威
+        - KR;4689;22;once in your body the coronavirus controls and manipulates you completely.
+            - コロナウイルスは、あなたの体内に入ると、あなたを完全にコントロールし、操作する。
+            - ウイルス
+            - 健康被害
+            - 関連しすぎ
+        - **KR;4689;23;the patient then spreads the disease to others clandestinely.**
+            - そして、その患者さんが密かに他の人に病気を広めていくのです。
+            - 患者
+            - 感染する
+        - KR;4689;27;since it is unseen and undetectable you cannot fight it effectively.
+            - 目に見えず、発見されないので、効果的に戦うことはできません。
+            - ウイルス
+            - 厄介
+            - ちょっと派生
+        - KR;4689;31;like the communist ideology the coronavirus is deadly.
+            - コロナウイルスは、共産主義的なイデオロギーと同様に、致命的なものです。
+            - ウイルス
+            - 健康被害
+            - 関連しすぎ
+        - KR;4689;32;communists have massacred so many people under the banner of their ideology.
+            - 共産主義者は、そのイデオロギーの旗の下で、非常に多くの人々を虐殺した。
+            - 共産主義者、イデオロギー
+            - 虐殺した
+            - ちょっと派生
+        - KR;4689;34;communist leaders are only good at surveillance censorship and the lockup of their political opponents.
+            - 共産党の指導者は、監視検閲と政敵の監禁だけが得意だ。
+            - 共産党、指導者
+            - 検閲が得意、監禁が得意
+            - 関連がない
+        - KR;4689;35;they are also good at executions in a kangaroo court.
+            - また、カンガルー・コートでの処刑も得意としています。
+            - カンガルーコート、処刑
+            - 得意
+            - 関連がない
+        - KR;4689;42;like the communist ideology the coronavirus looks attractive and gorgeous in appearance.
+            - 共産主義的なイデオロギーのように、コロナウイルスは魅力的でゴージャスな外見をしている。
+            - 共産主義、イデオロギー、ウイルス
+            - 魅力的
+            - ちょっと派生？関連がない？
+        - **IN;29514;23;the chances of similar outbreaks are lower if the virus infects humans and then evolve its highly pathogenic properties.**
+            - そのため、ウイルスがヒトに感染し、高い病原性を発揮するようになれば、同様の事態が発生する可能性は低くなります。
+            - ウイルス、猛威
+            - 事態の確率低下
+            - ~~ちょっと派生~~
+        - IN;29514;26;the only way to contain health emergencies is to build infrastructure to test contain and treat.
+            - 健康上の緊急事態を封じ込める唯一の方法は、封じ込めと治療のためのインフラを構築することです。
+            - コロナ対策
+            - 封じ込めが必要、治療が必要、インフラが必要
+            - ちょっと派生
+- 5000記事のクラスタリング
+    - 閾値ごとのクラスタ数と平均クラスタサイズの変化で分割
+    - 平均クラスタサイズは30程度でまとまってほしい
+    - クラスタ数の減りが遅くなる
+        - つまり似てない出来事もまとめられ始める
+        - 0.85くらいが変曲点
+            - 関連研究も同じ数値だった
+    - クラスタ数がほとんど減らなくなる
+        - まじで似てないクラスタも結合され始める
+    - 出来事のクラスタリング
+        - thres 2.0
+            - num of cluster 97
+                - 記事を約500分の1にしている
+            - ave size of cluster 51.55
+        - thres 0.85
+            - num of cluster 666
+            - ave size of cluster 7.51
+                - 調べ事をするときはこれくらいでしょ
+    - 主張のクラスタリング
+        - 同様に0.85が良さそう
+        - 出来事のクラスタ19
+            - 最大
+            - 複数記事
+            - thres 2.0
+                - num of cluster 2
+                    - でかすぎ
+                - ave size of cluster 29.5
+            - thres 0.85
+                - INしかないのでボツ
+                - num of cluster 6
+                - ave size of cluster 2.666
+                - cluster id 0 (緑)
+                    - IN;2398;7;complete lockdown will be maintained in these hotspots.
+                        - これらのホットスポットでは、完全なロックダウンが維持されます。
+                        - ホットスポット、ロックダウン
+                        - 
+                    - IN;5852;66;the threeweek lockdown has resulted in the shutdown of industries services and other sectors.
+                        - 3 週間にわたる封鎖により、産業界やその他の部門が閉鎖されました。
+                        - 
+                        - 
+                - cluster id 1 ()
+                    - IN;3013;20;stopping flights again is a call that only the central government can take.
+                        - また飛行を止めるというのは、中央政府だけができる呼びかけです。
+                        - 
+                        - 
+                    - IN;2634;36;the government may ask local administrations to shut down large markets and restrict the selling of vegetables at standalone shops.
+                        - 政府は、地方行政に対して、大規模な市場の閉鎖や、独立した店舗での野菜の販売を制限するよう要請する可能性があります。
+                        - 
+                        - 
+                    - IN;1093;15;most of the states have limited borrowing capacity.
+                        - は、ほとんどの州で借入能力に限界があります。
+                        - 
+                        - 
+                - cluster id 2 ()
+                    - IN;3013;35;a freely accessible testing policy through both private and publicsector clinics which is available on demand and with assured privacy of results should be the first national priority to identify and quarantine asymptomatic patients.
+                        - 無症状患者を特定し隔離するためには、民間および公的機関のクリニックで自由に検査ができ、必要に応じて検査結果のプライバシーが保証されていることが、国家的な最優先事項であるべきです。
+                        - 
+                        - 
+                    - IN;2634;27;we keep people in quarantine facilities but dont test them.
+                        - 検疫施設に人を閉じ込めても、検査はしない。
+                        - 
+                        - 
+                    - IN;4736;17;testing has process and guidelines.
+                        - テストにはプロセスやガイドラインがあります。
+                        - 
+                        - 
+                    - IN;4736;18;unnecessary testing for the sake of confidence building especially when kits are limited is not the right strategy.
+                        - 特にキットに限りがある場合、信頼性を高めるために不必要なテストをするのは正しい戦略ではありません。
+                        - 
+                        - 
+                - cluster id 3 ()
+                    - IN;3013;45;we cant afford to get frontliners infected.
+                        - フロントライナーが感染するようなことは許されない。
+                        - 
+                        - 
+                    - IN;13968;8;they showed less interest tracing the source of infection.
+                        - 感染源の特定にはあまり関心がないようだ。
+                        - 
+                        - 
+                    - IN;4901;22;dont announce the packages to gain publicity.
+                        - 宣伝のためにパッケージを発表するのはやめましょう。
+                        - 
+                        - 
+                - cluster id 4 ()
+                    - IN;3013;46;the government should have planned about the procurement process earlier considering the size of the state.
+                        - 国の規模を考えれば、もっと早くから調達の計画を立てるべきでした。
+                        - 
+                        - 
+                    - IN;7402;27;we should act as responsible citizens and obey the law.
+                        - 私たちは、責任ある市民として行動し、法律を遵守しなければなりません。
+                        - 
+                        - 
+                - cluster id 5 ()
+                    - IN;43596;15;thus transmission of the virus within the home is expected to increase.
+                        - そのため、家庭内でのウイルス感染も増加することが予想されます。
+                        - 
+                        - 
+                    - IN;15970;14;all sanitisation measures have been taken.
+                        - は、すべての除菌対策がなされている。
+        - 出来事のクラスタ230
+            - 38記事
+            - thres 0.85
+                - 0.85が変曲点になっている
+                - num of cluster 5
+                - ave size of cluster 2.6
+                - cluster id 0 (紫)
+                    - IN;24615;8;it was a laborious job.
+                        - 手間のかかる仕事だった。
+                        - 仕事
+                        - 手間がかかる
+                    - JP;13111;34;uncertainly remained over how best to stem the spread of the illness.
+                        - しかし、どのようにすれば病気の蔓延を食い止めることができるのか、その答えはまだ出ていない。
+                        - 病気
+                        - 対策がない
+                - cluster id 1 (橙)
+                    - KR;8909;18;sports event are also obligated to keep the ceiling of 30 percent at stadiums.
+                        - また、スポーツイベントは、競技場での上限を30%に抑える義務があります。
+                        - イベント
+                        - 入場者3割にする
+                    - JP;20865;22;outdoor exercise will be banned and wearing masks will be mandatory.
+                        - 屋外での運動は禁止され、マスクの着用が義務づけられます。
+                        - 運動、マスク
+                        - 禁止、義務付け
+                    - KR;2422;5;to keep out imported infections authorities have imposed more stringent measures on people arriving from countries deemed highrisk.
+                        - 輸入感染症を防ぐため、当局は感染リスクの高い国からの入国者に対して、より厳しい措置をとっています。
+                        - 輸入、入国
+                        - 措置
+                    - KR;2422;16;cities and provinces that agree to accommodate passengers who require a twoweek quarantine will be paid government incentives.
+                        - 2週間の検疫を必要とする旅客の受け入れに同意した市や県には、政府から奨励金が支払われます。
+                        - 検疫金、旅客、県、政府
+                        - 奨励金
+                - cluster id 2 (青)
+                    - KR;8909;19;south korea operates a threetier social distancing system.
+                        - 韓国では、3段階の社会的距離の取り方が行われています。
+                        - 韓国、社会的距離
+                        - 措置
+                - cluster id 3 (緑)
+                    - JP;13111;30;chinese banks have been ordered to disinfect old banknotes before reissuing them to the public.
+                        - 中国の銀行は、一般に再発行する前に古い銀行券を消毒するよう命じられました。
+                        - 銀行
+                        - 消毒
+                    - KR;3437;15;franchise cafes and dessert shops were obligated to offer only takeout around the clock.
+                        - フランチャイズのカフェやデザートショップは、24時間テイクアウトのみ提供することが義務づけられていた。
+                        - 食料店
+                        - テイクアウト措置
+                    - KR;2422;27;try not to eat in restaurants as much as possible.
+                        - 外食はなるべく控える。
+                        - 外食
+                        - 禁止
+                - cluster id 4 (赤)
+                    - KR;9550;6;health authorities remain vigilant over sporadic cluster infections at hospitals nursing homes and riskprone facilities.
+                        - 保健当局は、病院や老人ホーム、リスクの高い施設での散発的な集団感染に警戒を続けています。
+                        - 保健当局、施設
+                        - 集団感染の警戒
+                    - KR;2422;4;travelrelated cases continue to outnumber local cases.
+                        - 旅行関連の症例が引き続き現地での症例を上回っています。
+                        - 旅行
+                        - 感染者の増加
+                    - KR;6163;13;the citys hospitals are facing an overcrowding crisis.
+                        - の病院は混雑の危機に直面しています。
+                        - 病院
+                        - 経営の危機
+                - 予防の話っぽい
+                - 赤の6, 13と青の2がよく比較できそう
+- 概要
+    - 重複が少ないなら、数を増やせば特徴を得られる
+    - 重複が多くても、見逃している主張が存在している可能性が捨てきれない
+    - デンドログラムのメモリを大きく
+    - 見直し
+        - 話題は話に上がる対象
+        - 出来事は対象について実際に起こったこと
+        - 主張は出来事に対する筆者の考え
+            - 区別して両方用いる
+- 本論執筆
+    - 1月13日のご助言に基づいて修正
+        - 基づくってひらがなの方がええんかなあ
+    - ROBERTA
+        - マスクの無作為性を増加
+        - Next Sentence Predictionをしない
+            - いくつかの種類を検証
+            - 有効でないと検証
+            - MNLI
+        - バッチサイズと学習回数
+            - 256*100 0000から
+            - 2000*125000
+        - Text Encoding関連
+            - BPE
+            - 単語を分割
+            - 精度が悪くなったが、表現の豊かさのために維持
+        - データ
+            - BERT
+                - 16GB
+                - English Wikipedia(2,500M単語)
+                - BooksCorpus(800M単語)
+            - RoBERTa
+                - CC-News(76GB)
+                - OpenWebText(38GB)
+                - Stories(31GB)
+        - 学習回数
+            - 1000->5000000
+        - 省略のピリオドの難しさ
+            - SVMの論文
+    - 1エポックの追実験
+        - ibm
+            - {'mcc': 0.8387780193426857, 'tp': 376, 'tn': 808, 'fp': 43, 'fn': 48, 'auroc': 0.977416967829191, 'auprc': 0.9476252884837162, 'eval_loss': 0.1677857233898976, 'acc': 0.9286274509803921}
+        - covid
+            - TP
+                - 3
+            - TN
+                - 146
+            - FP
+                - 2
+            - FN
+                - 12
+            - RECALL
+                - 0.2
+            - PRC
+                - 0.6
+            - MCC
+                - 0.31
