@@ -472,7 +472,7 @@ $\bm{b}$は一般に1を要素とするバイアスニューロンと呼ばれ�
 % m個のデータについてこれらの差の二乗の平均を求めて誤差としている．
 
 \begin{align}
-  \color{red}{L}(\theta)&=-\frac{1}{m} \sum_{i=1}^{m}\left[y^{(i)} \log \left(\hat{p}^{(i)}\right)+\left(1-y^{(i)}\right) \log \left(1-\hat{p}^{(i)}\right)\right]
+  \color{red}{L}(\theta)&=-\frac{1}{m} \sum_{i=1}^{m}\left[y_{i} \log \left(\hat{p}_{i}\right)+\left(1-y_{i}\right) \log \left(1-\hat{p}_{i}\right)\right]
   \label{binary_cross_entropy}
   \\
   % \hat{y}&=\left\{
@@ -481,7 +481,7 @@ $\bm{b}$は一般に1を要素とするバイアスニューロンと呼ばれ�
   %   1 & \text { if } \hat{p} \geqq 0.5
   % \end{array}\right.
   % \label{logistic_predict}
-  y^{(i)}&=\left\{
+  y_{i}&=\left\{
     \begin{array}{l}
       0 \\
       1 
@@ -499,8 +499,8 @@ $\bm{b}$は一般に1を要素とするバイアスニューロンと呼ばれ�
   \label{sigmoid}
 \end{align}
 
-$y^{(i)}$は入力する特徴$\mathbf{x}$の個々の要素のラベルで，$\hat{p}$は$\mathbf{x}$の個々の要素についてモデルが予測したラベルが1となる確率である．
-\textcolor{red}{バイナリクロスエントロピー$L(\theta)$}は個々の$y^{(i)}$と$\hat{p}^{(i)}$の差が大きいほど大きくなり，この差が小さいほど0に漸近する．
+$y_{i}$は入力する特徴$\mathbf{x}$の個々の要素のラベルで，$\hat{p}$は$\mathbf{x}$の個々の要素についてモデルが予測したラベルが1となる確率である．
+\textcolor{red}{バイナリクロスエントロピー$L(\theta)$}は個々の$y_{i}$と$\hat{p}_{i}$の差が大きいほど大きくなり，この差が小さいほど0に漸近する．
 式(\ref{logistic_probability})の$\theta$は特徴$\mathbf{x}$のどの要素を重視するかを設定する重み係数である．
 式(\ref{sigmoid})の$\sigma(t)$はシグモイド関数と呼ばれる連続関数であり，実数tを入力したとき図\ref{fig_sigmoid}のように確率の範囲$(0, 1)$で実数を出力する．シグモイド関数を用いることで，$(0, 1)$の範囲にないモデルの出力を$(0, 1)$の範囲に落とし込むことができる．
 
@@ -1076,6 +1076,45 @@ Ward法では式(\ref{wards_method})に示すように，
 % ~
 % % @see 
 
+\subsection{\textcolor{red}{シルエット係数}}
+式(\ref{silhouette_coefficient})に示すシルエット係数は，階層的クラスタリングの評価指標のひとつである\cite{aranganayagi_clustering_2007}．
+全データのシルエット係数の平均$\overline{Sil(i)}$が大きいほど同一クラスタ内のデータがより類似し，異なるクラスタ間のデータがより類似していないといえる．
+
+\begin{align}
+  Sil(i) &= \frac{b(i) - a(i)}{\max ( b(i) , a(i))}
+  \label{silhouette_coefficient}
+  \\
+  a(i)
+  &=\frac{1}{\left|C_{\text {in}}\right|-1} \sum_{\boldsymbol{x}_{j} \in C_{\text {in }}}\left\|\boldsymbol{x}_{i}-\boldsymbol{x}_{j}\right\|
+  \quad(x_i \in C_{in} ,~ i \neq j)
+  \label{a_i}
+  \\
+  b(i)
+  &=\frac{1}{\left|C_{\text {near }}\right|} \sum_{\boldsymbol{x}_{k} \in C_{\text {near }}}\left\|\boldsymbol{x}_{i}-\boldsymbol{x}_{k}\right\|
+  = \min_C{\left( D(i, C) \right)}
+  \label{b_i}
+  \\
+  D(i, C)
+  &=\frac{1}{\left|C \right|} \sum_{\boldsymbol{x}_{h} \in C}\left\|\boldsymbol{x}_{i}-\boldsymbol{x}_{h}\right\|
+  \quad (x_i \in C_{in},~ C \cap C_{in} = \emptyset)
+  \label{d_ic}
+\end{align}
+
+式(\ref{a_i})に示す$a(i)$はデータ$\bm{x}_i$と$\bm{x}_i$が属するクラスタ$C_{in}$内の他の全データ$\bm{x}_j \in C_{in}$との距離の平均である．
+$a(i)$が0に近いほどクラスタ$C_{in}$内のデータがよく類似しているといえる．
+
+式(\ref{b_i})に示す$b(i)$はデータ$\bm{x}_i$と$\bm{x}_i$の最近傍のクラスタ$C_{near}$内の他の全データ$\bm{x}_k \in C_{near}$との距離の平均である．
+具体的には，$D(i, C)$をクラスタ$C_{in}$以外のあるクラスタ$C$についてデータ$x_i$とクラスタ$C$内の全データ$\bm{x}_h \in C$との距離の平均だとしたとき，$b(i)$は任意のCにおける$D(i, C)$の最小値として計算される．
+$b(i)$が1に近いほど異なるクラスタのデータが類似していないといえる．
+
+% $a(i)$，$b(i)$から計算されるシルエット係数$Sil(i)$は$[-1, 1]$の範囲の値であり，1に近いほどよく凝集と乖離をしているといえる．
+% 一方で，$Sil(i)$が0に近いデータが多いと複数の凝集したデータ群が1つのクラスタに属することがある．
+% また，$Sil(i)$が$-1$に近いデータが多いと異なるクラスタのデータが特徴空間内で重なってしまうことが多く，クラスタの所属判定が誤っている可能性が高い．
+
+% 本当は平均だけでなくデータごとのシルエット係数を図示するべきだった
+
+% % @see https://hkawabata.github.io/technical-note/note/ML/Evaluation/silhouette-analysis.html
+
 \section{k-NN分類法}
 k-NN分類法（k近傍法）は，クラスが既知のデータ群が存在するときに新規に入力したデータのクラスを推定するためのクラス分類手法である\cite{aurellen20}．
 新規のデータが入力されたとき，そのデータとの距離が最も近い既存のデータを順にk個選択し，k個のデータのクラスのうち最も多かったクラスを新規のデータのクラスと推定する．
@@ -1262,7 +1301,7 @@ RoBERTaが出来事の文と主張の文の分類に適用できるよう，出�
 まず，クラスタリングの前準備として「出来事と分類した文を記事ごとに結合した文章」と「主張と分類した文」のそれぞれをSentence-BERTに入力して文埋め込みを作成した．
 次に，出来事の文章の埋め込みを基に記事の階層的クラスタリングを行った．
 最後に，それぞれ記事のクラスタについて，主張の文の埋め込みを基に階層的クラスタリングを行った．
-階層的クラスタリングを行うとき，文埋め込み間の距離の算出にはコサイン距離を使用し，この距離を基にWard法を用いてクラスタ間の距離を算出した．
+階層的クラスタリングを行うとき，文埋め込み間の距離の算出にはコサイン距離を使用し，この距離を基にWard法を用いてクラスタ間距離を算出した．
 ここで出来事の文章の埋め込みに基づいたクラスタリングを先に行ったのは，複数の出来事に対して複数の主張が階層的に紐づいた構造を持つためである．
 
 \subsection{k-NN分類法を用いた主張のクラスタとクラスタに紐づく記事の推薦}
@@ -1639,7 +1678,7 @@ MNLIは話し言葉と書き言葉の様々な英文をカバーしている．
 
 次に，SciPyと距離行列を用いてWard法によるクラスタ間距離を計算し，階層的クラスタリングを行った．
 $n$回のクラスタの結合を行う階層的クラスタリングの結果は，$n$行4列の行列として保存される．
-1列目と2列目には結合される2つのクラスタのID，3列目には2つのクラスタ間の距離，4列目には新しく生成されるクラスタのIDが保存される．
+1列目と2列目には結合される2つのクラスタのID，3列目には2つのクラスタ間距離，4列目には新しく生成されるクラスタのIDが保存される．
 
 最後に，SciPyと保存された階層的クラスタリングの結果を使用してデンドログラムを作図し，データの分析を行った．
 
@@ -1956,11 +1995,13 @@ CarlebachらはIBM Debater$^{\textregistered}$ - Claims Stance Datasetを学習�
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{記事の階層的クラスタリングの実験}
 \label{section_article_clustering_experiment}
-~
 % @see 
 
-\subsection{実験方法（クラスタの階層の基準ごとの評価）}
-~
+\subsection{実験方法}
+
+階層的クラスタリングの実験にはCOVID-19 News Articlesの5000件の記事を用いた．
+クラスタを分けるクラスタ間距離には，クラスタ間距離を大きくしたときにクラスタ数の減少が緩やかになり始める距離を選択した．
+この距離は，より類似しない文章がクラスタにまとめられ始めるクラスタ間距離に対応する．
 % @see 
 
 \subsection{実験結果}
@@ -1988,6 +2029,7 @@ CarlebachらはIBM Debater$^{\textregistered}$ - Claims Stance Datasetを学習�
 
 \subsection{実験の考察}
 ~
+% 出来事をやらずに主張だけクラスタリングしたら面白そう
 % @see 
 
 
