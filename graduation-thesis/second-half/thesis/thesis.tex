@@ -112,7 +112,7 @@
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{序論}
+\chapter{\textcolor{red}{序論}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % （用紙や文字のなどのサイズには井尻先生のTeXテンプレートをそのまま利用しています）
@@ -1162,8 +1162,8 @@ kは事前に設定しておく必要がある．
 \label{chapter_related_studies}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{ニュース推薦システムのバイアスの解決}
-~
+\section{ニュース推薦システムのバイアスを解決する研究}
+% ~
 % @see 
 % [[1]E. BozdagとJ. van den Hoven, 「Breaking the filter bubble: democracy and design」, Ethics Inf Technol, vol. 17, no. 4, pp. 249–265, 12月 2015, doi: 10.1007/s10676-015-9380-y.](https://link.springer.com/article/10.1007/s10676-015-9380-y?source=post_page-----2afbf9cd8367----------------------)
 % - フィルターバブルの回避手法
@@ -1176,12 +1176,24 @@ kは事前に設定しておく必要がある．
 %             - 民主主義の議論に似ている
 %             - 完全な民主主義は難しく，本稿では網羅できない
 
-\subsection{Breaking the filter bubble: democracy and design}
-~
-% @see 
+\subsection{\textcolor{red}{Understanding and Controlling the Filter Bubble through Interactive Visualization: A User Study}}
+Nagulendraらは，ニュースやSNS（ソーシャルネットワークサービス）の利用者にフィルターバブルの存在の自覚を促すために，図\ref{fig_bubble_ui}に示すようなフィルターバブルを可視化する手法を提案した\cite{nagulendra_understanding_2014}．
+図のシステムでは，あるSNS投稿者の投稿のうち，SNSが閲覧者に推薦している投稿のカテゴリと推薦していない投稿のカテゴリとの境界を可視化している．
 
-\subsubsection{（UIでバブルの可視化）（結局表示されるものにバイアスがかかる，行動に繋がらない）}
-~
+\begin{figure}[H]
+	\centering
+	\includegraphics[keepaspectratio, width=80mm]{img/bubble_ui.png}
+	% \caption{あるSNS投稿者の投稿のうち，SNSに推薦されている投稿のカテゴリと推薦されていない投稿のカテゴリの境界を可視化したシステム\protect\footnotemark[10]}
+	\caption{フィルターバブルを可視化するシステム\protect\footnotemark[10]}
+	\label{fig_bubble_ui}
+\end{figure}
+\footnotetext[10]{\cite{nagulendra_understanding_2014}より引用}
+
+しかしこの手法では画面上に限られた数のカテゴリしか表示できないため，このシステム自体があるアルゴリズムに基づいて投稿を選別しており，フィルターバブルを生成してしまっている．
+% フィルターバブルの存在を自覚を促すことができるが，
+したがって，このシステムのようにユーザインタフェースを用いて記事を推薦してしまうとフィルターバブルを生成してしまい，読者が得る情報に偏りを生んでしまうと考える．
+そこで本研究では，記事の推薦にユーザインタフェースを直接は使用せず，記事や主張の文をクラスタで提示することを考える．
+クラスタで提示することで，階層的に並ぶ主張の文の違いを読者の手で選別させることができる．
 
 % フィルターバブル問題を緩和する策として，推薦アルゴリズムの公開，個人が推薦アルゴリズムを管理できるオプションの作成，UIの工夫によるバブルの可視化がある．一方で，個人が推薦アルゴリズムを微調節したところで完全に情報の泡から脱することはできないとの指摘もある．UIでバブル内外を可視化しきるのは不可能　情報が多い　手軽
 
@@ -1189,30 +1201,31 @@ kは事前に設定しておく必要がある．
 
 % @see 
 
-\subsubsection{（トピックモデル，LSI, LDAの議論）}
-~
+% \subsubsection{（トピックモデル，LSI, LDAの議論）}
+% ~
 % @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{話題の定量化によるニュース推薦手法}
-~
+\section{\textcolor{red}{話題の定量化によるニュース推薦を行う研究}}
 % @see 
 
-\subsection{トピックマップ}
-~
+% \subsection{トピックマップ}
+% ~
 % @see 
 
-\subsection{Labeled Bilingual Topic Model for Cross-Lingual Text Classification and Label Recommendation}
+\subsection{Bangla News Recommendation Using doc2vec}
 ~
+LDAとdoc2vecについて
+BERTによる文脈を考慮した埋め込みの方が優れているとの見解を記す
 % @see 
 
-\subsubsection{（LDAの利用）}
-~
+% \subsubsection{（LDAの利用）}
+% ~
 % @see 
 
 %%%%%%%%%%
 % \section{LSI}
-~
+% ~
 % @see 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
