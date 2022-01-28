@@ -1392,6 +1392,8 @@ Claimの文とEvidenceの文を100件ずつ確認したところ，他の多く�
   \label{covid_19_news_articles_composition}
 \end{table}
 
+\newpage
+
 COVID-19 News Articlesは3ヶ国の英記事が含まれるため，政治や文化の違いに由来する多くの異なる主張が分析できると考えた．
 加えてCOVID-19に関連する出来事は記者によって多くの異なる主張が記されているため，分析に適していると考えた．
 また，このデータセットは2020年1月1日から2020年12月1日の11カ月間という短い期間で収集されているため，より類似した出来事に関する記事が得られると期待できる．
@@ -1405,7 +1407,7 @@ Yangらの研究と同様に話題がCOVID-19に限定されてしまってい�
 
 \subsection{自然言語処理のためのテキストの前処理}
 IBM Debater$^{\textregistered}$ - Claims and EvidenceとCOVID-19 News Articlesの文章に対し，小節\ref{subsection_texts_preprocessing}で述べたような単語の表記揺れを少なくするいくつかの前処理を行った．
-具体的な処理は\ref{subsection_data_preprocessing_implement}で説明する．
+具体的な処理は小節\ref{subsection_data_preprocessing_implement}で説明する．
 
 % @see 
 % \subsection{テキストの前処理}
@@ -1418,7 +1420,7 @@ IBM Debater$^{\textregistered}$ - Claims and EvidenceとCOVID-19 News Articles�
 
 \subsection{省略のピリオドなどを考慮した文章の分割}
 記事の文を分類するにあたり，文章を文ごとに分割する必要がある．
-しかし，表\ref{period_usecase}英語の句点に用いられるピリオドは句点以外にも様々な用法があり，人間が決めたアルゴリズムによる文章の分割が難しい\cite{kreuzthaler_detection_2015}．
+しかし，表\ref{period_usecase}のように英語の句点に用いられるピリオドは句点以外にも様々な用法があり，人間が決めたアルゴリズムによる文章の分割が難しい\cite{kreuzthaler_detection_2015}．
 % F1スコア
 % 1117
 % @see weekly-report-20211110-1215
@@ -1469,8 +1471,7 @@ IBM Debater$^{\textregistered}$ - Claims and EvidenceとCOVID-19 News Articles�
 COVID-19 News Articlesから生成した記事のクラスタ群と主張の文のクラスタ群は，クラスタごとにテキストファイルに保存した．
 COVID-19 News Articlesの各記事には，主張の文から記事を特定するための固有のIDと記事の出来事の文章から生成した文埋め込みの情報を付与した．
 また，各文には文に固有のIDと抽出元の記事のID，出来事か主張かのラベル，文埋め込みの情報を付与した．
-
-実験では分類とクラスタリングの実装を行い，これらの評価を行った．
+% 実験では分類とクラスタリングの実装を行い，これらの評価を行った．
 
 % @see 
 
@@ -1578,7 +1579,9 @@ GNU Awkは，あるパターンに従う文字列を検索し，他の文字列�
 
 \subsection{Stanzaを用いた文章を文単位に分割する実装}
 PythonライブラリであるStanzaを使用し，IBM Debater$^{\textregistered}$ - Claims and Evidenceの出来事の文章とCOVID-19 News Articlesの文章の句点としてのピリオドの位置を同定した．その後，同定したピリオドの後ろに改行文字を挿入した．
-分割した出来事の文や主張の文には重複する文の組が多く見受けられたため，重複する文は1文を残してPythonで除去した．
+分割した出来事の文や主張の文には重複する文の組が多く見受けられたため，重複する文は1文を残して
+% Pythonで
+除去した．
 % uniqueの{}
 
 \textcolor{red}{
@@ -1625,7 +1628,9 @@ Simple Transformersの内部では同じくPythonのライブラリであるPyTo
 このとき，データの順序に由来する不必要な学習を回避するため，文とラベルは疑似乱数を用いた無作為な順序で学習した\cite{aurellen20}．
 % random.shuffle
 % @see p.127 412
-また，出来事の文は4209文，主張の文は2169文と数が不均衡であるため，出来事の文の学習の重みに$\frac{2169}{4209}$を乗算し，出来事の文を学習しにくくした．
+また，出来事の文は4209文，主張の文は2169文と数が不均衡であるため，出来事の文の学習の重みに$\frac{2169}{4209}$を乗算し，
+% 出来事の文を学習しにくくした．
+ラベルごとに均等に学習ができるようにした．
 学習のバッチサイズは40文とし，その他の学習のパラメータはSimple Transformersのデフォルトの値を使用した．
 
 % 回数を変えて学習したとき，バイナリクロスエントロピーの値は2エポックで約0.207，3エポックで約0.237，4エポックで約0.297，12エポックで約0.590と単調増加していた．
