@@ -610,8 +610,11 @@ Bahdanauらが2014年に提案したAttentionは，時系列データの機械�
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[keepaspectratio, width=120mm]{img/attention.png}
-	\caption{入力単語群$(x_1, x_2, ... , x_T)$を基にt番目の出力語$y_t$を生成するAttentionのモデルアーキテクチャ\protect\footnotemark[1]}
+	\includegraphics[keepaspectratio, width=50mm]{img/attention.png}
+	\caption{入力単語群$(x_1, x_2, ... , x_T)$を基にt番目の出力語$y_t$を生成するAttentionのモデルアーキテクチャ
+  \protect\footnotemark[1]
+  \textcolor{red}{make width smaller}
+  }
 	\label{fig_attention}
 \end{figure}
 \footnotetext[1]{\cite{bahdanau_neural_2016}より引用}
@@ -698,8 +701,10 @@ BERTモデルは，中間層の数や個々のTransformerの数，Transformer内
 
 \begin{figure}[H]
   \centering
-  \includegraphics[keepaspectratio, width=120mm]{img/bert.png}
-  \caption{中間層が1つのBERTのモデルアーキテクチャ\protect\footnotemark[4]}
+  \includegraphics[keepaspectratio, width=80mm]{img/bert.png}
+  \caption{中間層が1つのBERTのモデルアーキテクチャ\protect\footnotemark[4]
+  \textcolor{red}{make width smaller}
+  }
   \label{fig_bert}
 \end{figure}
 \footnotetext[4]{\cite{devlin_bert_2019}の図より一部抜粋}
@@ -865,6 +870,9 @@ BERTでは学習データとして250万単語のEnglish Wikipediaと80万単語
 分類器の評価では，混同行列を用いたいくつかの評価指標がよく用いられる\cite{aurellen20}．
 混同行列は，分類器の入力の$n$種類のラベルと出力の$n$種類のラベルの計$n^2$組の組み合わせについて，それぞれの数を要素とした$n$次正方行列である．
 
+\textcolor{red}{add \textbackslash newpage}
+\newpage
+
 表\ref{confusion_matrix}に10件のデータを0か1かの2値ラベルで分類したときの混同行列の例を示す．
 評価指標の計算で着目するクラスを陽性クラス（positive class），その他のクラスを陰性クラス（negative class）といい，表\ref{confusion_matrix}では1を陽性クラス，0を陰性クラスとして考える．
 表\ref{confusion_matrix}の2件のデータは正しく分類した陰性クラスであり，真陰性（TN; true negative）があるという．
@@ -909,6 +917,9 @@ BERTでは学習データとして250万単語のEnglish Wikipediaと80万単語
   \label{precision}
 \end{align}
 
+\textcolor{red}{add \textbackslash newpage}
+\newpage
+
 適合率は，数ある映像から子どもに観せても安心な映像を検出する分類器などで重視される．
 観せて安心な映像を陽性クラスの映像だとしたとき，分類器の適合率が高ければ，観せて安心な映像だと分類した映像の多くは真に観せて安心な映像であることが多い．
 
@@ -930,6 +941,8 @@ BERTでは学習データとして250万単語のEnglish Wikipediaと80万単語
 適合率と再現率は一般にトレードオフの関係にあり，分類器の目的によってそれぞれの評価指標をどれほど重要視するかを考慮する必要がある．
 上述の監視カメラの例では，適合率が低く万引き犯だと分類した映像のいくつかが万引き反でない人物となってしまうことよりも，再現率が高く確実に万引き犯を検出できることの方が重要である．
 
+\textcolor{red}{add \textbackslash newpage}
+\newpage
 
 \subsubsection{マシューズ相関係数}
 \label{subsubsection_mcc}
@@ -948,6 +961,9 @@ Matthewsが1975年に提案したマシューズ相関係数（MCC;Matthews Corr
 \label{section_sentence_distance}
 後述のクラスタリングを行うにあたり，クラスタリングに必要な文章の距離（非類似度）の算出法について記す．
 本節\ref{section_sentence_distance}では，小節\ref{subsection_sentence_bert}で文章を埋め込みに変換するSentence-BERTについて説明し，小節\ref{subsection_cosine_distance}で変換した埋め込みを用いて計算するコサイン距離について説明する．
+
+\textcolor{red}{add \textbackslash newpage}
+\newpage
 
 \subsection{Sentence-BERT}
 \label{subsection_sentence_bert}
@@ -970,6 +986,9 @@ poolingでは3つの手法が比較されており，BERTで出力したベク�
 	\label{fig_sentence_bert}
 \end{figure}
 \footnotetext[8]{\cite{reimers_sentence-bert_2019}の図より一部抜粋}
+
+\textcolor{red}{add \textbackslash newpage}
+\newpage
 
 BERTやRoBERTaで1万文から最も意味的類似度が高い2文を得たいとき，図\ref{fig_fine_tuning_of_bert}のように2文同時に入力すると$\frac{10000(10000-1)}{2}=49995000$回の実行が必要であり，Reimersらの実験では65時間の処理を要した．
 そこでReimersらは，BERTやRoBERTaに1文を入力して単語埋め込みを得る処理を$10000$回行い，埋め込み間の類似度を計算し，処理時間を約5秒に短縮した．
@@ -1059,6 +1078,9 @@ BERTやRoBERTaで1万文から最も意味的類似度が高い2文を得たい�
 クラスタ間距離の算出には単一連結法や最遠隣法など様々な手法が用いられているが，本研究では1963年にWardが提案したWard法（最小分散法）を使用する\cite{murtagh_wards_2014}．
 Ward法は異常なデータの値（外れ値）の影響を受けにくく，クラスタ間距離の算出法として広く用いられている．
 
+\textcolor{red}{add \textbackslash newpage}
+\newpage
+
 Ward法では式(\ref{wards_method})に示すように，
 併合後のクラスタ$C_{k} \cup C_{c}$の分散と
 併合前のクラスタ$C_{k}, C_{c}$のそれぞれの分散の和との差$d_{k c}$をクラスタ間距離とする．
@@ -1112,6 +1134,9 @@ Ward法では式(\ref{wards_method})に示すように，
 % ~
 % % @see 
 
+\textcolor{red}{add \textbackslash newpage}
+\newpage
+
 \subsection{\textcolor{red}{シルエット係数}}
 式(\ref{silhouette_coefficient})に示すシルエット係数は，階層的クラスタリングの評価指標のひとつである\cite{aranganayagi_clustering_2007}．
 全データのシルエット係数の平均$\overline{Sil(i)}$が大きいほど同一クラスタ内のデータがより類似し，異なるクラスタ間のデータがより類似していないといえる．
@@ -1151,6 +1176,9 @@ $b(i)$が1に近いほど異なるクラスタのデータが類似していな�
 
 % % @see https://hkawabata.github.io/technical-note/note/ML/Evaluation/silhouette-analysis.html
 
+\textcolor{red}{add \textbackslash newpage}
+\newpage
+
 \section{k-NN分類法}
 k-NN分類法（k近傍法）は，クラスが既知のデータ群が存在するときに新規に入力したデータのクラスを推定するためのクラス分類手法である\cite{aurellen20}．
 新規のデータが入力されたとき，そのデータとの距離が最も近い既存のデータを順にk個選択し，k個のデータのクラスのうち最も多かったクラスを新規のデータのクラスと推定する．
@@ -1182,7 +1210,7 @@ LSTUR，FIM，NAML，NRMS，NPA，DKNなどのニューラルネットワーク�
 
 そこでZhangらは，豊富な言語知識を事前学習したBERTモデルを利用し，コールドスタート問題に強いニュース推薦のための機械学習モデルとして，図\ref{fig_unbert_inputs}，\ref{fig_unbert_model_architecture}に示すUNBERTを提案した．
 Zhangらの実験では，学習済みの古い記事と未学習の新しい記事が読者が連続して読んだものであるかを分類し，既存手法と分類性能を比較した．
-実験の結果，\ref{fig_unbert_evaluation}に示すようにUNBERTが先に述べたどの既存手法よりも優れた性能で分類を行うことができた．
+実験の結果，図\ref{fig_unbert_evaluation}に示すようにUNBERTが先に述べたどの既存手法よりも優れた性能で分類を行うことができた．
 % 本当はAUC（適合率と再現率を考慮している）
 % 評価が切り抜かれているのでかなり怪しい
 
@@ -1484,6 +1512,9 @@ Evidenceの文ではナイジェリアの森林面積が減少していること
 \end{table}
 % もう少し増やしたい
 
+\textcolor{red}{add \textbackslash newpage}
+\newpage
+
 表の例は，本研究で定義した主張の文と出来事の文の定義と似た性質を持つ．
 Claimの文は炭素排出量のトピックについて記者が伝えるべきだと判断した森林伐採の説明をしており，主張の文の定義に即している．
 Evidenceの文は具体的な数字や森林のある地域名を用いて記者の解釈に依存しない事象を説明しており，出来事の文の定義に即している．
@@ -1540,6 +1571,9 @@ IBM Debater$^{\textregistered}$ - Claims and EvidenceとCOVID-19 News Articles�
 % 表記揺れによって増加した出現頻度の少ない単語が学習のノイズとなってしまうこともある．
 % 従って，テキストに何らかの処理をする前に，大文字を小文字に変換するなどの表記揺れを解消する処理を行う必要がある．
 % URLやメールアドレスといったユニークな文字の羅列は，出現頻度が極めて少ないノイズとなり得るため，事前に除去しておくと良い．
+
+\textcolor{red}{add \textbackslash newpage}
+\newpage
 
 \subsection{省略のピリオドなどを考慮した文章の分割}
 記事の文を分類するにあたり，文章を文ごとに分割する必要がある．
@@ -1816,7 +1850,11 @@ MNLIは話し言葉と書き言葉の様々な英文をカバーしている．
 % @see https://huggingface.co/sentence-transformers/paraphrase-MiniLM-L6-v2/blob/main/config.json
 % @see 
 
+\textcolor{red}{add \textbackslash newpage}
+\newpage
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \subsection{コサイン距離とWard法を用いた記事の階層的クラスタリングの実装}
 記事のIDに紐づけられた出来事の文章の文埋め込みを基に，PythonライブラリであるSciPyを用いて埋め込みの距離行列を作成した．
 この距離行列は，i番目の埋め込みとj番目の埋め込みとの距離をi行j列に格納した行列である．
@@ -1934,6 +1972,9 @@ COVID-19 News Articlesの正解ラベルには，3ヶ国の記事から3件ず�
 
 % @see 
 
+\textcolor{red}{add \textbackslash newpage}
+\newpage
+
 \subsection{実験結果}
 表\ref{covid_classification_criterion}にIBM Debater$^{\textregistered}$ - Claims and Evidenceの分析を基に作成したラベル付けの基準を示す．
 この基準に従い，COVID-19 News Articlesの163文のラベル付けを行った．
@@ -2028,6 +2069,9 @@ COVID-19 News Articlesの正解ラベルには，3ヶ国の記事から3件ず�
 % - 100文に2文ほど1行2文が存在
 %     - DeepLによるエラー
 
+\textcolor{red}{add \textbackslash newpage}
+\newpage
+
 表\ref{covid_classification_evaluation}にCOVID-19 News Articlesの163文の分類の評価結果を示す．
 適合率，再現率，マシューズ相関係数の全てにおいて3エポックの分類器が最も優れていた．
 3エポックの分類器は再現率が低いが，適合率とマシューズ相関係数が高く，分類器として機能していることがわかる．
@@ -2065,6 +2109,9 @@ COVID-19 News Articlesの正解ラベルには，3ヶ国の記事から3件ず�
   % }
   \label{covid_classification_evaluation}
 \end{table}
+
+\textcolor{red}{add \textbackslash newpage}
+\newpage
 
 表\ref{covid_classification_example}に分類結果の例を示す．
 5つ目の文は，一般の家族や教育者にいえる筆者の解釈が述べられているが，出来事に誤分類されていた．
@@ -2160,6 +2207,9 @@ CarlebachらはIBM Debater$^{\textregistered}$ - Claims Stance Datasetを学習�
 また，抽出したクラスタ内の主張の文のうちの，類似した出来事について述べている文の割合を算出した．
 % @see 
 
+\textcolor{red}{add \textbackslash newpage}
+\newpage
+
 \subsection{実験結果}
 図\ref{articles_silhouette}にクラスタ数ごとのシルエット係数を示す．
 シルエット係数が常に0より大きいため，同一クラスタ内の文埋め込みが類似し，異なるクラスタ間の文埋め込みが類似していない傾向にあることがわかる．
@@ -2172,6 +2222,9 @@ CarlebachらはIBM Debater$^{\textregistered}$ - Claims Stance Datasetを学習�
 	\caption{記事の階層的クラスタリングにおけるクラスタ数ごとのシルエット係数}
 	\label{articles_silhouette}
 \end{figure}
+
+\textcolor{red}{add \textbackslash newpage}
+\newpage
 
 図\ref{num_and_size_of_clusters_of_articles}にクラスタを分けるクラスタ間距離ごとにまとめたクラスタ数とクラスタ内の平均記事数を示す．
 図\ref{num_and_size_of_clusters_of_articles}の上の図から，クラスタ間距離0.5の付近（クラスタ数2000の付近）でクラスタ間距離を大きくしたときのクラスタ数の減少が緩やかになり始めていることがわかる．
@@ -2188,6 +2241,9 @@ CarlebachらはIBM Debater$^{\textregistered}$ - Claims Stance Datasetを学習�
 	\label{num_and_size_of_clusters_of_articles}
 \end{figure}
 
+\textcolor{red}{add \textbackslash newpage}
+\newpage
+
 図\ref{articles_dendrogram}に記事の階層的クラスタリングの結果をデンドログラムで示す．
 クラスタ間距離0.85以下の最後の結合で分かれたクラスタに色を付けている．
 
@@ -2197,6 +2253,9 @@ CarlebachらはIBM Debater$^{\textregistered}$ - Claims Stance Datasetを学習�
 	\caption{記事の階層的クラスタリングの結果}
 	\label{articles_dendrogram}
 \end{figure}
+
+\textcolor{red}{add \textbackslash newpage}
+\newpage
 
 色付けされたクラスタのうち，3ヶ国すべての国の記事を含む最も文字数が多いクラスタを抽出した．
 % 記事ID 230
@@ -2318,6 +2377,9 @@ Yangらのシステムでシルエット係数が高い理由は，内容が個�
 
 % @see 
 
+\textcolor{red}{add \textbackslash newpage}
+\newpage
+
 \subsection{実験結果}
 
 図\ref{sentences_silhouette}にクラスタ数ごとのシルエット係数を示す．
@@ -2331,6 +2393,9 @@ Yangらのシステムでシルエット係数が高い理由は，内容が個�
 	\caption{主張の文の階層的クラスタリングにおけるクラスタ数ごとのシルエット係数}
 	\label{sentences_silhouette}
 \end{figure}
+
+\textcolor{red}{add \textbackslash newpage}
+\newpage
 
 図\ref{num_and_size_of_clusters_of_sentences}にクラスタを分けるクラスタ間距離ごとにまとめたクラスタ数とクラスタ内の主張の文の数の平均値を示す．
 図\ref{num_and_size_of_clusters_of_sentences}の上の図から，クラスタ間距離0.85の付近（クラスタ数2000の付近）でクラスタ間距離を大きくしたときのクラスタ数の減少が緩やかになり始めていることがわかる．
@@ -2347,6 +2412,9 @@ Yangらのシステムでシルエット係数が高い理由は，内容が個�
   「クラスタ内の主張の文の数の平均値」}
 	\label{num_and_size_of_clusters_of_sentences}
 \end{figure}
+
+\textcolor{red}{add \textbackslash newpage}
+\newpage
 
 図\ref{sentences_dendrogram}に主張の文の階層的クラスタリングの結果をデンドログラムで示す．
 クラスタ間距離0.85以下の最後の結合で分かれたクラスタに色を付けている．
@@ -2392,24 +2460,7 @@ Yangらのシステムでシルエット係数が高い理由は，内容が個�
       \multicolumn{1}{c}{青} & \multicolumn{1}{c}{国の全域} & \textbf{感染対策} & \baselineskip=16pt
       \textbf{south korea} operates a threetier \textbf{social distancing} system.
       % \hline
-    \end{tabular}
-    \label{sentences_clustering_example}
-    % }
-  \end{table}
-  
-  \newpage
-  
-  
-  \begin{table}[H]
-    % \caption{クラスタごとの主張の文と主張の対象とした出来事}
-    % \vspace{4mm}
-    \centering
-  % {\tabcolsep=0.15cm
-    \begin{tabular}{p{2.7cm}ccp{6.8cm}}
-      % \hline
-      % 所属クラスタの図\ref{sentences_dendrogram}での色 & 出来事1 & 出来事2 & \multicolumn{1}{c}{主張の文}
-      % \\
-      % \hline
+      \\[2mm]
       \hline
       \multicolumn{1}{c}{赤} & \multicolumn{1}{c}{病院} & 感染の影響 & \baselineskip=16pt
       the citys \textbf{hospitals} are facing \textbf{an overcrowding crisis}.
@@ -2429,7 +2480,25 @@ Yangらのシステムでシルエット係数が高い理由は，内容が個�
       \\[2mm]
       \multicolumn{1}{c}{緑} & 銀行 & \textbf{感染対策} & \baselineskip=16pt
       chinese \textbf{banks} have been ordered to \textbf{disinfect} old banknotes before reissuing them to the public.
-      \\[2mm]
+      \\[1mm]
+    \end{tabular}
+    \label{sentences_clustering_example}
+    % }
+  \end{table}
+  
+  \newpage
+  
+  
+  \begin{table}[H]
+    % \caption{クラスタごとの主張の文と主張の対象とした出来事}
+    % \vspace{4mm}
+    \centering
+  % {\tabcolsep=0.15cm
+    \begin{tabular}{p{2.7cm}ccp{6.8cm}}
+      % \hline
+      % 所属クラスタの図\ref{sentences_dendrogram}での色 & 出来事1 & 出来事2 & \multicolumn{1}{c}{主張の文}
+      % \\
+      % \hline
       \hline
       \multicolumn{1}{c}{黄} & \textbf{運動} & \textbf{感染対策} & \baselineskip=16pt
       \textbf{outdoor exercise will be banned} and \textbf{wearing masks} will be mandatory.
