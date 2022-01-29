@@ -2,12 +2,15 @@
   file     ref.bib
   brief    bibliography references
   author   Kataoka Nagi al18036[at]shibaura-it.ac.jp
-  date     2021-12-21 22:09:37
+  see      newline of url https://tfidf.net/memos/latex-url.htm
+  date     2022-01-29 21:43:18
   Version: 1.0
   par      History
             add
   Copyright (c) 2021 Kataoka Nagi
 }
+
+%% about 
 
 @misc{2021_world_press_freedom_index,
   title      = {2021 {World} {Press} {Freedom} {Index}: {Journalism}, the vaccine against disinformation, blocked in more than 130 countries},
@@ -18,7 +21,50 @@
   language   = {en},
   urldate    = {2021-07-04},
   journal    = {RSF},
-  note       = {\url{https://rsf.org/en/2021-world-press-freedom-index-journalism-vaccine-against-disinformation-blocked-more-130-countries} (2021年7月19日参照)}
+  note       = {\href{https://rsf.org/en/2021-world-press-freedom-index-journalism-vaccine-against-disinformation-blocked-more-130-countries}{https://rsf.org/en/2021-world-press-freedom-index-journalism-vaccine-against-disinformation-blocked-more-130-countries} (2021年7月19日参照)}
+}
+
+@misc{pariser_beware_nodate,
+  title    = {Beware online "filter bubbles"},
+  url      = {https://www.ted.com/talks/eli_pariser_beware_online_filter_bubbles},
+  abstract = {As web companies strive to tailor their services (including news and search results) to our personal tastes, there's a dangerous unintended consequence: We get trapped in a "filter bubble" and don't get exposed to information that could challenge or broaden our worldview. Eli Pariser argues powerfully that this will ultimately prove to be bad for us and bad for democracy.},
+  language = {en},
+  urldate  = {2022-01-06},
+  author   = {Pariser, Eli},
+  note     = {\href{https:\slash \slash www.ted.com\slash talks\slash eli\_pariser\_beware\_online\_filter\_bubbles}{https:\slash \slash www.ted.com\slash talks\slash eli\_pariser\_beware\_online\_filter\_bubbles} (202年1月6日参照)}
+}
+
+@article{bruns_filter_2019,
+  title    = {Filter bubble},
+  volume   = {8},
+  issn     = {2197-6775},
+  url      = {https://policyreview.info/concepts/filter-bubble},
+  abstract = {Concepts such as ‘filter bubble’ enjoy considerable popularity in scholarly as well as mainstream debates, but are rarely defined with any rigour. This has led to highly contradictory research findings. This article provides a critical review of the ‘filter bubble’ idea, and concludes that its persistence has served only to distract scholarly attention from far more critical areas of enquiry.},
+  number   = {4},
+  urldate  = {2021-05-29},
+  journal  = {Internet Policy Review},
+  author   = {Bruns, Axel},
+  month    = nov,
+  year     = {2019},
+  file     = {Bruns_2019_Filter bubble.pdf:C\:\\Users\\calm3\\Dropbox\\zotero-sync\\Bruns_2019_Filter bubble.pdf:application/pdf}
+}
+
+@inproceedings{yang_scalable_2021,
+  address   = {Montpellier, France},
+  title     = {Scalable {Fact}-checking with {Human}-in-the-{Loop}},
+  isbn      = {978-1-66541-717-4},
+  url       = {https://ieeexplore.ieee.org/document/9648388/},
+  doi       = {10.1109/WIFS53200.2021.9648388},
+  abstract  = {Researchers have been investigating automated solutions for fact-checking in various fronts. However, current approaches often overlook the fact that information released every day is escalating, and a large amount of them overlap. Intending to accelerate fact-checking, we bridge this gap by proposing a new pipeline – grouping similar messages and summarizing them into aggregated claims. Speciﬁcally, we ﬁrst clean a set of social media posts (e.g., tweets) and build a graph of all posts based on their semantics; Then, we perform two clustering methods to group the messages for further claim summarization. We evaluate the summaries both quantitatively with ROUGE scores and qualitatively with human evaluation. We also generate a graph of summaries to verify that there is no signiﬁcant overlap among them. The results reduced 28,818 original messages to 700 summary claims, showing the potential to speed up the fact-checking process by organizing and selecting representative claims from massive disorganized and redundant messages.},
+  language  = {en},
+  urldate   = {2022-01-10},
+  booktitle = {2021 {IEEE} {International} {Workshop} on {Information} {Forensics} and {Security} ({WIFS})},
+  publisher = {IEEE},
+  author    = {Yang, Jing and Vega-Oliveros, Didier and Seibt, Tais and Rocha, Anderson},
+  month     = dec,
+  year      = {2021},
+  pages     = {1--6},
+  file      = {Yang et al. - 2021 - Scalable Fact-checking with Human-in-the-Loop.pdf:C\:\\Users\\calm3\\Zotero\\storage\\5LSI387L\\Yang et al. - 2021 - Scalable Fact-checking with Human-in-the-Loop.pdf:application/pdf}
 }
 
 @article{karimi_news_2018,
@@ -39,30 +85,6 @@
   file     = {Karimi et al_2018_News recommender systems – Survey and roads ahead.pdf:C\:\\Users\\calm3\\Dropbox\\zotero-sync\\Karimi et al_2018_News recommender systems – Survey and roads ahead.pdf:application/pdf}
 }
 
-@misc{pariser_beware_nodate,
-  title    = {Beware online "filter bubbles"},
-  url      = {https://www.ted.com/talks/eli_pariser_beware_online_filter_bubbles},
-  abstract = {As web companies strive to tailor their services (including news and search results) to our personal tastes, there's a dangerous unintended consequence: We get trapped in a "filter bubble" and don't get exposed to information that could challenge or broaden our worldview. Eli Pariser argues powerfully that this will ultimately prove to be bad for us and bad for democracy.},
-  language = {en},
-  urldate  = {2022-01-06},
-  author   = {Pariser, Eli}
-}
-
-@article{bruns_filter_2019,
-  title    = {Filter bubble},
-  volume   = {8},
-  issn     = {2197-6775},
-  url      = {https://policyreview.info/concepts/filter-bubble},
-  abstract = {Concepts such as ‘filter bubble’ enjoy considerable popularity in scholarly as well as mainstream debates, but are rarely defined with any rigour. This has led to highly contradictory research findings. This article provides a critical review of the ‘filter bubble’ idea, and concludes that its persistence has served only to distract scholarly attention from far more critical areas of enquiry.},
-  number   = {4},
-  urldate  = {2021-05-29},
-  journal  = {Internet Policy Review},
-  author   = {Bruns, Axel},
-  month    = nov,
-  year     = {2019},
-  file     = {Bruns_2019_Filter bubble.pdf:C\:\\Users\\calm3\\Dropbox\\zotero-sync\\Bruns_2019_Filter bubble.pdf:application/pdf}
-}
-
 @article{nguyen_echo_2020,
   title    = {{ECHO} {CHAMBERS} {AND} {EPISTEMIC} {BUBBLES}},
   volume   = {17},
@@ -80,28 +102,6 @@
   note     = {Publisher: Cambridge University Press},
   pages    = {141--161}
 }
-
-@misc{inc_echo_nodate,
-  title   = {エコー‐チェンバー【echo chamber】},
-  url     = {https://japanknowledge.com/lib/display/?lid=2001028535800},
-  urldate = {2022-01-06},
-  journal = {JapanKnowledge},
-  author  = {Inc, NetAdvance}
-}
-
-@article{__2020-5,
-  title    = {ウェブの功罪},
-  volume   = {70},
-  doi      = {10.18919/jkg.70.6_309},
-  abstract = {多様な情報と人々をつなぐはずのソーシャルメディアが，社会的分断や情報のタコツボ化を助長しているという問題が顕在化している。特に，エコーチェンバーやフィルターバブルといった閉じた情報環境は，自分の好みに合致した情報のみが来やすく，自分とは異なる観点からの情報が来にくいため，フェイク（偽）ニュースやヘイト（憎悪）の温床となる危険性を孕んでいる。本稿では，計算社会科学の観点から，偽ニュースが拡散する仕組みについて解説し，ウェブの負の側面について論じる。また，今後のウェブの技術が克服すべき問題について議論する。},
-  number   = {6},
-  journal  = {情報の科学と技術},
-  author   = {和俊, 笹原},
-  year     = {2020},
-  pages    = {309--314},
-  file     = {和俊_2020_ウェブの功罪.pdf:C\:\\Users\\calm3\\Dropbox\\zotero-sync\\和俊_2020_ウェブの功罪.pdf:application/pdf}
-}
-
 
 @article{conover_partisan_2012,
   title     = {Partisan asymmetries in online political activity},
@@ -121,6 +121,19 @@
   note      = {Number: 1 Publisher: SpringerOpen},
   pages     = {1--19},
   file      = {Conover et al_2012_Partisan asymmetries in online political activity.pdf:C\:\\Users\\calm3\\Dropbox\\zotero-sync\\Conover et al_2012_Partisan asymmetries in online political activity.pdf:application/pdf}
+}
+
+@article{__2020-5,
+  title    = {ウェブの功罪},
+  volume   = {70},
+  doi      = {10.18919/jkg.70.6_309},
+  abstract = {多様な情報と人々をつなぐはずのソーシャルメディアが，社会的分断や情報のタコツボ化を助長しているという問題が顕在化している。特に，エコーチェンバーやフィルターバブルといった閉じた情報環境は，自分の好みに合致した情報のみが来やすく，自分とは異なる観点からの情報が来にくいため，フェイク（偽）ニュースやヘイト（憎悪）の温床となる危険性を孕んでいる。本稿では，計算社会科学の観点から，偽ニュースが拡散する仕組みについて解説し，ウェブの負の側面について論じる。また，今後のウェブの技術が克服すべき問題について議論する。},
+  number   = {6},
+  journal  = {情報の科学と技術},
+  author   = {和俊, 笹原},
+  year     = {2020},
+  pages    = {309--314},
+  file     = {和俊_2020_ウェブの功罪.pdf:C\:\\Users\\calm3\\Dropbox\\zotero-sync\\和俊_2020_ウェブの功罪.pdf:application/pdf}
 }
 
 @inproceedings{nagulendra_understanding_2014,
@@ -232,7 +245,6 @@
   file       = {Reimers_Gurevych_2019_Sentence-BERT.pdf:C\:\\Users\\calm3\\Dropbox\\zotero-sync\\Reimers_Gurevych_2019_Sentence-BERT2.pdf:application/pdf}
 }
 
-
 @article{murtagh_wards_2014,
   title      = {Ward’s {Hierarchical} {Agglomerative} {Clustering} {Method}: {Which} {Algorithms} {Implement} {Ward}’s {Criterion}?},
   volume     = {31},
@@ -252,6 +264,19 @@
   file       = {Murtagh_Legendre_2014_Ward’s Hierarchical Agglomerative Clustering Method.pdf:C\:\\Users\\calm3\\Dropbox\\zotero-sync\\Murtagh_Legendre_2014_Ward’s Hierarchical Agglomerative Clustering Method.pdf:application/pdf}
 }
 
+@inproceedings{aranganayagi_clustering_2007,
+  title     = {Clustering {Categorical} {Data} {Using} {Silhouette} {Coefficient} as a {Relocating} {Measure}},
+  volume    = {2},
+  doi       = {10.1109/ICCIMA.2007.328},
+  abstract  = {Cluster analysis is an unsupervised learning method that constitutes a cornerstone of an intelligent data analysis process. Clustering categorical data is an important research area data mining. In this paper we propose a novel algorithm to cluster categorical data. Based on the minimum dissimilarity value objects are grouped into cluster. In the merging process, the objects are relocated using silhouette coefficient. Experimental results show that the proposed method is efficient.},
+  booktitle = {International {Conference} on {Computational} {Intelligence} and {Multimedia} {Applications} ({ICCIMA} 2007)},
+  author    = {Aranganayagi, S. and Thangavel, K.},
+  month     = dec,
+  year      = {2007},
+  pages     = {13--17},
+  file      = {Aranganayagi_Thangavel_2007_Clustering Categorical Data Using Silhouette Coefficient as a Relocating Measure.pdf:C\:\\Users\\calm3\\Dropbox\\zotero-sync\\Aranganayagi_Thangavel_2007_Clustering Categorical Data Using Silhouette Coefficient as a Relocating Measure.pdf:application/pdf}
+}
+
 @inproceedings{zhang_unbert_2021,
   address    = {Montreal, Canada},
   title      = {{UNBERT}: {User}-{News} {Matching} {BERT} for {News} {Recommendation}},
@@ -269,24 +294,6 @@
   year       = {2021},
   pages      = {3356--3362},
   file       = {Zhang et al. - 2021 - UNBERT User-News Matching BERT for News Recommend.pdf:C\:\\Users\\calm3\\Zotero\\storage\\VU9P3CIT\\Zhang et al. - 2021 - UNBERT User-News Matching BERT for News Recommend.pdf:application/pdf}
-}
-
-@inproceedings{yang_scalable_2021,
-  address   = {Montpellier, France},
-  title     = {Scalable {Fact}-checking with {Human}-in-the-{Loop}},
-  isbn      = {978-1-66541-717-4},
-  url       = {https://ieeexplore.ieee.org/document/9648388/},
-  doi       = {10.1109/WIFS53200.2021.9648388},
-  abstract  = {Researchers have been investigating automated solutions for fact-checking in various fronts. However, current approaches often overlook the fact that information released every day is escalating, and a large amount of them overlap. Intending to accelerate fact-checking, we bridge this gap by proposing a new pipeline – grouping similar messages and summarizing them into aggregated claims. Speciﬁcally, we ﬁrst clean a set of social media posts (e.g., tweets) and build a graph of all posts based on their semantics; Then, we perform two clustering methods to group the messages for further claim summarization. We evaluate the summaries both quantitatively with ROUGE scores and qualitatively with human evaluation. We also generate a graph of summaries to verify that there is no signiﬁcant overlap among them. The results reduced 28,818 original messages to 700 summary claims, showing the potential to speed up the fact-checking process by organizing and selecting representative claims from massive disorganized and redundant messages.},
-  language  = {en},
-  urldate   = {2022-01-10},
-  booktitle = {2021 {IEEE} {International} {Workshop} on {Information} {Forensics} and {Security} ({WIFS})},
-  publisher = {IEEE},
-  author    = {Yang, Jing and Vega-Oliveros, Didier and Seibt, Tais and Rocha, Anderson},
-  month     = dec,
-  year      = {2021},
-  pages     = {1--6},
-  file      = {Yang et al. - 2021 - Scalable Fact-checking with Human-in-the-Loop.pdf:C\:\\Users\\calm3\\Zotero\\storage\\5LSI387L\\Yang et al. - 2021 - Scalable Fact-checking with Human-in-the-Loop.pdf:application/pdf}
 }
 
 @inproceedings{rinott_show_2015,
@@ -367,19 +374,6 @@
   year      = {2020},
   pages     = {59--66},
   file      = {Carlebach et al_2020_News Aggregation with Diverse Viewpoint Identification Using Neural Embeddings.pdf:C\:\\Users\\calm3\\Dropbox\\zotero-sync\\Carlebach et al_2020_News Aggregation with Diverse Viewpoint Identification Using Neural Embeddings.pdf:application/pdf}
-}
-
-@inproceedings{aranganayagi_clustering_2007,
-  title     = {Clustering {Categorical} {Data} {Using} {Silhouette} {Coefficient} as a {Relocating} {Measure}},
-  volume    = {2},
-  doi       = {10.1109/ICCIMA.2007.328},
-  abstract  = {Cluster analysis is an unsupervised learning method that constitutes a cornerstone of an intelligent data analysis process. Clustering categorical data is an important research area data mining. In this paper we propose a novel algorithm to cluster categorical data. Based on the minimum dissimilarity value objects are grouped into cluster. In the merging process, the objects are relocated using silhouette coefficient. Experimental results show that the proposed method is efficient.},
-  booktitle = {International {Conference} on {Computational} {Intelligence} and {Multimedia} {Applications} ({ICCIMA} 2007)},
-  author    = {Aranganayagi, S. and Thangavel, K.},
-  month     = dec,
-  year      = {2007},
-  pages     = {13--17},
-  file      = {Aranganayagi_Thangavel_2007_Clustering Categorical Data Using Silhouette Coefficient as a Relocating Measure.pdf:C\:\\Users\\calm3\\Dropbox\\zotero-sync\\Aranganayagi_Thangavel_2007_Clustering Categorical Data Using Silhouette Coefficient as a Relocating Measure.pdf:application/pdf}
 }
 
 
