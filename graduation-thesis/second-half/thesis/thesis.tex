@@ -1289,16 +1289,40 @@ Nagulendraらは，ニュースやSNS（ソーシャルネットワークサー�
 \subsection{Scalable Fact-checking with Human-in-the-Loop}
 \label{subsection_scalable_fact_checking}
 
-Yangらは，ニュース読者が出来事を正確かつ迅速に把握できるように
-階層的クラスタリングを用いて記事に対するツイートの主張をグループ化する手法を提案した\cite{yang_scalable_2021}．
+Yangらは，ニュース読者が出来事を正確かつ迅速に把握できるように\textcolor{red}{，}
+階層的クラスタリングを用いて記事に対するツイートの主張\textcolor{red}{の}グループ化\textcolor{red}{と要約を行う}手法を提案した\cite{yang_scalable_2021}．
+\textcolor{red}{図\ref{fig_scalable_fact_checking_pipeline}に提案手法の概略を示す．}
 この研究ではCOVID-19の話題に限定した主張の文をグループ化しているが，この手法を記事に適用した場合，多くの話題について主張のまとまりが生成されることになる．
 これでは，COVID-19の飲み薬やワクチンなど異なる話題に含まれる安全性に関する共通した主張の文がグループ化されるため，読者が興味を持っている出来事の異なる主張の収集に時間を要してしまう．
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[keepaspectratio, width=120mm]{img/scalable_fact_checking_pipeline.png}
+	\caption{
+    \textcolor{red}{記事に対するツイートの主張のグループ化と要約}
+    \protect\footnotemark[14]
+  }
+	\label{fig_scalable_fact_checking_pipeline}
+\end{figure}
+\footnotetext[14]{\cite{yang_scalable_2021}より引用}
 
 \textcolor{red}{
 Yangらのシステムでは，959件の記事に対する28818件のツイートを収集し，これらのツイートをクラスタ間距離0.85を閾値としてクラスタに分割していた．
 このとき，全データのシルエット係数の平均が0.79となる705個のクラスタを生成しており，記事の主張を約74\%に要約できたことになる．
 しかし，異なる出来事が混在した705件の主張のクラスタが提示されたときに，読者が興味を持っている出来事の異なる主張を収集することは難しい．
 }
+
+% \begin{figure}[H]
+% 	\centering
+% 	\includegraphics[keepaspectratio, width=120mm]{img/scalable_fact_checking_communities.png}
+% 	\caption{
+%     要約されたツイート文のコミュニティ
+%     \protect\footnotemark[15]
+%   }
+% 	\label{fig_scalable_fact_checking_communities}
+% \end{figure}
+% \footnotetext[15]{\cite{yang_scalable_2021}より引用}
+
 % TODO
 % クラスタリングについて詳しく
 % 図を利用
