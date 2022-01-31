@@ -115,7 +115,7 @@
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{\textcolor{red}{序論}}
+\chapter{序論}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % （用紙や文字のなどのサイズには井尻先生のTeXテンプレートをそのまま利用しています）
@@ -127,10 +127,8 @@
 ニュース記事となる出来事は，記者によって受け取り方や伝え方が異なる．
 RSF（Reporters Sans Frontières）は，政治や文化などの要因によって記者の主張が制限されていることを問題視している\cite{2021_world_press_freedom_index}．
 近年のWebニュースには世界中の記者たちの様々な主張が見られるが，言語の違いによる時間的コストなどから，多くの読者はそれらの主張の一部しか把握できない．
-\textcolor{red}{
 また，ニュースサイトのアルゴリズムによって読者に合わせて読者の読む記事が選別されているため，選別されなかった記事の主張を読者が把握することは難しい
 \cite{pariser_beware_nodate}\cite{bruns_filter_2019}．
-}
 
 Yangらは，ニュース読者が出来事を正確かつ迅速に把握できるように
 階層的クラスタリングを用いて記事に対するツイートの主張をグループ化する手法を提案した\cite{yang_scalable_2021}．
@@ -150,7 +148,7 @@ Yangらは，ニュース読者が出来事を正確かつ迅速に把握でき�
 % クラスタ数がいうほど減っていない
 
 そこで本研究では，まず世界の記事を出来事の類似度を用いてグループ化し，同じグループの記事群から主張の類似度を用いて再度グループ化することによって，類似した出来事の異なる主張の文を提示する手法を提案する．
-\textcolor{red}{提示した主張の文に加え，文の抽出元である記事を推薦する手法についても検討した．}
+提示した主張の文に加え，文の抽出元である記事を推薦する手法についても検討した．
 % これにより，ニュース読者の正確かつ迅速な出来事の把握の支援を目指す．
 % ここで，「出来事」は記者の解釈に依存しない事象とし，「主張」は記者が伝えるべきだと判断した出来事の解釈とする．
 
@@ -469,7 +467,7 @@ $\bm{W}$はノード間の関係の強さを示す接続重み，
 $\bm{b}$は一般に1を要素とするバイアスニューロンと呼ばれるものである．
 
 ニューラルネットワークは脳細胞と似たように，個々のノード間の関係の強さを調節して機能する．
-具体的には，式(\ref{nn_update_weight})に示すようにノードの理想の出力$\hat{y}_j$と実際の出力$y_j$の差\textcolor{red}{や次節\ref{subsection_loss_function}で説明する損失関数$L$}を利用するなどして次の学習時の接続重みを更新する．
+具体的には，式(\ref{nn_update_weight})に示すようにノードの理想の出力$\hat{y}_j$と実際の出力$y_j$の差や次節\ref{subsection_loss_function}で説明する損失関数$L$を利用するなどして次の学習時の接続重みを更新する．
 
 \begin{align}
   w_{i, j}^{(next~ step)} &= w_{i, j} + \eta~ (y_j - \hat{y}_j)~ \color{red}{\frac{\partial L}{\partial w_{i, j}}}
@@ -488,7 +486,7 @@ $\bm{b}$は一般に1を要素とするバイアスニューロンと呼ばれ�
 本研究のクラス分類では，2クラスの分類によく用いられる損失関数として
 % 式\ref{mse}に示す平均二乗誤差
 式(\ref{binary_cross_entropy})に示す
-\textcolor{red}{バイナリクロスエントロピー（BCE）}
+バイナリクロスエントロピー（BCE）
 を用いた．
 
 % \begin{align}
@@ -537,7 +535,7 @@ $\bm{b}$は一般に1を要素とするバイアスニューロンと呼ばれ�
 \end{align}
 
 $y_{i}$は入力する特徴$\mathbf{x}$の個々の要素のラベルで，$\hat{p}$は$\mathbf{x}$の個々の要素についてモデルが予測したラベルが1となる確率である．
-\textcolor{red}{バイナリクロスエントロピー$L(\theta)$}は個々の$y_{i}$と$\hat{p}_{i}$の差が大きいほど大きくなり，この差が小さいほど0に漸近する．
+バイナリクロスエントロピー$L(\theta)$は個々の$y_{i}$と$\hat{p}_{i}$の差が大きいほど大きくなり，この差が小さいほど0に漸近する．
 式(\ref{logistic_probability})の$\theta$は特徴$\mathbf{x}$のどの要素を重視するかを設定する重み係数である．
 式(\ref{sigmoid})の$\sigma(t)$はシグモイド関数と呼ばれる連続関数であり，実数tを入力したとき図\ref{fig_sigmoid}のように確率の範囲$(0, 1)$で実数を出力する．シグモイド関数を用いることで，$(0, 1)$の範囲にないモデルの出力を$(0, 1)$の範囲に落とし込むことができる．
 
@@ -585,7 +583,7 @@ $y_{i}$は入力する特徴$\mathbf{x}$の個々の要素のラベルで，$\ha
 中でも，単語や文を表現しようとする埋め込みをそれぞれ単語埋め込み，文埋め込み呼ぶ．
 
 デフォルトでは，ベクトルは無作為な数値で初期化される．
-例えば，\textcolor{red}{``}NEAR BAY\textcolor{red}{''}というカテゴリは，\textcolor{red}{初期状態で無作為な値を成分にもつ}ベクトルで表現される．
+例えば，``NEAR BAY''というカテゴリは，初期状態で無作為な値を成分にもつベクトルで表現される．
 ベクトルの次元数は，目的やモデルの構造によって調節する必要がある．
 初期化した単語埋め込みは，意味が似た単語の埋め込み同士は距離を小さくするなど，何らかのアルゴリズムで表現を学習していく．
 学習した表現が適切であるほど，単語埋め込みを利用した自然言語処理の機械学習タスクはより精度が増す．
@@ -605,7 +603,7 @@ URLやメールアドレスといったユニークな文字の羅列は，出�
 % @see [自然言語処理における前処理の種類とその威力(2017)](https://qiita.com/Hironsan/items/2466fe0f344115aff177)
 
 \subsection{Attention}
-Bahdanauらが2014年に提案したAttentionは，時系列データの機械学習を行う際，出力データと関わりが強い入力データに効率よく比重を与える\textcolor{red}{仕組み}である\cite{aurellen20}\cite{bahdanau_neural_2016}．
+Bahdanauらが2014年に提案したAttentionは，時系列データの機械学習を行う際，出力データと関わりが強い入力データに効率よく比重を与える仕組みである\cite{aurellen20}\cite{bahdanau_neural_2016}．
 モデルにAttentionを組み込むことで無駄なデータの学習が減り，モデルが過去に学習した内容を忘却しにくくなる．
 これにより，30語以上の長い文章の機械翻訳タスクの精度が大幅に向上する．
 
@@ -616,13 +614,12 @@ Bahdanauらが2014年に提案したAttentionは，時系列データの機械�
 	\includegraphics[keepaspectratio, width=50mm]{img/attention.png}
 	\caption{入力単語群$(x_1, x_2, ... , x_T)$を基にt番目の出力語$y_t$を生成するAttentionのモデルアーキテクチャ
   \protect\footnotemark[1]
-  \textcolor{red}{make width smaller}
   }
 	\label{fig_attention}
 \end{figure}
 \footnotetext[1]{\cite{bahdanau_neural_2016}より引用}
 
-直前に翻訳した単語$y_{t-1}$と過去に翻訳した単語群の情報$s_{t-1}$に，Attentionの式\textcolor{red}{(\ref{attention_c})}を考慮して次の単語$y_t$を予測している．
+直前に翻訳した単語$y_{t-1}$と過去に翻訳した単語群の情報$s_{t-1}$に，Attentionの式(\ref{attention_c})を考慮して次の単語$y_t$を予測している．
 $\vec{h_i}$は文脈を加味した単語の意味情報をもつベクトルであり，BiGRUと呼ばれるニューラルネットワークを用いて生成されている．
 
 \begin{align}
@@ -706,7 +703,6 @@ BERTモデルは，中間層の数や個々のTransformerの数，Transformer内
   \centering
   \includegraphics[keepaspectratio, width=80mm]{img/bert.png}
   \caption{中間層が1つのBERTのモデルアーキテクチャ\protect\footnotemark[4]
-  \textcolor{red}{make width smaller}
   }
   \label{fig_bert}
 \end{figure}
@@ -873,7 +869,7 @@ BERTでは学習データとして250万単語のEnglish Wikipediaと80万単語
 分類器の評価では，混同行列を用いたいくつかの評価指標がよく用いられる\cite{aurellen20}．
 混同行列は，分類器の入力の$n$種類のラベルと出力の$n$種類のラベルの計$n^2$組の組み合わせについて，それぞれの数を要素とした$n$次正方行列である．
 
-\textcolor{red}{add \textbackslash newpage}
+% \textcolor{red}{add \textbackslash newpage}
 \newpage
 
 表\ref{confusion_matrix}に10件のデータを0か1かの2値ラベルで分類したときの混同行列の例を示す．
@@ -920,7 +916,7 @@ BERTでは学習データとして250万単語のEnglish Wikipediaと80万単語
   \label{precision}
 \end{align}
 
-\textcolor{red}{add \textbackslash newpage}
+% \textcolor{red}{add \textbackslash newpage}
 \newpage
 
 適合率は，数ある映像から子どもに観せても安心な映像を検出する分類器などで重視される．
@@ -944,7 +940,7 @@ BERTでは学習データとして250万単語のEnglish Wikipediaと80万単語
 適合率と再現率は一般にトレードオフの関係にあり，分類器の目的によってそれぞれの評価指標をどれほど重要視するかを考慮する必要がある．
 上述の監視カメラの例では，適合率が低く万引き犯だと分類した映像のいくつかが万引き反でない人物となってしまうことよりも，再現率が高く確実に万引き犯を検出できることの方が重要である．
 
-\textcolor{red}{add \textbackslash newpage}
+% \textcolor{red}{add \textbackslash newpage}
 \newpage
 
 \subsubsection{マシューズ相関係数}
@@ -965,7 +961,7 @@ Matthewsが1975年に提案したマシューズ相関係数（MCC;Matthews Corr
 後述のクラスタリングを行うにあたり，クラスタリングに必要な文章の距離（非類似度）の算出法について記す．
 本節\ref{section_sentence_distance}では，小節\ref{subsection_sentence_bert}で文章を埋め込みに変換するSentence-BERTについて説明し，小節\ref{subsection_cosine_distance}で変換した埋め込みを用いて計算するコサイン距離について説明する．
 
-\textcolor{red}{add \textbackslash newpage}
+% \textcolor{red}{add \textbackslash newpage}
 \newpage
 
 \subsection{Sentence-BERT}
@@ -990,7 +986,7 @@ poolingでは3つの手法が比較されており，BERTで出力したベク�
 \end{figure}
 \footnotetext[8]{\cite{reimers_sentence-bert_2019}の図より一部抜粋}
 
-\textcolor{red}{add \textbackslash newpage}
+% \textcolor{red}{add \textbackslash newpage}
 \newpage
 
 BERTやRoBERTaで1万文から最も意味的類似度が高い2文を得たいとき，図\ref{fig_fine_tuning_of_bert}のように2文同時に入力すると$\frac{10000(10000-1)}{2}=49995000$回の実行が必要であり，Reimersらの実験では65時間の処理を要した．
@@ -1043,10 +1039,8 @@ BERTやRoBERTaで1万文から最も意味的類似度が高い2文を得たい�
 
 \subsection{コサイン距離}
 \label{subsection_cosine_distance}
-\textcolor{red}{
 式(\ref{cosine_distance})にコサイン距離は，2つのベクトルの距離の指標の1つである．
 2つの3次元ベクトル間のコサイン距離は，2つのベクトルがなす角の大きさに相当する．
-}
 コサイン距離は，単語埋め込みや文章の埋め込みの距離の算出によく用いられる．
 
 \begin{align}
@@ -1081,7 +1075,7 @@ BERTやRoBERTaで1万文から最も意味的類似度が高い2文を得たい�
 クラスタ間距離の算出には単一連結法や最遠隣法など様々な手法が用いられているが，本研究では1963年にWardが提案したWard法（最小分散法）を使用する\cite{murtagh_wards_2014}．
 Ward法は異常なデータの値（外れ値）の影響を受けにくく，クラスタ間距離の算出法として広く用いられている．
 
-\textcolor{red}{add \textbackslash newpage}
+% \textcolor{red}{add \textbackslash newpage}
 \newpage
 
 Ward法では式(\ref{wards_method})に示すように，
@@ -1108,9 +1102,7 @@ Ward法では式(\ref{wards_method})に示すように，
 \subsection{階層的クラスタリング}
 \label{subsection_hierarchical_clustering}
 階層的クラスタリング（凝集型クラスタリング）は，図\ref{fig_clustering_example}に示すようにクラスタ間距離が最も近い2つのクラスタを順次1つのクラスタに結合していく手法である．
-\textcolor{red}{
 図\ref{fig_clustering_example}の右側のグラフのように，階層的クラスタリングの様子をツリー状に可視化したものをデンドログラムという．
-}
 
 結合前のクラスタは結合後のクラスタの部分集合となり，最終的には1つのクラスタとなる．
 従って階層的クラスタリングは，このような部分集合の階層構造をもつデータの分析に有用である．
@@ -1137,10 +1129,10 @@ Ward法では式(\ref{wards_method})に示すように，
 % ~
 % % @see 
 
-\textcolor{red}{add \textbackslash newpage}
+% \textcolor{red}{add \textbackslash newpage}
 \newpage
 
-\subsection{\textcolor{red}{シルエット係数}}
+\subsection{シルエット係数}
 式(\ref{silhouette_coefficient})に示すシルエット係数は，階層的クラスタリングの評価指標のひとつである\cite{aranganayagi_clustering_2007}．
 全データのシルエット係数の平均$\overline{Sil(i)}$が大きいほど同一クラスタ内のデータがより類似し，異なるクラスタ間のデータがより類似していないといえる．
 
@@ -1179,7 +1171,7 @@ $b(i)$が1に近いほど異なるクラスタのデータが類似していな�
 
 % % @see https://hkawabata.github.io/technical-note/note/ML/Evaluation/silhouette-analysis.html
 
-\textcolor{red}{add \textbackslash newpage}
+% \textcolor{red}{add \textbackslash newpage}
 \newpage
 
 \section{k-NN分類法}
@@ -1198,7 +1190,7 @@ kは事前に設定しておく必要がある．
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{\textcolor{red}{BERTが事前学習した自然言語の特徴を用いてニュース推薦を行う研究}}
+\section{BERTが事前学習した自然言語の特徴を用いてニュース推薦を行う研究}
 
 % @see 
 
@@ -1287,7 +1279,7 @@ Zhangらの研究から，BERTが事前学習した自然言語の特徴が記�
 %             - 民主主義の議論に似ている
 %             - 完全な民主主義は難しく，本稿では網羅できない
 
-\subsection{\textcolor{red}{Understanding and Controlling the Filter Bubble through Interactive Visualization: A User Study}}
+\subsection{Understanding and Controlling the Filter Bubble through Interactive Visualization: A User Study}
 Nagulendraらは，ニュースやSNS（ソーシャルネットワークサービス）の利用者にフィルターバブルの存在の自覚を促すために，図\ref{fig_bubble_ui}に示すようなフィルターバブルを可視化する手法を提案した\cite{nagulendra_understanding_2014}．
 図のシステムでは，あるSNS投稿者の投稿のうち，SNSが閲覧者に推薦している投稿のカテゴリと推薦していない投稿のカテゴリとの境界を可視化している．
 
@@ -1325,9 +1317,9 @@ Nagulendraらは，ニュースやSNS（ソーシャルネットワークサー�
 \subsection{Scalable Fact-checking with Human-in-the-Loop}
 \label{subsection_scalable_fact_checking}
 
-Yangらは，ニュース読者が出来事を正確かつ迅速に把握できるように\textcolor{red}{，}
-階層的クラスタリングを用いて記事に対するツイートの主張\textcolor{red}{の}グループ化\textcolor{red}{と要約を行う}手法を提案した\cite{yang_scalable_2021}．
-\textcolor{red}{図\ref{fig_scalable_fact_checking_pipeline}に提案手法の概略を示す．}
+Yangらは，ニュース読者が出来事を正確かつ迅速に把握できるように，
+階層的クラスタリングを用いて記事に対するツイートの主張のグループ化と要約を行う手法を提案した\cite{yang_scalable_2021}．
+図\ref{fig_scalable_fact_checking_pipeline}に提案手法の概略を示す．
 この研究ではCOVID-19の話題に限定した主張の文をグループ化しているが，この手法を記事に適用した場合，多くの話題について主張のまとまりが生成されることになる．
 これでは，COVID-19の飲み薬やワクチンなど異なる話題に含まれる安全性に関する共通した主張の文がグループ化されるため，読者が興味を持っている出来事の異なる主張の収集に時間を要してしまう．
 
@@ -1335,18 +1327,16 @@ Yangらは，ニュース読者が出来事を正確かつ迅速に把握でき�
 	\centering
 	\includegraphics[keepaspectratio, width=120mm]{img/scalable_fact_checking_pipeline.png}
 	\caption{
-    \textcolor{red}{記事に対するツイートの主張のグループ化と要約}
+    記事に対するツイートの主張のグループ化と要約
     \protect\footnotemark[14]
   }
 	\label{fig_scalable_fact_checking_pipeline}
 \end{figure}
 \footnotetext[14]{\cite{yang_scalable_2021}より引用}
 
-\textcolor{red}{
 Yangらのシステムでは，959件の記事に対する28818件のツイートを収集し，これらのツイートをクラスタ間距離0.85を閾値としてクラスタに分割していた．
 このとき，全データのシルエット係数の平均が0.79となる705個のクラスタを生成しており，記事の主張を約74\%に要約できたことになる．
 しかし，異なる出来事が混在した705件の主張のクラスタが提示されたときに，読者が興味を持っている出来事の異なる主張を収集することは難しい．
-}
 
 % \begin{figure}[H]
 % 	\centering
@@ -1392,7 +1382,7 @@ Yangらのシステムでは，959件の記事に対する28818件のツイー�
 	\centering
 	\includegraphics[keepaspectratio, width=110mm]{img/method_abstract.png}
 	\caption{
-    \textcolor{red}{提案手法の概要}
+    提案手法の概要
     \newline
     \qquad\quad(\ajroman{1})
     記事の文章を出来事の文と主張の文に分類する
@@ -1457,7 +1447,7 @@ Yangらのシステムでは，959件の記事に対する28818件のツイー�
 出来事と主張の文の分類のため，RoBERTaを転移学習した分類器を作成した．
 RoBERTaが出来事の文と主張の文の分類に適用できるよう，出来事か主張かでラベル付けされた文を含むデータセットを用いて転移学習を行った．
 図\ref{fig_single_sentence_classification_of_bert}に示したように入力は文字列[CLS]と分類したい1文とし，[CLS]に対応する出力Cと正解のラベルを基に損失関数の計算を行う．
-具体的には，出力Cを入力とする1層の全結合層と1ノードの出力層を接続し，その出力と\textcolor{red}{バイナリクロスエントロピー}を用いて損失を計算した．
+具体的には，出力Cを入力とする1層の全結合層と1ノードの出力層を接続し，その出力とバイナリクロスエントロピーを用いて損失を計算した．
 
 \subsection{Sentence-BERT，コサイン距離，Ward法を用いた記事と主張の文の階層的クラスタリング}
 
@@ -1515,7 +1505,7 @@ Evidenceの文ではナイジェリアの森林面積が減少していること
 \end{table}
 % もう少し増やしたい
 
-\textcolor{red}{add \textbackslash newpage}
+% \textcolor{red}{add \textbackslash newpage}
 \newpage
 
 表の例は，本研究で定義した主張の文と出来事の文の定義と似た性質を持つ．
@@ -1527,7 +1517,7 @@ Claimの文とEvidenceの文を100件ずつ確認したところ，他の多く�
 % @see 
 
 \subsection{分類とクラスタリングを行ったデータセット}
-分類とクラスタリングを行うデータセットには，Ghasiyaらが収集したCOVID-19 News Articlesを選定した\textcolor{red}{\cite{ghasiya_investigating_2021}}．
+分類とクラスタリングを行うデータセットには，Ghasiyaらが収集したCOVID-19 News Articlesを選定した\cite{ghasiya_investigating_2021}．
 表\ref{covid_19_news_articles_composition}示すように，COVID-19 News Articlesはイギリス，インド，日本，韓国の主要な新聞8紙の英語版ウェブサイトから約10万件の記事を収集している．
 これらの記事は，スクレイピングライブラリBeautiful Soupを用いて収集された記事のうち文字列COVID-19またはCoronavirusを含む記事である．
 このうちイギリスの記事には句点が含まれておらず，文章を文に分割できなかったため使用しなかった．
@@ -1575,7 +1565,7 @@ IBM Debater$^{\textregistered}$ - Claims and EvidenceとCOVID-19 News Articles�
 % 従って，テキストに何らかの処理をする前に，大文字を小文字に変換するなどの表記揺れを解消する処理を行う必要がある．
 % URLやメールアドレスといったユニークな文字の羅列は，出現頻度が極めて少ないノイズとなり得るため，事前に除去しておくと良い．
 
-\textcolor{red}{add \textbackslash newpage}
+% \textcolor{red}{add \textbackslash newpage}
 \newpage
 
 \subsection{省略のピリオドなどを考慮した文章の分割}
@@ -1744,9 +1734,7 @@ PythonライブラリであるStanzaを使用し，IBM Debater$^{\textregistered
 除去した．
 % uniqueの{}
 
-\textcolor{red}{
-  Stanzaの英語版モデルには，ウェブログ，ニュース文，メール文，レビュー文，Yahoo! answersの16621文とそのテキスト解析結果を含むデータセットUD English EWTを学習したモデルを使用した． 
-}
+Stanzaの英語版モデルには，ウェブログ，ニュース文，メール文，レビュー文，Yahoo! answersの16621文とそのテキスト解析結果を含むデータセットUD English EWTを学習したモデルを使用した． 
 
 % @see https://stanfordnlp.github.io/stanza/available_models.html
 % @see https://universaldependencies.org/treebanks/en_ewt/index.html
@@ -1758,12 +1746,10 @@ PythonライブラリであるStanzaを使用し，IBM Debater$^{\textregistered
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{RoBERTaを用いた出来事の文と主張の文の分類器の実装}
-\textcolor{red}{
 RoBERTaの事前学習モデルにはLiuらのRoBERTa baseを利用した\cite{liu_roberta_2019}．
 RoBERTa baseは1層に16個のScaled Dot-Product Attentionを含むTransformerエンコーダを768個持つ層を12層用いている．
 % 125Mパラメータ
 また，ニュース記事を含む約160GBの英文をバッチサイズ8,000で50万回学習している．
-}
 % 英語
 % 大文字と小文字を区別するらしい...
 % The model was trained on 1024 V100 GPUs for 500K steps with a batch size of 8K and a sequence length of 512. The optimizer used is Adam with a learning rate of 6e-4, β1=0.9\beta_{1} = 0.9β1​=0.9, β2=0.98\beta_{2} = 0.98β2​=0.98 and ϵ=1e−6\epsilon = 1e-6ϵ=1e−6, a weight decay of 0.01, learning rate warmup for 24,000 steps and linear decay of the learning rate after.
@@ -1784,7 +1770,7 @@ RoBERTa baseは1層に16個のScaled Dot-Product Attentionを含むTransformer�
 RoBERTa baseの転移学習と分類の実行には，PythonライブラリであるSimple Transformersを使用した．
 Simple Transformersの内部では同じくPythonのライブラリであるPyTorchが用いられている．
 
-転移学習ではIBM \textcolor{red}{Debater} - Claims and Evidenceの出来事の文と主張の文のそれぞれについて8割を訓練データ，2割をテストデータに分割し，バイナリクロスエントロピーの計算を行った．
+転移学習ではIBM Debater - Claims and Evidenceの出来事の文と主張の文のそれぞれについて8割を訓練データ，2割をテストデータに分割し，バイナリクロスエントロピーの計算を行った．
 このとき，データの順序に由来する不必要な学習を回避するため，文とラベルは疑似乱数を用いた無作為な順序で学習した\cite{aurellen20}．
 % random.shuffle
 % @see p.127 412
@@ -1811,13 +1797,11 @@ Simple Transformersの内部では同じくPythonのライブラリであるPyTo
 % 本当はリストに格納して1回渡すだけ
 
 
-\textcolor{red}{
 Sentence-BERTのモデルにはRaimersらのparaphrase-MiniLM-L6-v2を使用した\cite{reimers_sentence-bert_2019}．
 paraphrase-MiniLM-L6-v2は1層に12個のScaled Dot-Product Attentionを含むTransformerエンコーダを384個持つ層を6層用いている．
 % 125Mパラメータ
 MNLIとSNLI（The Stanford Natural Language Inference）の約100万文のうち約10万文の英文をバッチサイズ16で1回学習している．
 MNLIは話し言葉と書き言葉の様々な英文をカバーしている．
-}
 % {
 %   "_name_or_path": "old_models/paraphrase-MiniLM-L6-v2/0_Transformer",
 %   "architectures": [
@@ -1853,7 +1837,7 @@ MNLIは話し言葉と書き言葉の様々な英文をカバーしている．
 % @see https://huggingface.co/sentence-transformers/paraphrase-MiniLM-L6-v2/blob/main/config.json
 % @see 
 
-\textcolor{red}{add \textbackslash newpage}
+% \textcolor{red}{add \textbackslash newpage}
 \newpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1975,7 +1959,7 @@ COVID-19 News Articlesの正解ラベルには，3ヶ国の記事から3件ず�
 
 % @see 
 
-\textcolor{red}{add \textbackslash newpage}
+% \textcolor{red}{add \textbackslash newpage}
 \newpage
 
 \subsection{実験結果}
@@ -2072,7 +2056,7 @@ COVID-19 News Articlesの正解ラベルには，3ヶ国の記事から3件ず�
 % - 100文に2文ほど1行2文が存在
 %     - DeepLによるエラー
 
-\textcolor{red}{add \textbackslash newpage}
+% \textcolor{red}{add \textbackslash newpage}
 \newpage
 
 表\ref{covid_classification_evaluation}にCOVID-19 News Articlesの163文の分類の評価結果を示す．
@@ -2113,7 +2097,7 @@ COVID-19 News Articlesの正解ラベルには，3ヶ国の記事から3件ず�
   \label{covid_classification_evaluation}
 \end{table}
 
-\textcolor{red}{add \textbackslash newpage}
+% \textcolor{red}{add \textbackslash newpage}
 \newpage
 
 表\ref{covid_classification_example}に分類結果の例を示す．
@@ -2210,7 +2194,7 @@ CarlebachらはIBM Debater$^{\textregistered}$ - Claims Stance Datasetを学習�
 また，抽出したクラスタ内の主張の文のうちの，類似した出来事について述べている文の割合を算出した．
 % @see 
 
-\textcolor{red}{add \textbackslash newpage}
+% \textcolor{red}{add \textbackslash newpage}
 \newpage
 
 \subsection{実験結果}
@@ -2226,7 +2210,7 @@ CarlebachらはIBM Debater$^{\textregistered}$ - Claims Stance Datasetを学習�
 	\label{articles_silhouette}
 \end{figure}
 
-\textcolor{red}{add \textbackslash newpage}
+% \textcolor{red}{add \textbackslash newpage}
 \newpage
 
 図\ref{num_and_size_of_clusters_of_articles}にクラスタを分けるクラスタ間距離ごとにまとめたクラスタ数とクラスタ内の平均記事数を示す．
@@ -2244,7 +2228,7 @@ CarlebachらはIBM Debater$^{\textregistered}$ - Claims Stance Datasetを学習�
 	\label{num_and_size_of_clusters_of_articles}
 \end{figure}
 
-\textcolor{red}{add \textbackslash newpage}
+% \textcolor{red}{add \textbackslash newpage}
 \newpage
 
 図\ref{articles_dendrogram}に記事の階層的クラスタリングの結果をデンドログラムで示す．
@@ -2257,7 +2241,7 @@ CarlebachらはIBM Debater$^{\textregistered}$ - Claims Stance Datasetを学習�
 	\label{articles_dendrogram}
 \end{figure}
 
-\textcolor{red}{add \textbackslash newpage}
+% \textcolor{red}{add \textbackslash newpage}
 \newpage
 
 色付けされたクラスタのうち，3ヶ国すべての国の記事を含む最も文字数が多いクラスタを抽出した．
@@ -2380,7 +2364,7 @@ Yangらのシステムでシルエット係数が高い理由は，内容が個�
 
 % @see 
 
-\textcolor{red}{add \textbackslash newpage}
+% \textcolor{red}{add \textbackslash newpage}
 \newpage
 
 \subsection{実験結果}
@@ -2397,7 +2381,7 @@ Yangらのシステムでシルエット係数が高い理由は，内容が個�
 	\label{sentences_silhouette}
 \end{figure}
 
-\textcolor{red}{add \textbackslash newpage}
+% \textcolor{red}{add \textbackslash newpage}
 \newpage
 
 図\ref{num_and_size_of_clusters_of_sentences}にクラスタを分けるクラスタ間距離ごとにまとめたクラスタ数とクラスタ内の主張の文の数の平均値を示す．
@@ -2416,7 +2400,7 @@ Yangらのシステムでシルエット係数が高い理由は，内容が個�
 	\label{num_and_size_of_clusters_of_sentences}
 \end{figure}
 
-\textcolor{red}{add \textbackslash newpage}
+% \textcolor{red}{add \textbackslash newpage}
 \newpage
 
 図\ref{sentences_dendrogram}に主張の文の階層的クラスタリングの結果をデンドログラムで示す．
