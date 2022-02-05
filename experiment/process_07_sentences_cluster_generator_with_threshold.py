@@ -357,6 +357,9 @@ def main():
     plt.plot(x, y)
     plt.xlabel("Num of Clusters", fontsize=LABEL_TITLE_SIZE)
     plt.ylabel("Silhouette Coefficient", fontsize=LABEL_TITLE_SIZE)
+    RANGE_Y_LEFT = 0
+    RANGE_Y_RIGHT = 1.1
+    plt.ylim(RANGE_Y_LEFT, RANGE_Y_RIGHT)  # y軸の範囲
     plt.grid()
     plt.tick_params(labelsize=LABEL_SIZE)
     # plt.show()
