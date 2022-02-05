@@ -797,7 +797,7 @@ NSPとしての学習では，入力文の50\%を文章中で連続する2文，
 % @see https://qiita.com/omiita/items/72998858efc19a368e50
 
 \subsection{RoBERTa}
-Devlinらが2019年に提案したRoBERTaはBERTの学習方法を改善した機械学習モデルで，多くの自然言語処理タスクのベンチマークでBERTのスコアを上回る．
+Devlinらが2019年に提案したRoBERTa（Robustly Optimized BERT Pretraining Approach）はBERTの学習方法を改善した機械学習モデルで，多くの自然言語処理タスクのベンチマークでBERTのスコアを上回る．
 RoBERTaのモデルアーキテクチャは図\ref{fig_bert}のBERTと同じものを使用する．
 MLMとしての学習でBERTでは10回学習するごとに同じマスクを使用していたため，どの学習でも異なるマスクを使用することでSQuAD（Stanford Question Answering Dataset）とSST-2（The Stanford Sentiment Treebank）のスコアを向上させた．
 % 余裕があれば表を挿入
